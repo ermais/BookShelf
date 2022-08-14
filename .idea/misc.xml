@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Erma Pictures/AndroidStudioProjects/BookShelf/app/src/main/res/drawable-v24/ic_baseline_account_circle_24.xml" value="0.2942708333333333" />
+        <entry key="..\:/Users/Erma Pictures/AndroidStudioProjects/BookShelf/app/src/main/res/layout/activity_create_account.xml" value="0.21" />
+        <entry key="..\:/Users/Erma Pictures/AndroidStudioProjects/BookShelf/app/src/main/res/layout/activity_login.xml" value="0.25" />
+        <entry key="..\:/Users/Erma Pictures/AndroidStudioProjects/BookShelf/app/src/main/res/layout/activity_main.xml" value="0.278125" />
+        <entry key="..\:/Users/Erma Pictures/AndroidStudioProjects/BookShelf/app/src/main/res/layout/app_bar_main.xml" value="0.2006340579710145" />
+        <entry key="..\:/Users/Erma Pictures/AndroidStudioProjects/BookShelf/app/src/main/res/layout/book_list_fragment.xml" value="0.19610507246376813" />
+        <entry key="..\:/Users/Erma Pictures/AndroidStudioProjects/BookShelf/app/src/main/res/layout/book_list_item.xml" value="0.25" />
+        <entry key="..\:/Users/Erma Pictures/AndroidStudioProjects/BookShelf/app/src/main/res/layout/content_main.xml" value="0.2006340579710145" />
+        <entry key="..\:/Users/Erma Pictures/AndroidStudioProjects/BookShelf/app/src/main/res/layout/fragment_book_list.xml" value="0.33" />
+        <entry key="..\:/Users/Erma Pictures/AndroidStudioProjects/BookShelf/app/src/main/res/layout/fragment_gallery.xml" value="0.135258358662614" />
+        <entry key="..\:/Users/Erma Pictures/AndroidStudioProjects/BookShelf/app/src/main/res/layout/fragment_home.xml" value="0.19610507246376813" />
+        <entry key="..\:/Users/Erma Pictures/AndroidStudioProjects/BookShelf/app/src/main/res/layout/fragment_recent.xml" value="0.19610507246376813" />
+        <entry key="..\:/Users/Erma Pictures/AndroidStudioProjects/BookShelf/app/src/main/res/layout/fragment_slideshow.xml" value="0.135258358662614" />
+        <entry key="..\:/Users/Erma Pictures/AndroidStudioProjects/BookShelf/app/src/main/res/layout/fragment_top_rated.xml" value="0.19610507246376813" />
+        <entry key="..\:/Users/Erma Pictures/AndroidStudioProjects/BookShelf/app/src/main/res/layout/nav_header_main.xml" value="0.135258358662614" />
+        <entry key="..\:/Users/Erma Pictures/AndroidStudioProjects/BookShelf/app/src/main/res/menu/activity_main_drawer.xml" value="0.1421875" />
+        <entry key="..\:/Users/Erma Pictures/AndroidStudioProjects/BookShelf/app/src/main/res/menu/main.xml" value="0.1421875" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/drawable/btn_rounded_colored.xml" value="0.199" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/drawable/btn_shape.xml" value="0.199" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/drawable/btn_shape_outlined.xml" value="0.1" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/drawable/input_shape.xml" value="0.199" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout-v28/content_create_book.xml" value="0.25" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/activity_create_account.xml" value="0.1" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/activity_create_book.xml" value="0.22" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/activity_login.xml" value="0.16" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/activity_main.xml" value="0.17481884057971014" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/app_bar_main.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/book_list_item.xml" value="0.25" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/content_create_book.xml" value="0.25" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/content_main.xml" value="0.1" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/fragment_book_list.xml" value="0.22" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/fragment_first.xml" value="0.17481884057971014" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/fragment_gallery.xml" value="0.17481884057971014" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/fragment_home.xml" value="0.15806159420289856" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/fragment_recent.xml" value="0.17481884057971014" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/fragment_slideshow.xml" value="0.1" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/fragment_top_rated.xml" value="0.1" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

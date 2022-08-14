@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/padding"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="20dp"
+            android:paddingTop="10dp"
+            android:theme="@style/Theme.BookShelf"
+            tools:context=".CreateAccountActivity">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineTop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="100dp" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineBottom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="643dp" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineVerStart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="24dp" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineVerEnd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="25dp" />
+
+                <EditText
+                    android:id="@+id/editTextUserName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_baseline_account_circle_24"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:selectAllOnFocus="true"
+                    android:singleLine="true"
+                    android:text="@string/user_name_input_text"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toStartOf="@+id/guidelineVerEnd"
+                    app:layout_constraintStart_toStartOf="@+id/guidelineVerStart"
+                    app:layout_constraintTop_toTopOf="@+id/guidelineTop" />
+
+                <EditText
+                    android:id="@+id/editTextEmail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:drawableEnd="@drawable/ic_baseline_email_24"
+                    android:ellipsize="start"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:selectAllOnFocus="true"
+                    android:singleLine="true"
+                    android:text="example@gamil.com"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toStartOf="@+id/guidelineVerEnd"
+                    app:layout_constraintStart_toStartOf="@+id/guidelineVerStart"
+                    app:layout_constraintTop_toBottomOf="@+id/editTextUserName" />
+
+                <EditText
+                    android:id="@+id/editTextPassword"
+                    style="@android:style/Widget.Material.Light.EditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:drawableEnd="@drawable/ic_baseline_lock_24"
+                    android:ems="10"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:text="mypassword"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="@+id/editTextEmail"
+                    app:layout_constraintEnd_toStartOf="@+id/guidelineVerEnd"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/editTextEmail"
+                    app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
+
+                <Button
+                    android:id="@+id/btnCreateAccount"
+                    style="@style/Theme.BookShelf"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:capitalize="characters"
+                    android:elevation="20dp"
+                    android:includeFontPadding="true"
+                    android:letterSpacing="0.025"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="create account"
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="@+id/editTextPassword"
+                    app:layout_constraintHorizontal_bias="0.333"
+                    app:layout_constraintStart_toStartOf="@+id/guidelineVerStart"
+                    app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
+
+                <Button
+                    android:id="@+id/btnForgetPassword"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:fontFamily="sans-serif-light"
+                    android:letterSpacing="0.025"
+                    android:text="Forget Password"
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toStartOf="@+id/guidelineVerEnd"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="@+id/btnCreateAccount"
+                    app:layout_constraintTop_toBottomOf="@+id/btnCreateAccount" />
+
+                <Button
+                    android:id="@+id/btnHaveAccount"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:fontFamily="sans-serif-light"
+                    android:letterSpacing="0.025"
+                    android:text="have an account"
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="@+id/btnForgetPassword"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/btnForgetPassword"
+                    app:layout_constraintTop_toBottomOf="@+id/btnForgetPassword" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

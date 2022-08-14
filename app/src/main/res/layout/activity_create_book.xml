@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.bookshelf.create.CreateBookViewModel" />
+    </data>
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+
+            android:layout_width="match_parent"
+            android:layout_height="64dp" >
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/bookCreateToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimary"
+                android:minHeight="?attr/actionBarSize"
+                android:theme="?attr/actionBarTheme" />
+        </com.google.android.material.appbar.AppBarLayout>
+        <include
+            android:id="@+id/layout_book_create"
+            layout="@layout/content_create_book"
+            />
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>    
+</layout>
+
