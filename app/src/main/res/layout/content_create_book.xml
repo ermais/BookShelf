@@ -34,45 +34,47 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Spinner
-            android:id="@+id/svCategory"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:paddingStart="2dp"
-            android:fontFamily="@font/akaya_telivigala"
-            android:padding="16dp"
-            android:background="@drawable/input_shape"
-            app:layout_constraintEnd_toEndOf="@+id/teBookTitle"
-            app:layout_constraintStart_toStartOf="@+id/teBookTitle"
-            app:layout_constraintTop_toBottomOf="@+id/teBookTitle"
-            tools:listheader="Category" />
-
         <EditText
             android:id="@+id/teDesc"
-            android:text="@={viewModel.bookDesc}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/input_shape"
             android:ems="10"
             android:fontFamily="@font/akaya_telivigala"
             android:gravity="start|top"
             android:hint="@string/book_desc_hint"
-            android:textColorHint="@color/primaryGray"
             android:inputType="textMultiLine"
             android:lines="4"
             android:padding="16dp"
-            android:background="@drawable/input_shape"
+            android:text="@={viewModel.bookDesc}"
+            android:textColorHint="@color/primaryGray"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@+id/svCategory"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/svCategory"
             app:layout_constraintTop_toBottomOf="@+id/svCategory" />
+
+        <Spinner
+            android:id="@+id/svCategory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="39dp"
+            android:background="@drawable/input_shape"
+            android:fontFamily="@font/akaya_telivigala"
+            android:padding="16dp"
+            android:paddingStart="2dp"
+            app:layout_constraintEnd_toEndOf="@+id/teBookTitle"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/teBookTitle"
+            app:layout_constraintTop_toBottomOf="@+id/teBookTitle"
+            tools:listheader="Category" />
 
         <Button
             android:id="@+id/btnBookCover"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="28dp"
             android:background="@drawable/btn_rounded_colored"
             android:elevation="4dp"
             android:fontFamily="@font/akaya_telivigala"
@@ -84,12 +86,26 @@
             app:layout_constraintTop_toBottomOf="@+id/teDesc" />
 
         <Button
+            android:id="@+id/btnUploadBook"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/btn_shape_outlined"
+            android:fontFamily="@font/akaya_telivigala"
+            android:text="@string/upload_book_doc_button_text"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/teDesc"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/teDesc"
+            app:layout_constraintTop_toBottomOf="@+id/btnBookCover" />
+
+        <Button
             android:id="@+id/btnAddBook"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
-            android:layout_marginBottom="132dp"
+            android:layout_marginBottom="100dp"
             android:background="@drawable/btn_shape"
             android:drawableStart="@drawable/ic_baseline_check_24"
             android:elevation="4dp"
@@ -106,25 +122,36 @@
         <ProgressBar
             android:id="@+id/pbAddBook"
             style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="108dp"
+            android:layout_height="110dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/btnUploadBook"
+        <TextView
+            android:id="@+id/bookTitleTextError"
             android:layout_width="0dp"
+            android:text="@={viewModel.bookTitleError}"
+            android:textColor="@color/red"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/btn_shape_outlined"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/akaya_telivigala"
-            android:text="@string/upload_book_doc_button_text"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="@+id/teDesc"
-            app:layout_constraintStart_toStartOf="@+id/teDesc"
-            app:layout_constraintTop_toBottomOf="@+id/btnBookCover" />
+            app:layout_constraintEnd_toEndOf="@+id/teBookTitle"
+            app:layout_constraintStart_toStartOf="@+id/teBookTitle"
+            app:layout_constraintTop_toBottomOf="@+id/teBookTitle" />
+
+        <TextView
+            android:id="@+id/bookDocUriTextError"
+            android:layout_width="0dp"
+            android:text="@={viewModel.bookDocUriError}"
+            android:textColor="@color/red"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            app:layout_constraintEnd_toEndOf="@+id/btnUploadBook"
+            app:layout_constraintStart_toStartOf="@+id/btnUploadBook"
+            app:layout_constraintTop_toBottomOf="@+id/btnUploadBook" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

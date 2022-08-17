@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class BookListViewModel(val bookListRepository: BookListRepository,application:Application) : ViewModel(){
+class BookListViewModel(private val bookListRepository: BookListRepository, application:Application) : ViewModel(){
     var _books = MutableLiveData<List<Book>>()
 
     var books = _books

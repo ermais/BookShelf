@@ -1,28 +1,30 @@
 package com.example.bookshelf.create
 
-import android.annotation.SuppressLint
 import android.app.Application
-import android.net.Uri
-import android.view.View
-import android.widget.Toast
-import androidx.lifecycle.*
-import androidx.work.*
+import android.content.Context
+import android.text.TextUtils
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.example.bookshelf.data.*
 import com.example.bookshelf.model.book.Book
-import com.example.bookshelf.model.book.Result
 import com.example.bookshelf.model.book.data
 import com.example.bookshelf.worker.UploadBookCover
 import com.example.bookshelf.worker.UploadBookWorker
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.*
 
 class CreateBookViewModel(
     private val auth: FirebaseAuth,
     private val createBookRepository: CreateBookRepository,
-    application: Application)
+    application: Context,
+)
     : ViewModel(){
 
     val bookTitle by lazy { MutableLiveData<String>() }
@@ -31,15 +33,24 @@ class CreateBookViewModel(
     var bookCover = MutableLiveData<String>()
     var bookDocUri = MutableLiveData<String>()
     var bookCreated = MutableLiveData<Void>()
-     var bookDocUploadWorkInfo  : LiveData<List<WorkInfo>>? = null
-     val bookCoverUploadWorkInfo  by lazy {
+     val bookDocUploadWorkInfo  : LiveData<List<WorkInfo>> by lazy {
+         workManager.getWorkInfosByTagLiveData(UPLOAD_BOOK_DOC_WORKER_TAG)
+     }
+     val bookCoverUploadWorkInfo  : LiveData<List<WorkInfo>> by lazy {
          workManager.getWorkInfosByTagLiveData(UPLOAD_BOOK_COVER_WORKER_TAG)
      }
-    var workManager = WorkManager.getInstance(application)
+    val bookTitleError : MutableLiveData<String> by lazy {
+        MutableLiveData<String>("")
+    }
+
+    val bookDocUriError : MutableLiveData<String> by lazy {
+        MutableLiveData<String>("")
+    }
+    var workManager: WorkManager = WorkManager.getInstance(application)
 
 
     init {
-        bookDocUploadWorkInfo =   workManager.getWorkInfosByTagLiveData(UPLOAD_BOOK_DOC_WORKER_TAG)
+
     }
 
          fun publishBook() = viewModelScope.launch {
@@ -66,7 +77,7 @@ class CreateBookViewModel(
             .setInputData(createBookURIInputData())
             .addTag(UPLOAD_BOOK_DOC_WORKER_TAG)
             .build()
-        workManager.enqueue(uploadBookWorker)
+        workManager?.enqueue(uploadBookWorker)
     }
 
     fun uploadBookCover()= viewModelScope.launch{
@@ -74,7 +85,7 @@ class CreateBookViewModel(
             .setInputData(createBookCoverURInputData())
             .addTag(UPLOAD_BOOK_COVER_WORKER_TAG)
             .build()
-        workManager.enqueue(uploadBookCoverRequest)
+        workManager?.enqueue(uploadBookCoverRequest)
     }
 
     private fun createBookURIInputData():Data {
@@ -100,7 +111,36 @@ class CreateBookViewModel(
 
     fun canCreateBook() : Boolean {
         return bookDocUploadWorkInfo?.value?.get(0)?.state?.isFinished  == true &&
-                bookCoverUploadWorkInfo.value?.get(0)?.state?.isFinished ==true
+                bookCoverUploadWorkInfo?.value?.get(0)?.state?.isFinished ==true
+    }
+
+    fun titleNotNullOREmpty():Boolean {
+        return (!TextUtils.isEmpty(bookTitle.value)) && (bookTitle.value != null)
+    }
+
+    fun bookDocNotNullOREmpty():Boolean {
+        return (!TextUtils.isEmpty(bookDocUri.value) && bookDocUri.value != null)
+    }
+
+
+    fun canUploadBookDoc():Boolean {
+        return titleNotNullOREmpty()
+    }
+
+    fun canUploadBookCover():Boolean {
+        return titleNotNullOREmpty() && bookDocNotNullOREmpty()
+    }
+
+    fun canSaveBook() : Boolean{
+        return titleNotNullOREmpty() && bookDocNotNullOREmpty()
+    }
+
+    fun cancelUploadBookDocWorker(){
+        workManager?.cancelAllWorkByTag(UPLOAD_BOOK_DOC_WORKER_TAG)
+    }
+
+    fun cancelUploadBookCoverWorker() {
+        workManager?.cancelAllWorkByTag(UPLOAD_BOOK_DOC_WORKER_TAG)
     }
 }
 

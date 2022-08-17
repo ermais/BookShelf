@@ -1,20 +1,20 @@
 package com.example.bookshelf.create
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.BindingAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.work.Data
 import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.example.bookshelf.MainActivity
 import com.example.bookshelf.R
 import com.example.bookshelf.data.KEY_BOOK_COVER_URI
@@ -42,7 +42,7 @@ class CreateBookActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        val application = requireNotNull(this).application
+        val application = this as Context
         val auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         firestoreBookDataSource = FirestoreBookDataSource(db)
@@ -55,46 +55,34 @@ class CreateBookActivity : AppCompatActivity() {
             createBookViewModelFactory
         )[CreateBookViewModel::class.java]
 
+        println("Book Uri _----------------------------------")
+        println(viewModel.bookDocUri.value)
         binding.viewModel = viewModel
         binding.layoutBookCreate.viewModel = viewModel
         binding.layoutBookCreate.lifecycleOwner = this
         binding.lifecycleOwner = this
 
 
-        /*
-            Disable and enable  Save Button
-            Where All Required field is fulfilled enable button else
-            disable button till they fulfilled
-
-         */
-
-
-//        val bookCoverObserver = Observer<Uri> {bookCover:Uri->
-//            binding.layoutBookCreate.tvShow.text = bookCover.toString()
-//        }
-//
-//        viewModel.bookCover.observe(this,bookCoverObserver
-//
-//        )
-
 
         /**
          * Binding element
          */
 
-        binding.layoutBookCreate.btnUploadBook.visibility = View.GONE
-        binding.layoutBookCreate.btnBookCover.visibility = View.GONE
 
-
-        binding.layoutBookCreate.pbAddBook.visibility = View.GONE
-        binding.layoutBookCreate.btnBookCover.visibility = View.GONE
-        binding.layoutBookCreate.btnUploadBook.visibility = View.VISIBLE
-        if (viewModel.canCreateBook()){
-            binding.layoutBookCreate.btnAddBook.visibility = View.VISIBLE
-            binding.layoutBookCreate.pbAddBook.visibility = View.GONE
-        }else {
-            binding.layoutBookCreate.btnAddBook.visibility = View.GONE
+        with(binding.layoutBookCreate){
+            btnUploadBook.visibility = View.VISIBLE
+            btnBookCover.visibility = View.GONE
+            btnAddBook.visibility = View.GONE
+            pbAddBook.visibility = View.GONE
         }
+
+//
+//        if (viewModel.canCreateBook()){
+//            binding.layoutBookCreate.btnAddBook.visibility = View.VISIBLE
+//            binding.layoutBookCreate.pbAddBook.visibility = View.GONE
+//        }else {
+//            binding.layoutBookCreate.btnAddBook.visibility = View.GONE
+//        }
 
 
 
@@ -105,7 +93,7 @@ class CreateBookActivity : AppCompatActivity() {
          * return the result uri
          */
 
-        viewModel.bookDocUploadWorkInfo?.observe(this, Observer {
+        viewModel.bookDocUploadWorkInfo.observe(this, Observer {
             if(it.isNullOrEmpty()){
                 return@Observer
             }
@@ -114,6 +102,7 @@ class CreateBookActivity : AppCompatActivity() {
                     val bookDocUri = workInfo.outputData.getString(KEY_BOOK_URI)
                     viewModel.bookDocUri.value = bookDocUri
                     uploadBookOnFinished()
+                    println("Logging -------------------------------------")
                 }
                 if (WorkInfo.State.RUNNING == workInfo.state){
                     uploadBookOnProgress()
@@ -159,12 +148,37 @@ class CreateBookActivity : AppCompatActivity() {
             if (title.isNullOrEmpty()) {
                 binding.layoutBookCreate.btnBookCover.visibility = View.GONE
                 binding.layoutBookCreate.btnUploadBook.visibility = View.GONE
+                binding.layoutBookCreate.btnAddBook.visibility = View.GONE
+                viewModel.bookTitleError?.value = "Title is required!"
+//                binding.layoutBookCreate.bookTitleTextError.setTextColor(resources.getColor(R.color.red))
             }else {
-                binding.layoutBookCreate.btnBookCover.visibility = View.VISIBLE
                 binding.layoutBookCreate.btnUploadBook.visibility = View.VISIBLE
+                viewModel.bookTitleError?.value = ""
             }
 
         }
+
+        viewModel.bookDocUri.observe(this){uri->
+            if (uri.isNullOrEmpty()){
+                viewModel.bookDocUriError.value = "You must upload book document!"
+            }
+        }
+
+
+        viewModel.bookDocUri.observe(this){
+            if (it.isNullOrEmpty()){
+               with(binding.layoutBookCreate){
+                   btnAddBook.visibility = View.GONE
+                   btnBookCover.visibility = View.GONE
+               }
+            }else {
+                with(binding.layoutBookCreate){
+                    btnAddBook.visibility = View.VISIBLE
+                    btnBookCover.visibility = View.VISIBLE
+                }
+            }
+        }
+
 
         /**
          * Handling event listener
@@ -176,11 +190,17 @@ class CreateBookActivity : AppCompatActivity() {
          */
 
         binding.layoutBookCreate.btnBookCover.setOnClickListener {
-            if (isPermissionGranted(applicationContext, PHOTO_READ_PERMISSION)) {
-                getImageIntent()
-            } else {
-                requestPermission(requireNotNull(this), PHOTO_READ_PERMISSION, BOOK_COVER_RE_CODE)
+            if (viewModel.canUploadBookCover()){
+                if (isPermissionGranted(applicationContext, PHOTO_READ_PERMISSION)) {
+                    getImageIntent()
+                } else {
+                    requestPermission(requireNotNull(this), PHOTO_READ_PERMISSION, BOOK_COVER_RE_CODE)
+                }
+            }else {
+                val toast = Toast.makeText(this,"Title is required!",Toast.LENGTH_LONG)
+                toast.show()
             }
+
         }
 
         /**
@@ -190,11 +210,17 @@ class CreateBookActivity : AppCompatActivity() {
          *
          */
         binding.layoutBookCreate.btnUploadBook.setOnClickListener{
-            if (isPermissionGranted(applicationContext, PHOTO_READ_PERMISSION)) {
-                getBookDoc()
-            } else {
-                requestPermission(requireNotNull(this), PHOTO_READ_PERMISSION, BOOK_DOC_RE_CODE)
+            if (viewModel.canUploadBookDoc()){
+                if (isPermissionGranted(applicationContext, PHOTO_READ_PERMISSION)) {
+                    getBookDoc()
+                } else {
+                    requestPermission(requireNotNull(this), PHOTO_READ_PERMISSION, BOOK_DOC_RE_CODE)
+                }
+            }else {
+                val toast = Toast.makeText(this,"Title is required!",Toast.LENGTH_LONG)
+                toast.show()
             }
+
         }
 
         /**
@@ -204,41 +230,21 @@ class CreateBookActivity : AppCompatActivity() {
 
         binding.layoutBookCreate.btnAddBook.setOnClickListener { view ->
 
-            viewModel.publishBook()
-            val bookUriToast = Toast.makeText(this,"Book Successfully Created!",Toast.LENGTH_LONG)
-            bookUriToast.show()
-            val intent = Intent(this,MainActivity::class.java)
-            startActivity(intent)
-            finish()
+            if (viewModel.canSaveBook()){
+                viewModel.publishBook()
+                val bookUriToast = Toast.makeText(this,"Book Successfully Created!",Toast.LENGTH_LONG)
+                bookUriToast.show()
+                viewModel.cancelUploadBookDocWorker()
+                viewModel.cancelUploadBookCoverWorker()
+                val intent = Intent(this,MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }else {
+                val toast = Toast.makeText(this,"Title is required! OR \n book document must uploaded",Toast.LENGTH_LONG)
+                toast.show()
+            }
+
         }
-
-
-
-
-//
-//        val bookCoverUploadedObserver = Observer<Boolean> {
-//            binding.layoutBookCreate.tvShow.text  = it
-//        }
-
-//        val addBookBtnEnabledObserver = Observer<Boolean> {
-//            binding.layoutBookCreate.btnAddBook.isClickable = it
-//        }
-//
-//        val pbAddBookVisibilityObserver = Observer<Int> {
-//            binding.layoutBookCreate.pbAddBook.visibility = it
-//        }
-
-//        viewModel.bookCoverUploaded.observe(this,bookCoverUploadedObserver)
-//        viewModel.createBookBtnEnabled.observe(this, addBookBtnEnabledObserver)
-//        viewModel.pbAddBookVisibility.observe(this, pbAddBookVisibilityObserver)
-
-//        val bookCoverUploadedObserver = Observer<Boolean> { bookCoverUploaded:Boolean->
-//            coverUploaded = bookCoverUploaded
-//        }
-
-//        binding.viewModel.bookCoverUploaded.observe(this,bookCoverUploadedObserver)
-
-
 
 
         binding.layoutBookCreate.svCategory.onItemSelectedListener =
@@ -290,6 +296,9 @@ class CreateBookActivity : AppCompatActivity() {
 //    }
 
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -365,3 +374,13 @@ class CreateBookActivity : AppCompatActivity() {
         return data.getString(key)
     }
 }
+
+//@BindingAdapter("android:text")
+//fun setText(view:TextView,text:CharSequence){
+//    if (view.id == R.id.teBookTitle){
+//        view.text = text
+//        view.setBackgroundResource()
+//    }else {
+//        view.text = text
+//    }
+//}

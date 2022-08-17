@@ -13,4 +13,5 @@
     <color name="secondary">#a4a4a4</color>
     <color name="secondaryDark">#252525</color>
     <color name="orange">#ff7800</color>
+    <color name="red">#FF0000</color>
 </resources>

@@ -35,7 +35,7 @@ class UploadBookWorker(ctx: Context, params:WorkerParameters) : CoroutineWorker(
             val bookUri = Uri.parse(bookUriString)
             val bookTitle = inputData.getString(KEY_BOOK_TITLE)
             val storageRef = FirebaseStorage.getInstance().reference
-            val imageRef = storageRef.child("BookDoc/sample/bookUri")
+            val imageRef = storageRef.child("BookDoc/${bookTitle}/bookUri")
             val uploadTask = imageRef.putFile(bookUri as Uri)
 
             uploadTask

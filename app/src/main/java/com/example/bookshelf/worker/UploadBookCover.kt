@@ -30,7 +30,7 @@ class UploadBookCover(ctx : Context,params:WorkerParameters) : CoroutineWorker(c
             val bookTitle = inputData.getString(KEY_BOOK_TITLE)
             val bookUri = Uri.parse(bookUriString)
             val storageRef = FirebaseStorage.getInstance().reference
-            val imageRef = storageRef.child("BookCover/booktitle/cover")
+            val imageRef = storageRef.child("BookCover/${bookTitle}/cover")
             val uploadTask = imageRef.putFile(bookUri as Uri)
             uploadTask.addOnFailureListener{
                 continuation.resumeWithException(it)

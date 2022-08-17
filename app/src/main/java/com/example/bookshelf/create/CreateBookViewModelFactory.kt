@@ -1,6 +1,7 @@
 package com.example.bookshelf.create
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
@@ -9,7 +10,7 @@ import java.lang.IllegalArgumentException
 class CreateBookViewModelFactory(
     private val auth : FirebaseAuth,
     private val repo: CreateBookRepository,
-    private val app: Application
+    private val app: Context
 ) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

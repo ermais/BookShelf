@@ -1,17 +1,28 @@
 package com.example.bookshelf.model.book
 
+import android.net.Uri
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
+import androidx.work.ListenableWorker
+import androidx.work.workDataOf
+import com.example.bookshelf.data.KEY_BOOK_COVER_URI
+import com.example.bookshelf.data.KEY_BOOK_TITLE
+import com.google.android.gms.tasks.Continuation
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObjects
-import kotlinx.coroutines.flow.callbackFlow
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
-class FirestoreBookDataSource(db : FirebaseFirestore) : BookDataSource {
+class FirestoreBookDataSource(db : FirebaseFirestore,cloudStorage: FirebaseStorage) : BookDataSource {
+    val cloudRef = cloudStorage.reference
     val bookRef = db.collection("books")
     override suspend fun publishBook(book: Book) = flow {
         try {
@@ -113,4 +124,101 @@ class FirestoreBookDataSource(db : FirebaseFirestore) : BookDataSource {
     }
 
 
+    override suspend fun updateBookDoc(
+        bookUID: String,
+        bookTitle: String,
+        bookUriFromFile: Uri
+    ): Flow<Result<Void>> {
+        return flow {
+            try {
+                val bookDocUpdated = bookRef.document(bookUID)
+                    .update(mapOf("bookDocCover" to bookUriFromFile))
+                    .await()
+                emit(Result.Success(bookDocUpdated))
+            }catch (e:Exception){
+                emit(Result.Failure(e?.message ?: e.toString()))
+            }
+
+        }
     }
+
+    override suspend fun updateBookCover(
+        bookUID: String,
+        bookTitle: String,
+        bookCoverUriFromFile: String
+    ): Flow<Result<Void>> {
+        return flow {
+            try {
+                emit(Result.Loading)
+                val bookCoverUpdated = bookRef.document(bookUID)
+                    .update(mapOf("bookCover" to bookCoverUriFromFile))
+                    .await()
+                emit(Result.Success(bookCoverUpdated))
+            }catch (e:Exception){
+                emit(Result.Failure(e?.message ?: e.toString()))
+            }
+        }
+    }
+
+    override suspend fun rateBook(rating: String, bookUID: String): Flow<Result<Void>> {
+        return flow {
+            try {
+                emit(Result.Loading)
+                val bookRated = bookRef.document(bookUID)
+                    .update(mapOf("rating" to rating))
+                    .await()
+                emit(Result.Success(bookRated))
+            }catch (e:Exception){
+                Result.Failure(e?.message ?: e.toString())
+            }
+        }
+    }
+
+    override suspend fun sortByDate(): Flow<Result<List<Book>>> {
+        return getBooksFromFirestore()
+    }
+
+    override suspend fun sortByBookTitle(): Flow<Result<List<Book>>> {
+        return getBooksFromFirestore()
+    }
+
+    override suspend fun uploadBookDoc(uriFromFile: Uri,bookTitle: String): Flow<Result<MutableLiveData<Uri>>> {
+        return callbackFlow {
+                Result.Loading
+                var downloadUri : Uri? = null
+                val imageRef = cloudRef.child("Books/${bookTitle}/document")
+                val uploadTask = imageRef.putFile(uriFromFile)
+                uploadTask.continueWithTask{
+                    imageRef.downloadUrl
+                }.addOnSuccessListener {
+                   downloadUri = it
+                    Result.Success(downloadUri)
+                }.addOnFailureListener{
+                    Result.Failure(it.message ?: it.toString())
+                }
+            awaitClose{
+                uploadTask
+            }
+        }
+
+    }
+
+    override suspend fun uploadBookCover(uriFromFile: Uri,bookTitle: String): Flow<Result<Uri>> {
+        return callbackFlow {
+            Result.Loading
+            var downloadUri : Uri? = null
+            val imageRef = cloudRef.child("BookCover/${bookTitle}/cover")
+            val uploadTask = imageRef.putFile(uriFromFile)
+            uploadTask.continueWithTask {
+                imageRef.downloadUrl
+            }.addOnSuccessListener {
+                Result.Success(it)
+            }.addOnFailureListener {
+                Result.Failure(it.message ?: it.toString())
+            }
+            awaitClose {
+                uploadTask
+            }
+        }
+    }
+}
