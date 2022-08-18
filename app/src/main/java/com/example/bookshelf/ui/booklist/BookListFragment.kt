@@ -1,18 +1,24 @@
 package com.example.bookshelf.ui.booklist
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import com.example.bookshelf.MainViewModel
 import com.example.bookshelf.databinding.FragmentBookListBinding
 import com.example.bookshelf.model.book.Book
 import com.example.bookshelf.model.book.FirestoreBookDataSource
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 
 class BookListFragment : Fragment() {
     val books by lazy {
@@ -43,6 +49,8 @@ class BookListFragment : Fragment() {
     private lateinit var bookListRepository: BookListRepository
     private lateinit var bookListModel: BookListViewModel
     private var _binding: FragmentBookListBinding? = null
+    private lateinit var cloudStorage: FirebaseStorage
+    private lateinit var mainViewModel : MainViewModel
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -55,14 +63,22 @@ class BookListFragment : Fragment() {
     ): View? {
         _binding = FragmentBookListBinding.inflate(inflater, container, false)
         db = Firebase.firestore
-        firestoreBookDataSource = FirestoreBookDataSource(db)
+        cloudStorage = FirebaseStorage.getInstance()
+        firestoreBookDataSource = FirestoreBookDataSource(db, cloudStorage)
         bookListRepository = BookListRepository(firestoreBookDataSource)
         val bookListViewModelFactory = BookListViewModelFactory(bookListRepository, requireNotNull(activity).application)
         bookListModel = ViewModelProvider(this,bookListViewModelFactory).get(BookListViewModel::class.java)
         val adapter = BookListAdapter(requireContext())
-        bookListModel.books.observe(viewLifecycleOwner) {
+        activity?.let {
+            mainViewModel = ViewModelProviders.of(it)[MainViewModel::class.java]
+        }
+        mainViewModel.query.observe(viewLifecycleOwner){query->
+            bookListModel.filter(query)
+        }
+        bookListModel.filteredBooks?.observe(viewLifecycleOwner) {
             adapter.data = it
         }
+
 
         adapter.data = books
         binding.rvBookList.adapter = adapter
@@ -79,4 +95,5 @@ class BookListFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

@@ -26,6 +26,7 @@ import com.example.bookshelf.model.book.FirestoreBookDataSource
 import com.example.bookshelf.requestPermission
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 
 class CreateBookActivity : AppCompatActivity() {
 
@@ -33,6 +34,7 @@ class CreateBookActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreateBookBinding
     private lateinit var firestoreBookDataSource: FirestoreBookDataSource
     private lateinit var db: FirebaseFirestore
+    private lateinit var cloudStorage : FirebaseStorage
     private lateinit var viewModel: CreateBookViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,8 +47,9 @@ class CreateBookActivity : AppCompatActivity() {
         val application = this as Context
         val auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
-        firestoreBookDataSource = FirestoreBookDataSource(db)
-        val repo = CreateBookRepository(firestoreBookDataSource)
+        cloudStorage = FirebaseStorage.getInstance()
+        firestoreBookDataSource = FirestoreBookDataSource(db,cloudStorage)
+        val repo = CreateBookRepository(firestoreBookDataSource,cloudStorage)
         var coverUploaded: Boolean = false
 
         val createBookViewModelFactory = CreateBookViewModelFactory(auth,repo, application)
@@ -55,8 +58,6 @@ class CreateBookActivity : AppCompatActivity() {
             createBookViewModelFactory
         )[CreateBookViewModel::class.java]
 
-        println("Book Uri _----------------------------------")
-        println(viewModel.bookDocUri.value)
         binding.viewModel = viewModel
         binding.layoutBookCreate.viewModel = viewModel
         binding.layoutBookCreate.lifecycleOwner = this
@@ -93,48 +94,48 @@ class CreateBookActivity : AppCompatActivity() {
          * return the result uri
          */
 
-        viewModel.bookDocUploadWorkInfo.observe(this, Observer {
-            if(it.isNullOrEmpty()){
-                return@Observer
-            }
-            it.forEach{workInfo ->
-                if (WorkInfo.State.SUCCEEDED == workInfo.state){
-                    val bookDocUri = workInfo.outputData.getString(KEY_BOOK_URI)
-                    viewModel.bookDocUri.value = bookDocUri
-                    uploadBookOnFinished()
-                    println("Logging -------------------------------------")
-                }
-                if (WorkInfo.State.RUNNING == workInfo.state){
-                    uploadBookOnProgress()
-                }
+//        viewModel.bookDocUploadWorkInfo.observe(this, Observer {
+//            if(it.isNullOrEmpty()){
+//                return@Observer
+//            }
+//            it.forEach{workInfo ->
+//                if (WorkInfo.State.SUCCEEDED == workInfo.state){
+//                    val bookDocUri = workInfo.outputData.getString(KEY_BOOK_URI)
+//                    viewModel.bookDocUri.value = bookDocUri
+//                    uploadBookOnFinished()
+//                    println("Logging -------------------------------------")
+//                }
+//                if (WorkInfo.State.RUNNING == workInfo.state){
+//                    uploadBookOnProgress()
+//                }
+//
+//            }
+//
+//            val workInfo = it[0]
+//            if (workInfo.state.isFinished){
+//                val bookDocUri = workInfo.outputData.getString(KEY_BOOK_URI)
+//                println("Printing book doc uri -----------------------------------")
+//                println(bookDocUri)
+//            }
+//        })
 
-            }
-
-            val workInfo = it[0]
-            if (workInfo.state.isFinished){
-                val bookDocUri = workInfo.outputData.getString(KEY_BOOK_URI)
-                println("Printing book doc uri -----------------------------------")
-                println(bookDocUri)
-            }
-        })
-
-        viewModel.bookCoverUploadWorkInfo.observe(this, Observer {
-
-            if (it.isNullOrEmpty()){
-                return@Observer
-            }
-            it.forEach{workInfo ->
-                if (WorkInfo.State.SUCCEEDED == workInfo.state){
-
-                    val bookCoverUri = workInfo.outputData.getString(KEY_BOOK_COVER_URI)
-                    viewModel.bookCover.value = bookCoverUri
-                    uploadBookCoverOnFinished()
-                }
-                if (WorkInfo.State.RUNNING == workInfo.state){
-                    uploadBookCoverInProgress()
-                }
-            }
-        })
+//        viewModel.bookCoverUploadWorkInfo.observe(this, Observer {
+//
+//            if (it.isNullOrEmpty()){
+//                return@Observer
+//            }
+//            it.forEach{workInfo ->
+//                if (WorkInfo.State.SUCCEEDED == workInfo.state){
+//
+//                    val bookCoverUri = workInfo.outputData.getString(KEY_BOOK_COVER_URI)
+//                    viewModel.bookCover.value = bookCoverUri
+//                    uploadBookCoverOnFinished()
+//                }
+//                if (WorkInfo.State.RUNNING == workInfo.state){
+//                    uploadBookCoverInProgress()
+//                }
+//            }
+//        })
 
 
         /**
@@ -153,28 +154,53 @@ class CreateBookActivity : AppCompatActivity() {
 //                binding.layoutBookCreate.bookTitleTextError.setTextColor(resources.getColor(R.color.red))
             }else {
                 binding.layoutBookCreate.btnUploadBook.visibility = View.VISIBLE
+                binding.layoutBookCreate.btnBookCover.visibility = View.VISIBLE
+                binding.layoutBookCreate.btnAddBook.visibility = View.VISIBLE
                 viewModel.bookTitleError?.value = ""
             }
 
         }
 
-        viewModel.bookDocUri.observe(this){uri->
+        viewModel.bookDocUriFromFirebase.observe(this){uri->
             if (uri.isNullOrEmpty()){
                 viewModel.bookDocUriError.value = "You must upload book document!"
+            }else {
+                binding.layoutBookCreate.btnBookCover.visibility = View.VISIBLE
+                binding.layoutBookCreate.btnAddBook.visibility = View.VISIBLE
             }
         }
 
 
-        viewModel.bookDocUri.observe(this){
+        viewModel.bookCoverUriFromFirebase.observe(this){
             if (it.isNullOrEmpty()){
                with(binding.layoutBookCreate){
                    btnAddBook.visibility = View.GONE
-                   btnBookCover.visibility = View.GONE
                }
             }else {
                 with(binding.layoutBookCreate){
                     btnAddBook.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        viewModel.loading.observe(this){
+            if (it as Boolean){
+                binding.layoutBookCreate.pbAddBook.visibility = View.VISIBLE
+            }else{
+                binding.layoutBookCreate.pbAddBook.visibility = View.GONE
+            }
+        }
+
+        viewModel.bookCreated.observe(this){
+            with(binding.layoutBookCreate){
+                if (it as Boolean){
                     btnBookCover.visibility = View.VISIBLE
+                    pbAddBook.visibility = View.VISIBLE
+                    btnAddBook.visibility = View.VISIBLE
+                }else {
+                    btnBookCover.visibility = View.GONE
+                    pbAddBook.visibility = View.GONE
+                    pbAddBook.visibility = View.GONE
                 }
             }
         }
@@ -229,16 +255,15 @@ class CreateBookActivity : AppCompatActivity() {
          */
 
         binding.layoutBookCreate.btnAddBook.setOnClickListener { view ->
-
             if (viewModel.canSaveBook()){
                 viewModel.publishBook()
-                val bookUriToast = Toast.makeText(this,"Book Successfully Created!",Toast.LENGTH_LONG)
-                bookUriToast.show()
-                viewModel.cancelUploadBookDocWorker()
-                viewModel.cancelUploadBookCoverWorker()
-                val intent = Intent(this,MainActivity::class.java)
-                startActivity(intent)
-                finish()
+                    val bookUriToast = Toast.makeText(this,"Book Successfully Created!",Toast.LENGTH_LONG)
+                    bookUriToast.show()
+//                viewModel.cancelUploadBookDocWorker()
+//                viewModel.cancelUploadBookCoverWorker()
+                    val intent = Intent(this,MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
             }else {
                 val toast = Toast.makeText(this,"Title is required! OR \n book document must uploaded",Toast.LENGTH_LONG)
                 toast.show()
@@ -306,18 +331,17 @@ class CreateBookActivity : AppCompatActivity() {
             val imageUri = data?.data
             val toast = Toast.makeText(applicationContext, imageUri.toString(), Toast.LENGTH_LONG)
             toast.show()
-            viewModel.bookCover.value = imageUri.toString()
+            viewModel.bookCoverUriFromFile.value = imageUri.toString()
             viewModel.uploadBookCover()
         }
         if (requestCode == GET_BOOK_DOC && resultCode == Activity.RESULT_OK) {
             val bookDoc: Uri? = data?.data
             val toast = Toast.makeText(applicationContext, bookDoc.toString(), Toast.LENGTH_LONG)
             toast.show()
-            viewModel.bookDocUri.value = bookDoc.toString()
-            val toastViewModel = Toast.makeText(applicationContext, viewModel.bookDocUri.value, Toast.LENGTH_LONG)
+            viewModel.bookDocUriFromFile.value = bookDoc.toString()
+            val toastViewModel = Toast.makeText(applicationContext, viewModel.bookDocUriFromFile.value, Toast.LENGTH_LONG)
             toastViewModel.show()
             viewModel.uploadBookDoc()
-
         }
     }
 

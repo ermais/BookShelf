@@ -1,5 +1,7 @@
 package com.example.bookshelf
 
+import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -16,18 +18,24 @@ import com.example.bookshelf.create.CreateBookActivity
 import com.example.bookshelf.databinding.ActivityMainBinding
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import androidx.appcompat.widget.SearchView.*
+import androidx.lifecycle.ViewModelProvider
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() , OnQueryTextListener{
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModelFactory: MainViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        initSearchView()
+        viewModelFactory = MainViewModelFactory(application)
+        viewModel = ViewModelProvider(this,viewModelFactory).get(MainViewModel::class.java)
         setSupportActionBar(binding.appBarMain.toolbar)
         binding.appBarMain.fabCreateBook.setOnClickListener{
             val createBookIntent = Intent(this, CreateBookActivity::class.java)
@@ -68,5 +76,23 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        viewModel.setQuery(query)
+        return false
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        viewModel.setQuery(newText)
+        return false
+    }
+
+    fun initSearchView(){
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        binding.appBarMain.actionSearch.setSearchableInfo(searchManager.getSearchableInfo(this.componentName))
+        binding.appBarMain.actionSearch.maxWidth = Int.MAX_VALUE
+        binding.appBarMain.actionSearch.setOnQueryTextListener(this)
+
     }
 }

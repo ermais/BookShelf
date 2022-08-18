@@ -7,6 +7,7 @@ import androidx.work.ListenableWorker
 import androidx.work.workDataOf
 import com.example.bookshelf.data.KEY_BOOK_COVER_URI
 import com.example.bookshelf.data.KEY_BOOK_TITLE
+import com.example.bookshelf.data.KEY_BOOK_URI
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -17,6 +18,7 @@ import com.google.firebase.storage.UploadTask
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
+import com.example.bookshelf.model.book.Result.Success
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -182,25 +184,27 @@ class FirestoreBookDataSource(db : FirebaseFirestore,cloudStorage: FirebaseStora
         return getBooksFromFirestore()
     }
 
-    override suspend fun uploadBookDoc(uriFromFile: Uri,bookTitle: String): Flow<Result<MutableLiveData<Uri>>> {
-        return callbackFlow {
+    override suspend fun uploadBookDoc(uriFromFile: Uri,bookTitle: String) =
+        callbackFlow {
                 Result.Loading
                 var downloadUri : Uri? = null
                 val imageRef = cloudRef.child("Books/${bookTitle}/document")
                 val uploadTask = imageRef.putFile(uriFromFile)
-                uploadTask.continueWithTask{
+                val loading = uploadTask.continueWithTask{
                     imageRef.downloadUrl
                 }.addOnSuccessListener {
-                   downloadUri = it
-                    Result.Success(downloadUri)
+                    downloadUri = it
+                    trySend(Success(it))
+                }.addOnCompleteListener {
+                    if (it.isSuccessful){
+                        Success(it.result)
+                    }else {
+                        Result.Failure(it.exception?.message.toString())
+                    }
                 }.addOnFailureListener{
                     Result.Failure(it.message ?: it.toString())
                 }
-            awaitClose{
-                uploadTask
-            }
-        }
-
+            awaitClose { loading.result }
     }
 
     override suspend fun uploadBookCover(uriFromFile: Uri,bookTitle: String): Flow<Result<Uri>> {
@@ -209,15 +213,16 @@ class FirestoreBookDataSource(db : FirebaseFirestore,cloudStorage: FirebaseStora
             var downloadUri : Uri? = null
             val imageRef = cloudRef.child("BookCover/${bookTitle}/cover")
             val uploadTask = imageRef.putFile(uriFromFile)
-            uploadTask.continueWithTask {
+            val loading = uploadTask.continueWithTask {
                 imageRef.downloadUrl
             }.addOnSuccessListener {
-                Result.Success(it)
+                downloadUri = it
+                trySend(Success(it))
             }.addOnFailureListener {
                 Result.Failure(it.message ?: it.toString())
             }
             awaitClose {
-                uploadTask
+                loading.result
             }
         }
     }

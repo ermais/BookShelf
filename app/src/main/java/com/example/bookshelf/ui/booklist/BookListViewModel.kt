@@ -12,13 +12,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.util.Collections.copy
 
 class BookListViewModel(private val bookListRepository: BookListRepository, application:Application) : ViewModel(){
-    var _books = MutableLiveData<List<Book>>()
+    var _books = MutableLiveData<MutableList<Book>>()
+    var filteredBooks =  MutableLiveData<MutableList<Book>>()
 
     var books = _books
     init {
         getBooks()
+        filteredBooks = books
     }
 
 
@@ -26,7 +29,6 @@ class BookListViewModel(private val bookListRepository: BookListRepository, appl
         bookListRepository.getBookList().collect{
             Log.d("BookListViewModel",it.toString())
              books.value = it.data
-
         }
     }
 
@@ -41,6 +43,23 @@ class BookListViewModel(private val bookListRepository: BookListRepository, appl
         bookListRepository.filterByAuthor(author).collect{
             books.value = it.data
         }
+    }
+
+     fun filter(query:String?) = viewModelScope.launch {
+         if (!query.isNullOrEmpty()){
+             val _filteredBooks = books.value?.filter { book:Book-> query.let {
+                 book.title?.contains(
+                     it
+                 )
+             }
+                 ?: true }
+             filteredBooks.value = (_filteredBooks as MutableList<Book>?)!!
+         }else{
+             filteredBooks = books
+             println("Check out the list of books ---------------------------")
+             println(books)
+         }
+
     }
 
 

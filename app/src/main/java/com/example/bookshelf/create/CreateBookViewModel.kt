@@ -2,6 +2,7 @@ package com.example.bookshelf.create
 
 import android.app.Application
 import android.content.Context
+import android.net.Uri
 import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,10 +14,13 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.example.bookshelf.data.*
 import com.example.bookshelf.model.book.Book
+import com.example.bookshelf.model.book.Result
 import com.example.bookshelf.model.book.data
 import com.example.bookshelf.worker.UploadBookCover
 import com.example.bookshelf.worker.UploadBookWorker
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -27,24 +31,34 @@ class CreateBookViewModel(
 )
     : ViewModel(){
 
-    val bookTitle by lazy { MutableLiveData<String>() }
+    val bookTitle by lazy { MutableLiveData<String>("") }
     val bookDesc by lazy {MutableLiveData<String>()}
     val bookCategory by lazy { MutableLiveData<String>() }
-    var bookCover = MutableLiveData<String>()
-    var bookDocUri = MutableLiveData<String>()
-    var bookCreated = MutableLiveData<Void>()
-     val bookDocUploadWorkInfo  : LiveData<List<WorkInfo>> by lazy {
-         workManager.getWorkInfosByTagLiveData(UPLOAD_BOOK_DOC_WORKER_TAG)
-     }
-     val bookCoverUploadWorkInfo  : LiveData<List<WorkInfo>> by lazy {
-         workManager.getWorkInfosByTagLiveData(UPLOAD_BOOK_COVER_WORKER_TAG)
-     }
+    var bookCoverUriFromFile = MutableLiveData<String>()
+    var bookDocUriFromFile = MutableLiveData<String>()
+    val bookDocUriFromFirebase : MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+    val bookCoverUriFromFirebase : MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+    var bookCreated = MutableLiveData<Boolean>(false)
+//     val bookDocUploadWorkInfo  : LiveData<List<WorkInfo>> by lazy {
+//         workManager.getWorkInfosByTagLiveData(UPLOAD_BOOK_DOC_WORKER_TAG)
+//     }
+//     val bookCoverUploadWorkInfo  : LiveData<List<WorkInfo>> by lazy {
+//         workManager.getWorkInfosByTagLiveData(UPLOAD_BOOK_COVER_WORKER_TAG)
+//     }
     val bookTitleError : MutableLiveData<String> by lazy {
         MutableLiveData<String>("")
     }
 
     val bookDocUriError : MutableLiveData<String> by lazy {
         MutableLiveData<String>("")
+    }
+
+    val loading : MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>(false)
     }
     var workManager: WorkManager = WorkManager.getInstance(application)
 
@@ -53,73 +67,73 @@ class CreateBookViewModel(
 
     }
 
-         fun publishBook() = viewModelScope.launch {
+    fun publishBook() = viewModelScope.launch {
             val book = Book(
                 auth.currentUser?.uid,
                 bookTitle.value,
                 auth.currentUser?.displayName,
                 bookCategory.value,
                 bookDesc.value,Date(),
-                bookDocUri.value,
-                bookCover.value,
+                bookDocUriFromFirebase.value,
+                bookCoverUriFromFirebase.value,
                 "0.0"
             )
             createBookRepository.publishBook(book).collect{
-                bookCreated.value = it.data
+                bookCreated.postValue(true)
             }
-        }
-
-
-
-
-    fun uploadBookDoc() = viewModelScope.launch{
-        val uploadBookWorker = OneTimeWorkRequestBuilder<UploadBookWorker>()
-            .setInputData(createBookURIInputData())
-            .addTag(UPLOAD_BOOK_DOC_WORKER_TAG)
-            .build()
-        workManager?.enqueue(uploadBookWorker)
-    }
-
-    fun uploadBookCover()= viewModelScope.launch{
-        val uploadBookCoverRequest = OneTimeWorkRequestBuilder<UploadBookCover>()
-            .setInputData(createBookCoverURInputData())
-            .addTag(UPLOAD_BOOK_COVER_WORKER_TAG)
-            .build()
-        workManager?.enqueue(uploadBookCoverRequest)
-    }
-
-    private fun createBookURIInputData():Data {
-        val dataBuilder = Data.Builder()
-        println("Printing from createBookURIInputData-------------------------------")
-        println(bookDocUri.value.toString())
-        bookDocUri.let {
-            dataBuilder.putString(KEY_BOOK_URI,it.value.toString())
-            dataBuilder.putString(KEY_BOOK_TITLE, bookTitle.value)
-        }
-        return dataBuilder.build()
     }
 
 
-    private fun createBookCoverURInputData():Data {
-        val dataBuilder = Data.Builder()
-        bookCover.let {
-            dataBuilder.putString(KEY_BOOK_COVER_URI,it.value)
-            dataBuilder.putString(KEY_BOOK_TITLE,bookTitle.value)
-        }
-        return dataBuilder.build()
-    }
 
-    fun canCreateBook() : Boolean {
-        return bookDocUploadWorkInfo?.value?.get(0)?.state?.isFinished  == true &&
-                bookCoverUploadWorkInfo?.value?.get(0)?.state?.isFinished ==true
-    }
+
+//    fun uploadBookDoc() = viewModelScope.launch{
+//        val uploadBookWorker = OneTimeWorkRequestBuilder<UploadBookWorker>()
+//            .setInputData(createBookURIInputData())
+//            .addTag(UPLOAD_BOOK_DOC_WORKER_TAG)
+//            .build()
+//        workManager?.enqueue(uploadBookWorker)
+//    }
+//
+//    fun uploadBookCover()= viewModelScope.launch{
+//        val uploadBookCoverRequest = OneTimeWorkRequestBuilder<UploadBookCover>()
+//            .setInputData(createBookCoverURInputData())
+//            .addTag(UPLOAD_BOOK_COVER_WORKER_TAG)
+//            .build()
+//        workManager?.enqueue(uploadBookCoverRequest)
+//    }
+
+//    private fun createBookURIInputData():Data {
+//        val dataBuilder = Data.Builder()
+//        println("Printing from createBookURIInputData-------------------------------")
+//        println(bookDocUri.value.toString())
+//        bookDocUri.let {
+//            dataBuilder.putString(KEY_BOOK_URI,it.value.toString())
+//            dataBuilder.putString(KEY_BOOK_TITLE, bookTitle.value)
+//        }
+//        return dataBuilder.build()
+//    }
+//
+//
+//    private fun createBookCoverURInputData():Data {
+//        val dataBuilder = Data.Builder()
+//        bookCover.let {
+//            dataBuilder.putString(KEY_BOOK_COVER_URI,it.value)
+//            dataBuilder.putString(KEY_BOOK_TITLE,bookTitle.value)
+//        }
+//        return dataBuilder.build()
+//    }
+
+//    fun canCreateBook() : Boolean {
+//        return bookDocUploadWorkInfo?.value?.get(0)?.state?.isFinished  == true &&
+//                bookCoverUploadWorkInfo?.value?.get(0)?.state?.isFinished ==true
+//    }
 
     fun titleNotNullOREmpty():Boolean {
         return (!TextUtils.isEmpty(bookTitle.value)) && (bookTitle.value != null)
     }
 
     fun bookDocNotNullOREmpty():Boolean {
-        return (!TextUtils.isEmpty(bookDocUri.value) && bookDocUri.value != null)
+        return (!TextUtils.isEmpty(bookDocUriFromFirebase.value) && bookDocUriFromFirebase.value != null)
     }
 
 
@@ -141,6 +155,25 @@ class CreateBookViewModel(
 
     fun cancelUploadBookCoverWorker() {
         workManager?.cancelAllWorkByTag(UPLOAD_BOOK_DOC_WORKER_TAG)
+    }
+
+
+    fun uploadBookDoc() =viewModelScope.launch(Dispatchers.IO) {
+        loading.postValue(true)
+        createBookRepository.uploadBookDoc(Uri.parse(bookDocUriFromFile.value),bookTitle.value.toString())
+            .collect{result->
+                bookDocUriFromFirebase.postValue(result.data.toString())
+                loading.postValue(false)
+            }
+    }
+
+    fun uploadBookCover() = viewModelScope.launch(Dispatchers.IO) {
+        loading.postValue(true)
+        createBookRepository.uploadBookCover(Uri.parse(bookCoverUriFromFile.value),bookTitle.value.toString())
+            .collect{result->
+                bookCoverUriFromFirebase.postValue(result.data.toString())
+                loading.postValue(false)
+            }
     }
 }
 

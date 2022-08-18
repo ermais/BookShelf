@@ -19,7 +19,15 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/primaryDark"
                 android:elevation="0dp"
-                app:popupTheme="@style/Theme.BookShelf.PopupOverlay" />
+                app:popupTheme="@style/Theme.BookShelf.PopupOverlay" >
+
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/action_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:focusable="false"
+                    />
+            </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
 

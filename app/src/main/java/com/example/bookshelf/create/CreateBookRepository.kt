@@ -3,19 +3,16 @@ package com.example.bookshelf.create
 import android.net.Uri
 import com.example.bookshelf.model.book.Book
 import com.example.bookshelf.model.book.FirestoreBookDataSource
-import com.google.android.gms.tasks.Continuation
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.UploadTask
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
-class CreateBookRepository(val firestoreBookDataSource: FirestoreBookDataSource){
+class CreateBookRepository(val firestoreBookDataSource: FirestoreBookDataSource,val cloudStorage:FirebaseStorage){
     suspend fun publishBook(book:Book) = firestoreBookDataSource.publishBook(book)
+    suspend fun uploadBookDoc(uriFromFile:Uri,bookTitle: String) =
+        firestoreBookDataSource.uploadBookDoc(uriFromFile,bookTitle)
+
+    suspend fun uploadBookCover(uriFromFile: Uri,bookTitle: String) =
+        firestoreBookDataSource.uploadBookCover(uriFromFile,bookTitle)
+
 }
 
 

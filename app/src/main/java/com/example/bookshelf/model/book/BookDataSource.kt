@@ -18,7 +18,7 @@ interface BookDataSource {
     suspend fun rateBook(rating:String,bookUID:String): Flow<Result<Void>>
     suspend fun sortByDate():Flow<Result<List<Book>>>
     suspend fun sortByBookTitle():Flow<Result<List<Book>>>
-    suspend fun uploadBookDoc(uriFromFile:Uri,bookTitle: String) : Flow<Result<MutableLiveData<Uri>>>
+    suspend fun uploadBookDoc(uriFromFile:Uri,bookTitle: String) : Flow<Result<Uri>>
     suspend fun uploadBookCover(uriFromFile: Uri,bookTitle: String): Flow<Result<Uri>>
 
 }
