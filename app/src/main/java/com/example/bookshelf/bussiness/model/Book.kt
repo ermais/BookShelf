@@ -1,4 +1,4 @@
-package com.example.bookshelf.model.book
+package com.example.bookshelf.bussiness.model
 import com.google.firebase.database.Exclude
 import com.google.firebase.database.IgnoreExtraProperties
 import java.util.*

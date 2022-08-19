@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.bookshelf.R
-import com.example.bookshelf.model.book.Book
+import com.example.bookshelf.bussiness.model.Book
 
 class BookListAdapter(context : Context)  : RecyclerView.Adapter<BookListAdapter.ViewHolder>() {
     private val mContext  by lazy {context}
@@ -41,7 +41,7 @@ class BookListAdapter(context : Context)  : RecyclerView.Adapter<BookListAdapter
         val tvAuthor = itemView.findViewById<TextView>(R.id.tvAuthor)
         val rbBook = itemView.findViewById(R.id.rbBook) as RatingBar
         @SuppressLint("SetTextI18n")
-        fun bind(item:Book,mContext:Context){
+        fun bind(item: Book, mContext:Context){
             val requestOptions : RequestOptions = RequestOptions().placeholder(R.drawable.ic_launcher_background)
             tvBookTitle.text = item.title
             tvCategory.text = item.category

@@ -1,29 +1,18 @@
-package com.example.bookshelf.model.book
+package com.example.bookshelf.bussiness
 
 import android.net.Uri
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.work.ListenableWorker
-import androidx.work.workDataOf
-import com.example.bookshelf.data.KEY_BOOK_COVER_URI
-import com.example.bookshelf.data.KEY_BOOK_TITLE
-import com.example.bookshelf.data.KEY_BOOK_URI
-import com.google.android.gms.tasks.Continuation
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
+import com.example.bookshelf.bussiness.model.Book
+import com.example.bookshelf.model.book.Result
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.UploadTask
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
 import com.example.bookshelf.model.book.Result.Success
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
-class FirestoreBookDataSource(db : FirebaseFirestore,cloudStorage: FirebaseStorage) : BookDataSource {
+class FirestoreBookDataSource(db : FirebaseFirestore,cloudStorage: FirebaseStorage) :
+    BookDataSource {
     val cloudRef = cloudStorage.reference
     val bookRef = db.collection("books")
     override suspend fun publishBook(book: Book) = flow {

@@ -1,4 +1,4 @@
-package com.example.bookshelf.create
+package com.example.bookshelf.ui.create
 
 import android.app.Activity
 import android.content.Context
@@ -8,21 +8,14 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.BindingAdapter
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.work.Data
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
-import com.example.bookshelf.MainActivity
+import com.example.bookshelf.ui.main.MainActivity
 import com.example.bookshelf.R
-import com.example.bookshelf.data.KEY_BOOK_COVER_URI
-import com.example.bookshelf.data.KEY_BOOK_URI
-import com.example.bookshelf.data.UPLOAD_BOOK_COVER_PROGRESS
 import com.example.bookshelf.databinding.ActivityCreateBookBinding
 import com.example.bookshelf.isPermissionGranted
-import com.example.bookshelf.model.book.FirestoreBookDataSource
+import com.example.bookshelf.bussiness.FirestoreBookDataSource
 import com.example.bookshelf.requestPermission
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -261,7 +254,7 @@ class CreateBookActivity : AppCompatActivity() {
                     bookUriToast.show()
 //                viewModel.cancelUploadBookDocWorker()
 //                viewModel.cancelUploadBookCoverWorker()
-                    val intent = Intent(this,MainActivity::class.java)
+                    val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finish()
             }else {

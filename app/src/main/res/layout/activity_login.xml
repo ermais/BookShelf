@@ -11,7 +11,7 @@
         android:focusable="auto"
         android:theme="@style/Theme.BookShelf"
         app:circularflow_radiusInDP="100"
-        tools:context=".LoginActivity">
+        tools:context=".ui.login.LoginActivity">
 
         <EditText
             android:id="@+id/editTextUsername"

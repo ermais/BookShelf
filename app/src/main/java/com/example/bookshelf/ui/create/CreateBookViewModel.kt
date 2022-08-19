@@ -1,26 +1,17 @@
-package com.example.bookshelf.create
+package com.example.bookshelf.ui.create
 
-import android.app.Application
 import android.content.Context
 import android.net.Uri
 import android.text.TextUtils
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.work.Data
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.example.bookshelf.data.*
-import com.example.bookshelf.model.book.Book
-import com.example.bookshelf.model.book.Result
+import com.example.bookshelf.bussiness.model.Book
 import com.example.bookshelf.model.book.data
-import com.example.bookshelf.worker.UploadBookCover
-import com.example.bookshelf.worker.UploadBookWorker
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
 

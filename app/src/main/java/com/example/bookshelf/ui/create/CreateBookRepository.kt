@@ -1,12 +1,12 @@
-package com.example.bookshelf.create
+package com.example.bookshelf.ui.create
 
 import android.net.Uri
-import com.example.bookshelf.model.book.Book
-import com.example.bookshelf.model.book.FirestoreBookDataSource
+import com.example.bookshelf.bussiness.model.Book
+import com.example.bookshelf.bussiness.FirestoreBookDataSource
 import com.google.firebase.storage.FirebaseStorage
 
-class CreateBookRepository(val firestoreBookDataSource: FirestoreBookDataSource,val cloudStorage:FirebaseStorage){
-    suspend fun publishBook(book:Book) = firestoreBookDataSource.publishBook(book)
+class CreateBookRepository(val firestoreBookDataSource: FirestoreBookDataSource, val cloudStorage:FirebaseStorage){
+    suspend fun publishBook(book: Book) = firestoreBookDataSource.publishBook(book)
     suspend fun uploadBookDoc(uriFromFile:Uri,bookTitle: String) =
         firestoreBookDataSource.uploadBookDoc(uriFromFile,bookTitle)
 

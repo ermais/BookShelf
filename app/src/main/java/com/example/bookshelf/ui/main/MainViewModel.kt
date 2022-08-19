@@ -1,4 +1,4 @@
-package com.example.bookshelf
+package com.example.bookshelf.ui.main
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData

@@ -1,12 +1,12 @@
-package com.example.bookshelf.model.book
+package com.example.bookshelf.bussiness
 
 import android.net.Uri
-import androidx.lifecycle.MutableLiveData
+import com.example.bookshelf.bussiness.model.Book
+import com.example.bookshelf.model.book.Result
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 
 interface BookDataSource {
-    suspend fun publishBook(book:Book) : Flow<Result<Void>>
+    suspend fun publishBook(book: Book) : Flow<Result<Void>>
     suspend fun getBooksFromFirestore() : Flow<Result<MutableList<Book>>>
     suspend fun updateBook(book: Book) : Flow<Result<Void>>
     suspend fun deleteBook(bookId: String) : Flow<Result<Void?>>

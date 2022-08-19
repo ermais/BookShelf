@@ -1,20 +1,16 @@
 package com.example.bookshelf.ui.booklist
 
-import android.app.SearchManager
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.example.bookshelf.MainViewModel
+import com.example.bookshelf.ui.main.MainViewModel
 import com.example.bookshelf.databinding.FragmentBookListBinding
-import com.example.bookshelf.model.book.Book
-import com.example.bookshelf.model.book.FirestoreBookDataSource
+import com.example.bookshelf.bussiness.model.Book
+import com.example.bookshelf.bussiness.FirestoreBookDataSource
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase

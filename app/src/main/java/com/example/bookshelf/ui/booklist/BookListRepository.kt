@@ -1,5 +1,5 @@
 package com.example.bookshelf.ui.booklist
-import com.example.bookshelf.model.book.FirestoreBookDataSource
+import com.example.bookshelf.bussiness.FirestoreBookDataSource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.*
 import com.google.firebase.ktx.Firebase

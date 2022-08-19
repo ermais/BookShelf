@@ -1,11 +1,9 @@
-package com.example.bookshelf
+package com.example.bookshelf.ui.login
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.bookshelf.data.User
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
 class LoginViewModel(auth: FirebaseAuth) : ViewModel() {
 

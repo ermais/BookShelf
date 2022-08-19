@@ -1,4 +1,4 @@
-package com.example.bookshelf
+package com.example.bookshelf.ui.createaccount
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -1,10 +1,12 @@
-package com.example.bookshelf
+package com.example.bookshelf.ui.login
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.example.bookshelf.ui.main.MainActivity
+import com.example.bookshelf.R
 import com.example.bookshelf.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -15,7 +17,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import kotlin.reflect.KType
 
 class LoginActivity : AppCompatActivity() {
 
@@ -47,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
 
         Log.d(LoginActivity::getLocalClassName.toString(),"On create")
         binding.btnUserLogin.setOnClickListener { view->
-            val intent = Intent(this,MainActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
@@ -112,7 +113,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun updateUI(user: FirebaseUser?) {
         if (user !=null){
-            val intent = Intent(this,MainActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
         }

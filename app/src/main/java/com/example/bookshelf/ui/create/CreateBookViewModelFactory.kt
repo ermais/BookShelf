@@ -1,6 +1,5 @@
-package com.example.bookshelf.create
+package com.example.bookshelf.ui.create
 
-import android.app.Application
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

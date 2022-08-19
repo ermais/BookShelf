@@ -10,7 +10,7 @@
             android:elevation="20dp"
             android:paddingTop="10dp"
             android:theme="@style/Theme.BookShelf"
-            tools:context=".CreateAccountActivity">
+            tools:context=".ui.createaccount.CreateAccountActivity">
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guidelineTop"

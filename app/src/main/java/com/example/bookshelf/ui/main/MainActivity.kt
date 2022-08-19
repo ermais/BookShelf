@@ -1,4 +1,4 @@
-package com.example.bookshelf
+package com.example.bookshelf.ui.main
 
 import android.app.SearchManager
 import android.content.Context
@@ -14,12 +14,14 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
-import com.example.bookshelf.create.CreateBookActivity
+import com.example.bookshelf.ui.create.CreateBookActivity
 import com.example.bookshelf.databinding.ActivityMainBinding
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import androidx.appcompat.widget.SearchView.*
 import androidx.lifecycle.ViewModelProvider
+import com.example.bookshelf.R
+import com.example.bookshelf.ui.login.LoginActivity
 
 class MainActivity : AppCompatActivity() , OnQueryTextListener{
 
@@ -57,9 +59,9 @@ class MainActivity : AppCompatActivity() , OnQueryTextListener{
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.action_settings->{
+            R.id.action_settings ->{
 
-                val intent = Intent(this,LoginActivity::class.java)
+                val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
                 Firebase.auth.signOut()
             }
