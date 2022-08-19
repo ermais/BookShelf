@@ -4,7 +4,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.bookshelf.create.CreateBookViewModel" />
+            type="com.example.bookshelf.ui.create.CreateBookViewModel" />
     </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
 

@@ -23,13 +23,15 @@
         <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/drawable/btn_rounded_colored.xml" value="0.199" />
         <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/drawable/btn_shape.xml" value="0.199" />
         <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/drawable/btn_shape_outlined.xml" value="0.1" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/drawable/home_tab_list_selector.xml" value="0.1" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/drawable/ic_plant_list_active.xml" value="0.1" />
         <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/drawable/input_shape.xml" value="0.199" />
         <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout-v28/content_create_book.xml" value="0.25" />
         <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/activity_create_account.xml" value="0.1" />
         <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/activity_create_book.xml" value="0.22" />
         <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/activity_login.xml" value="0.16" />
         <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/activity_main.xml" value="0.17481884057971014" />
-        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/app_bar_main.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/app_bar_main.xml" value="0.22" />
         <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/book_list_item.xml" value="0.25" />
         <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/content_create_book.xml" value="0.25" />
         <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/content_main.xml" value="0.1" />
@@ -38,8 +40,10 @@
         <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/fragment_gallery.xml" value="0.17481884057971014" />
         <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/fragment_home.xml" value="0.15806159420289856" />
         <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/fragment_recent.xml" value="0.17481884057971014" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/fragment_second.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/fragment_slideshow.xml" value="0.1" />
         <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/fragment_top_rated.xml" value="0.1" />
+        <entry key="..\:/Users/erma/StudioProjects/BookShelf/app/src/main/res/layout/nav_header_main.xml" value="0.20416666666666666" />
       </map>
     </option>
   </component>

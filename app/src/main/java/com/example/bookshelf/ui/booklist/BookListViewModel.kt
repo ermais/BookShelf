@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bookshelf.bussiness.model.Book
-import com.example.bookshelf.model.book.data
+import com.example.bookshelf.bussiness.Result.data
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

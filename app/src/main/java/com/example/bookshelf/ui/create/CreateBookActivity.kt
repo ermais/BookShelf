@@ -20,6 +20,7 @@ import com.example.bookshelf.requestPermission
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.example.bookshelf.ui.create.CreateBookViewModel
 
 class CreateBookActivity : AppCompatActivity() {
 

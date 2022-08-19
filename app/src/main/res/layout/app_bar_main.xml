@@ -10,25 +10,75 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/Theme.BookShelf.AppBarOverlay">
+            android:layout_height="@dimen/book_shelf_app_bar_size"
+            android:fitsSystemWindows="true"
+            style="@style/Theme.BookShelf.AppBarOverlay"
+            >
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                style="?attr/collapsingToolbarLayoutStyle"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/primaryDark"
-                android:elevation="0dp"
-                app:popupTheme="@style/Theme.BookShelf.PopupOverlay" >
+                app:layout_scrollFlags="scroll|snap"
+                app:toolbarId="@id/toolbar"
+                android:layout_height="?attr/actionBarSize">
 
-                <androidx.appcompat.widget.SearchView
-                    android:id="@+id/action_search"
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:focusable="false"
-                    />
-            </androidx.appcompat.widget.Toolbar>
+                    android:elevation="0dp"
+                    app:contentInsetStart="0dp"
+                    app:layout_collapseMode="parallax"
+                    app:popupTheme="@style/Theme.BookShelf.PopupOverlay">
 
+                    <androidx.appcompat.widget.SearchView
+                        android:id="@+id/action_search"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:focusable="false" />
+
+                </androidx.appcompat.widget.Toolbar>
+
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                >
+
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/homeTabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="SpeakableTextPresentCheck">
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|start"
+                        android:layout_marginTop="50dp"
+                        android:text="@string/books_tab_text" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/top_rated_tab_text" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="50dp"
+                        android:text="@string/recent_tab_text" />
+                </com.google.android.material.tabs.TabLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
         <include layout="@layout/content_main" />
@@ -45,3 +95,4 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
+

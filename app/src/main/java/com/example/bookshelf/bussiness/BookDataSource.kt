@@ -2,7 +2,7 @@ package com.example.bookshelf.bussiness
 
 import android.net.Uri
 import com.example.bookshelf.bussiness.model.Book
-import com.example.bookshelf.model.book.Result
+import com.example.bookshelf.bussiness.Result.Result
 import kotlinx.coroutines.flow.Flow
 
 interface BookDataSource {

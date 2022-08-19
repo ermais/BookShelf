@@ -3,13 +3,13 @@ package com.example.bookshelf.bussiness
 import android.net.Uri
 import android.util.Log
 import com.example.bookshelf.bussiness.model.Book
-import com.example.bookshelf.model.book.Result
+import com.example.bookshelf.bussiness.Result.Result
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
-import com.example.bookshelf.model.book.Result.Success
+import com.example.bookshelf.bussiness.Result.Result.Success
 
 class FirestoreBookDataSource(db : FirebaseFirestore,cloudStorage: FirebaseStorage) :
     BookDataSource {

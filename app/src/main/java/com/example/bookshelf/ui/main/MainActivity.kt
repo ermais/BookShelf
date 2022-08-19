@@ -20,14 +20,19 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import androidx.appcompat.widget.SearchView.*
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.widget.ViewPager2
 import com.example.bookshelf.R
+import com.example.bookshelf.ui.booklist.BookListFragment
 import com.example.bookshelf.ui.login.LoginActivity
+import com.example.bookshelf.ui.recent.RecentFragment
+import com.example.bookshelf.ui.toprated.TopRatedFragment
+import com.google.android.material.tabs.TabLayoutMediator
 
-class MainActivity : AppCompatActivity() , OnQueryTextListener{
+class MainActivity : AppCompatActivity() , OnQueryTextListener,IMainInterface{
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: MainViewModel
+    lateinit var viewModel: MainViewModel
     private lateinit var viewModelFactory: MainViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,6 +100,18 @@ class MainActivity : AppCompatActivity() , OnQueryTextListener{
         binding.appBarMain.actionSearch.setSearchableInfo(searchManager.getSearchableInfo(this.componentName))
         binding.appBarMain.actionSearch.maxWidth = Int.MAX_VALUE
         binding.appBarMain.actionSearch.setOnQueryTextListener(this)
+
+    }
+
+    override fun attachTabWithViewPager(viewPager: ViewPager2, listOfTabs: List<String>) {
+        supportFragmentManager.fragments.forEach{
+            if (it is BookListFragment || it is RecentFragment || it is TopRatedFragment){
+                TabLayoutMediator(binding.appBarMain.homeTabs,viewPager) { tab, position ->
+                    tab.text = listOfTabs[position]
+
+                }.attach()
+            }
+        }
 
     }
 }

@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.bookshelf.create.CreateBookViewModel" />
+            type="com.example.bookshelf.ui.create.CreateBookViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
