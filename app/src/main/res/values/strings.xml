@@ -43,6 +43,8 @@
     <string name="top_rated_tab_text">Top Rated</string>
     <string name="recent_tab_text">Recent</string>
     <string name="user_name_input_text">User Name</string>
+    <string name="search_hint">fiction</string>
+    <string name="search_title">Search</string>
 
     <string-array name="categories">
         <item>Fiction</item>

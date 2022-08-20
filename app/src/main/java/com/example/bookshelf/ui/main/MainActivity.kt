@@ -14,6 +14,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import com.example.bookshelf.ui.create.CreateBookActivity
 import com.example.bookshelf.databinding.ActivityMainBinding
 import com.google.firebase.auth.ktx.auth
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity() , OnQueryTextListener,IMainInterface{
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        initSearchView()
+//        initSearchView()
         viewModelFactory = MainViewModelFactory(application)
         viewModel = ViewModelProvider(this,viewModelFactory).get(MainViewModel::class.java)
         setSupportActionBar(binding.appBarMain.toolbar)
@@ -77,6 +78,13 @@ class MainActivity : AppCompatActivity() , OnQueryTextListener,IMainInterface{
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        ( menu.findItem(R.id.action_search).actionView as SearchView).apply {
+            setSearchableInfo(searchManager.getSearchableInfo(componentName))
+            maxWidth=Int.MAX_VALUE
+            setIconifiedByDefault(false)
+            setOnQueryTextListener(this@MainActivity)
+        }
         return true
     }
 
@@ -95,13 +103,13 @@ class MainActivity : AppCompatActivity() , OnQueryTextListener,IMainInterface{
         return false
     }
 
-    fun initSearchView(){
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        binding.appBarMain.actionSearch.setSearchableInfo(searchManager.getSearchableInfo(this.componentName))
-        binding.appBarMain.actionSearch.maxWidth = Int.MAX_VALUE
-        binding.appBarMain.actionSearch.setOnQueryTextListener(this)
-
-    }
+//    fun initSearchView(){
+//        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+//        binding.appBarMain.actionSearch.setSearchableInfo(searchManager.getSearchableInfo(this.componentName))
+//        binding.appBarMain.actionSearch.maxWidth = Int.MAX_VALUE
+//        binding.appBarMain.actionSearch.setOnQueryTextListener(this)
+//
+//    }
 
     override fun attachTabWithViewPager(viewPager: ViewPager2, listOfTabs: List<String>) {
         supportFragmentManager.fragments.forEach{
