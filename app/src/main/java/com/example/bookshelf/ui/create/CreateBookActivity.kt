@@ -16,11 +16,11 @@ import com.example.bookshelf.R
 import com.example.bookshelf.databinding.ActivityCreateBookBinding
 import com.example.bookshelf.isPermissionGranted
 import com.example.bookshelf.bussiness.FirestoreBookDataSource
+import com.example.bookshelf.bussiness.repository.book.CreateBookRepository
 import com.example.bookshelf.requestPermission
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.example.bookshelf.ui.create.CreateBookViewModel
 
 class CreateBookActivity : AppCompatActivity() {
 

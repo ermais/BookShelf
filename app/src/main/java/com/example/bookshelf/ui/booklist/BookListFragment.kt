@@ -11,35 +11,15 @@ import com.example.bookshelf.ui.main.MainViewModel
 import com.example.bookshelf.databinding.FragmentBookListBinding
 import com.example.bookshelf.bussiness.model.Book
 import com.example.bookshelf.bussiness.FirestoreBookDataSource
+import com.example.bookshelf.bussiness.db.AppDatabase
+import com.example.bookshelf.bussiness.repository.book.BookListRepository
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 
 class BookListFragment : Fragment() {
-    val books by lazy {
-        arrayListOf<Book>(
-            Book(
-                "The Green Spot in your face",
-                "USERUID RANDOM ",
-                "Fiction",
-                "as soon as I see the post in ur face.",
-                null,
-                null,
-                "4.5"
-            ),
-            Book(
-                "The Green Spot in your face",
-                "USER ID UID",
-                "Fiction",
-                "as soon as I see the post in ur face.",
-                null,
-                null,
-                "4.3"
-            )
 
-        )
-    }
     private lateinit var db: FirebaseFirestore
     private lateinit var firestoreBookDataSource: FirestoreBookDataSource
     private lateinit var bookListRepository: BookListRepository
@@ -47,6 +27,7 @@ class BookListFragment : Fragment() {
     private var _binding: FragmentBookListBinding? = null
     private lateinit var cloudStorage: FirebaseStorage
     private lateinit var mainViewModel : MainViewModel
+    private lateinit var bookDb : AppDatabase
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -61,7 +42,7 @@ class BookListFragment : Fragment() {
         db = Firebase.firestore
         cloudStorage = FirebaseStorage.getInstance()
         firestoreBookDataSource = FirestoreBookDataSource(db, cloudStorage)
-        bookListRepository = BookListRepository(firestoreBookDataSource)
+        bookListRepository = BookListRepository(firestoreBookDataSource,bookDb)
         val bookListViewModelFactory = BookListViewModelFactory(bookListRepository, requireNotNull(activity).application)
         bookListModel = ViewModelProvider(this,bookListViewModelFactory).get(BookListViewModel::class.java)
         val adapter = BookListAdapter(requireContext())
@@ -71,12 +52,12 @@ class BookListFragment : Fragment() {
         mainViewModel.query.observe(viewLifecycleOwner){query->
             bookListModel.filter(query)
         }
-        bookListModel.filteredBooks?.observe(viewLifecycleOwner) {
+        bookListModel.filteredBooks.observe(viewLifecycleOwner) {
             adapter.data = it
         }
 
 
-        adapter.data = books
+
         binding.rvBookList.adapter = adapter
         val root: View = binding.root
 

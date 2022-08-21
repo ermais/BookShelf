@@ -52,4 +52,19 @@
         <item>Education</item>
         <item>Documentary</item>
     </string-array>
+
+    <string-array name="sort_by">
+        <item>Date</item>
+        <item>Title</item>
+        <item>Book Size</item>
+    </string-array>
+
+    <string-array name="filter_by">
+        <item>All</item>
+        <item>Fiction</item>
+        <item>Sc-Fi Adventure</item>
+        <item>Education</item>
+        <item>Documentary</item>
+    </string-array>
+
 </resources>

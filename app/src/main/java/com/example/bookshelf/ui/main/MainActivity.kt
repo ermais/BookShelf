@@ -6,6 +6,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -20,6 +24,7 @@ import com.example.bookshelf.databinding.ActivityMainBinding
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import androidx.appcompat.widget.SearchView.*
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.example.bookshelf.R
@@ -61,7 +66,50 @@ class MainActivity : AppCompatActivity() , OnQueryTextListener,IMainInterface{
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        val sortByAdapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.sort_by,
+            android.R.layout.simple_spinner_item
+        )
+        sortByAdapter.let { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.appBarMain.sortBy.adapter = adapter
+        }
+
+        binding.appBarMain.filterBy.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                val filterBy = p0?.getItemAtPosition(p2)
+                if (filterBy != null){
+                    val toast = Toast.makeText(applicationContext,filterBy.toString(),Toast.LENGTH_LONG)
+                    toast.show()
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
+
+
+        binding.appBarMain.sortBy.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                val sortBy = p0?.getItemAtPosition(p2)
+                if (sortBy != null){
+                    val toast = Toast.makeText(applicationContext,sortBy.toString(),Toast.LENGTH_LONG)
+                    toast.show()
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
+
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
