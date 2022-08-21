@@ -62,10 +62,10 @@ class CreateBookViewModel(
     fun publishBook() = viewModelScope.launch {
             val book = Book(
                 auth.currentUser?.uid,
-                bookTitle.value,
-                auth.currentUser?.displayName,
-                bookCategory.value,
-                bookDesc.value,Date(),
+                bookTitle.value.toString(),
+                auth.currentUser?.displayName.toString(),
+                bookCategory.value.toString(),
+                bookDesc.value, Calendar.getInstance(),
                 bookDocUriFromFirebase.value,
                 bookCoverUriFromFirebase.value,
                 "0.0"
@@ -142,11 +142,11 @@ class CreateBookViewModel(
     }
 
     fun cancelUploadBookDocWorker(){
-        workManager?.cancelAllWorkByTag(UPLOAD_BOOK_DOC_WORKER_TAG)
+        workManager.cancelAllWorkByTag(UPLOAD_BOOK_DOC_WORKER_TAG)
     }
 
     fun cancelUploadBookCoverWorker() {
-        workManager?.cancelAllWorkByTag(UPLOAD_BOOK_DOC_WORKER_TAG)
+        workManager.cancelAllWorkByTag(UPLOAD_BOOK_DOC_WORKER_TAG)
     }
 
 

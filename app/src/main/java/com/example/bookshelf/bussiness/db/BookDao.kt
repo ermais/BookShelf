@@ -30,7 +30,7 @@ interface BookDao {
     fun queryBooks(query:String) : Flow<List<BookEntity>>
 
     @Update
-    suspend fun updateBook(vararg book:Book)
+    suspend fun updateBook(vararg book:BookEntity)
 
 
 }
