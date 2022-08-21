@@ -6,6 +6,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -29,7 +33,7 @@ import com.example.bookshelf.ui.recent.RecentFragment
 import com.example.bookshelf.ui.toprated.TopRatedFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
-class MainActivity : AppCompatActivity() , OnQueryTextListener,IMainInterface{
+class MainActivity : AppCompatActivity() , OnQueryTextListener,IMainInterface {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
@@ -43,9 +47,9 @@ class MainActivity : AppCompatActivity() , OnQueryTextListener,IMainInterface{
         setContentView(binding.root)
 //        initSearchView()
         viewModelFactory = MainViewModelFactory(application)
-        viewModel = ViewModelProvider(this,viewModelFactory).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         setSupportActionBar(binding.appBarMain.toolbar)
-        binding.appBarMain.fabCreateBook.setOnClickListener{
+        binding.appBarMain.fabCreateBook.setOnClickListener {
             val createBookIntent = Intent(this, CreateBookActivity::class.java)
             startActivity(createBookIntent)
         }
@@ -56,12 +60,67 @@ class MainActivity : AppCompatActivity() , OnQueryTextListener,IMainInterface{
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
+                R.id.nav_home, R.id.nav_notifications, R.id.nav_info,
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        val filterByAdapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.filter_by,
+            android.R.layout.simple_spinner_item
+        )
+            filterByAdapter.let { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.appBarMain.filterBy.adapter = adapter
+        }
+
+        val sortByAdapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.sort_by,
+            android.R.layout.simple_spinner_item
+        )
+            sortByAdapter.let { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.appBarMain.sortBy.adapter = adapter
+        }
+
+        binding.appBarMain.filterBy.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                val filterBy = p0?.getItemAtPosition(p2)
+                if (filterBy != null){
+                    val toast = Toast.makeText(applicationContext,filterBy.toString(),Toast.LENGTH_LONG)
+                    toast.show()
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
+
+
+        binding.appBarMain.sortBy.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                val sortBy = p0?.getItemAtPosition(p2)
+                if (sortBy != null){
+                    val toast = Toast.makeText(applicationContext,sortBy.toString(),Toast.LENGTH_LONG)
+                    toast.show()
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
+
     }
+
+
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){

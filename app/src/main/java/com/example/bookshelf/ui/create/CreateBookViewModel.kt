@@ -10,6 +10,7 @@ import androidx.work.WorkManager
 import com.example.bookshelf.data.*
 import com.example.bookshelf.bussiness.model.Book
 import com.example.bookshelf.bussiness.Result.data
+import com.example.bookshelf.bussiness.repository.book.CreateBookRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -61,10 +62,10 @@ class CreateBookViewModel(
     fun publishBook() = viewModelScope.launch {
             val book = Book(
                 auth.currentUser?.uid,
-                bookTitle.value,
-                auth.currentUser?.displayName,
-                bookCategory.value,
-                bookDesc.value,Date(),
+                bookTitle.value.toString(),
+                auth.currentUser?.displayName.toString(),
+                bookCategory.value.toString(),
+                bookDesc.value, Calendar.getInstance(),
                 bookDocUriFromFirebase.value,
                 bookCoverUriFromFirebase.value,
                 "0.0"
@@ -141,11 +142,11 @@ class CreateBookViewModel(
     }
 
     fun cancelUploadBookDocWorker(){
-        workManager?.cancelAllWorkByTag(UPLOAD_BOOK_DOC_WORKER_TAG)
+        workManager.cancelAllWorkByTag(UPLOAD_BOOK_DOC_WORKER_TAG)
     }
 
     fun cancelUploadBookCoverWorker() {
-        workManager?.cancelAllWorkByTag(UPLOAD_BOOK_DOC_WORKER_TAG)
+        workManager.cancelAllWorkByTag(UPLOAD_BOOK_DOC_WORKER_TAG)
     }
 
 
