@@ -63,6 +63,8 @@ class MainActivity : AppCompatActivity() , OnQueryTextListener,IMainInterface{
         navView.setupWithNavController(navController)
     }
 
+
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.action_settings ->{

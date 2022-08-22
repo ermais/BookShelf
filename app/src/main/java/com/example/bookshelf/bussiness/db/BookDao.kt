@@ -1,7 +1,7 @@
 package com.example.bookshelf.bussiness.db
 
+
 import androidx.room.*
-import com.example.bookshelf.bussiness.model.Book
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -30,7 +30,7 @@ interface BookDao {
     fun queryBooks(query:String) : Flow<List<BookEntity>>
 
     @Update
-    suspend fun updateBook(vararg book:Book)
+    suspend fun updateBook(vararg book:BookEntity)
 
 
 }

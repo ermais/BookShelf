@@ -10,6 +10,7 @@ import androidx.work.WorkManager
 import com.example.bookshelf.data.*
 import com.example.bookshelf.bussiness.model.Book
 import com.example.bookshelf.bussiness.Result.data
+import com.example.bookshelf.bussiness.repository.book.CreateBookRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -60,14 +61,16 @@ class CreateBookViewModel(
 
     fun publishBook() = viewModelScope.launch {
             val book = Book(
-                auth.currentUser?.uid,
-                bookTitle.value,
-                auth.currentUser?.displayName,
-                bookCategory.value,
-                bookDesc.value,Date(),
-                bookDocUriFromFirebase.value,
-                bookCoverUriFromFirebase.value,
-                "0.0"
+                auth.currentUser?.uid.toString(),
+                bookTitle.value.toString(),
+                auth.currentUser?.displayName.toString(),
+                bookCategory.value.toString(),
+                bookDesc.value,
+                Calendar.getInstance().timeInMillis,
+                bookDocUriFromFirebase.value.toString(),
+                bookCoverUriFromFirebase.value.toString(),
+                "0.0",
+                downloadCount = 0
             )
             createBookRepository.publishBook(book).collect{
                 bookCreated.postValue(true)
