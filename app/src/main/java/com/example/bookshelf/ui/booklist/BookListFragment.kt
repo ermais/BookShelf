@@ -59,6 +59,20 @@ class BookListFragment : Fragment() {
             adapter.data = it.asDomainModel()
         }
 
+        mainViewModel.filterByCategory.observe(viewLifecycleOwner){
+            if (it != "All"){
+                bookListModel.filterByCategory(it)
+            }else{
+                bookListModel.getBooks()
+            }
+
+
+        }
+
+        mainViewModel.query.observe(viewLifecycleOwner){
+            bookListModel.filterBooks(it)
+        }
+
 
         binding.rvBookList.adapter = adapter
         val root: View = binding.root

@@ -4,6 +4,7 @@ import com.example.bookshelf.bussiness.FirestoreBookDataSource
 import com.example.bookshelf.bussiness.Result.Result
 import com.example.bookshelf.bussiness.Result.data
 import com.example.bookshelf.bussiness.db.BookDatabase
+import com.example.bookshelf.bussiness.db.BookEntity
 import com.example.bookshelf.bussiness.model.Book
 import com.example.bookshelf.bussiness.model.asBookEntity
 import com.google.firebase.auth.FirebaseAuth
@@ -22,21 +23,21 @@ class BookListRepository(val firestoreBookDataSource: FirestoreBookDataSource,pr
     suspend fun filterByAuthor(author:String) = firestoreBookDataSource.filterByCategory(author)
 
     suspend fun refreshBooks()  {
-        println("I am refreshing ------------------------")
         var _books = listOf<Book>()
             getBookList().collect{
                 _books = it.data as List<Book>
-                println("I am printing again --------------------")
-                println(_books.asBookEntity())
+                clearDatabase()
                 db.bookDao().insertBooks(_books.asBookEntity())
-
             }
-        }
-
-
+    }
     fun getOfflineBooks() =
         db.bookDao().getBooks()
 
+    suspend fun clearDatabase() = db.bookDao().clear()
+
+    suspend fun filterByCategoryOffline(category: String) = db.bookDao().filterByCategory(category)
+
+    suspend fun filterBooks(query:String) = db.bookDao().queryBooks(query)
 
 
 }

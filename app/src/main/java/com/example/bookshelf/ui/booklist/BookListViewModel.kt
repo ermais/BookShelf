@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 class BookListViewModel(
     private val bookListRepository: BookListRepository,
     application:Application) : ViewModel(){
-    var books : LiveData<List<BookEntity>> = bookListRepository.getOfflineBooks().asLiveData()
+    internal var books : MutableLiveData<List<BookEntity>> = bookListRepository.getOfflineBooks().asLiveData() as MutableLiveData<List<BookEntity>>
     var filteredBooks = books
 
     init {
@@ -35,8 +35,27 @@ class BookListViewModel(
 
 
 
-    private fun refreshBooks() = viewModelScope.launch {
+    private fun refreshBooks() = viewModelScope.launch(Dispatchers.IO) {
         bookListRepository.refreshBooks()
+    }
+
+
+    fun filterByCategory(category:String) = viewModelScope.launch {
+        bookListRepository.filterByCategoryOffline(category).collect{
+            books.value = it
+        }
+    }
+
+    fun filterBooks(query:String) = viewModelScope.launch {
+        bookListRepository.filterBooks(query).collect{
+            books.value = it
+        }
+    }
+
+    fun getBooks() = viewModelScope.launch {
+        bookListRepository.getOfflineBooks().collect(){
+            books.value = it
+        }
     }
 //
 //    private fun filterByCategory(category: String) = viewModelScope.launch(Dispatchers.Unconfined) {

@@ -40,6 +40,8 @@ class HomeFragment : Fragment() {
 
 
 
+
+
 //        val textView: TextView = binding.textHome
 //        homeViewModel.text.observe(viewLifecycleOwner, Observer {
 //            textView.text = it

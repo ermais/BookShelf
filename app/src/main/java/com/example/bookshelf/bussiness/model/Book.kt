@@ -25,7 +25,7 @@ data class Book(
         authorName = "",
         category = "",
         desc = "",
-        pubDate = 0,
+        pubDate = 0L,
         bookCover = "",
         bookUri =""
         ,rating="4.5",

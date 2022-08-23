@@ -23,14 +23,17 @@ interface BookDao {
     fun filterByAuthor(author:String) : Flow<List<BookEntity>>
 
 
-    @Query("SELECT * FROM books WHERE authorName LIKE :query" +
-            " OR title LIKE :query" +
-            " OR category LIKE :query"
+    @Query("SELECT * FROM books WHERE authorName LIKE '%'||:query ||'%'" +
+            " OR title  LIKE '%' || :query || '%'" +
+            " OR category LIKE '%' || :query || '%'"
     )
     fun queryBooks(query:String) : Flow<List<BookEntity>>
 
     @Update
     suspend fun updateBook(vararg book:BookEntity)
+
+    @Query("DELETE  FROM books")
+    fun clear()
 
 
 }
