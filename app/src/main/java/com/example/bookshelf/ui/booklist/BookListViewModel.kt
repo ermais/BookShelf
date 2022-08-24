@@ -57,6 +57,26 @@ class BookListViewModel(
             books.value = it
         }
     }
+
+    fun sortByAuthor() = viewModelScope.launch {
+        bookListRepository.sortByAuthor().collect(){
+            books.value = it
+        }
+    }
+
+    fun sortByTitle() = viewModelScope.launch {
+        bookListRepository.sortByTitle().collect(){
+            books.value = it
+        }
+    }
+
+    fun sortByPubDate() = viewModelScope.launch {
+        bookListRepository.sortByPubDate().collect(){
+            books.value = it
+        }
+    }
+
+
 //
 //    private fun filterByCategory(category: String) = viewModelScope.launch(Dispatchers.Unconfined) {
 //        bookListRepository.filterByCategory(category).collect{

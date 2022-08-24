@@ -94,13 +94,14 @@ class MainActivity : AppCompatActivity() , OnQueryTextListener,IMainInterface{
         binding.appBarMain.sortBy.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 val itemSelected = p0?.getItemAtPosition(p2)
-
+                viewModel.sortBy.value = itemSelected.toString()
                 val toast = Toast.makeText(applicationContext,itemSelected.toString(),Toast.LENGTH_LONG)
                 toast.show()
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 val itemSelected  = p0?.getItemAtPosition(0)
+                viewModel.sortBy.value = itemSelected.toString()
             }
 
 
@@ -119,7 +120,6 @@ class MainActivity : AppCompatActivity() , OnQueryTextListener,IMainInterface{
                 val itemSelected  = p0?.getItemAtPosition(0)
             }
         }
-
     }
 
 

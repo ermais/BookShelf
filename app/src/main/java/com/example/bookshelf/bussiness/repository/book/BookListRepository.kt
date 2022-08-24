@@ -33,11 +33,17 @@ class BookListRepository(val firestoreBookDataSource: FirestoreBookDataSource,pr
     fun getOfflineBooks() =
         db.bookDao().getBooks()
 
-    suspend fun clearDatabase() = db.bookDao().clear()
+    private suspend fun clearDatabase() = db.bookDao().clear()
 
     suspend fun filterByCategoryOffline(category: String) = db.bookDao().filterByCategory(category)
 
     suspend fun filterBooks(query:String) = db.bookDao().queryBooks(query)
+
+    suspend fun sortByAuthor() = db.bookDao().sortByAuthor()
+
+    suspend fun sortByTitle() = db.bookDao().sortByTitle()
+
+    suspend fun sortByPubDate() = db.bookDao().sortByPubDate()
 
 
 }

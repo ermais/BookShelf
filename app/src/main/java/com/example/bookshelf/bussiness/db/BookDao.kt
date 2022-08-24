@@ -35,5 +35,14 @@ interface BookDao {
     @Query("DELETE  FROM books")
     fun clear()
 
+    @Query("SELECT * FROM books ORDER BY authorName ASC")
+    fun sortByAuthor() : Flow<List<BookEntity>>
+
+    @Query("SELECT * FROM books ORDER BY title ASC")
+    fun sortByTitle():Flow<List<BookEntity>>
+
+    @Query("SELECT * FROM books ORDER BY pub_date ASC")
+    fun sortByPubDate(): Flow<List<BookEntity>>
+
 
 }

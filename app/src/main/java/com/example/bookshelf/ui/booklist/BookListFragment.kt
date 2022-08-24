@@ -73,6 +73,15 @@ class BookListFragment : Fragment() {
             bookListModel.filterBooks(it)
         }
 
+        mainViewModel.sortBy.observe(viewLifecycleOwner){
+            when(it){
+                "date"->bookListModel.sortByPubDate()
+                "author"->bookListModel.sortByAuthor()
+                "title"->bookListModel.sortByTitle()
+                else->bookListModel.sortByPubDate()
+            }
+        }
+
 
         binding.rvBookList.adapter = adapter
         val root: View = binding.root
