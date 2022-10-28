@@ -12,14 +12,23 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_notifications"
         android:name="com.example.bookshelf.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
+        android:label="@string/string_notifications"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
+        android:id="@+id/nav_info"
         android:name="com.example.bookshelf.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
+        android:label="@string/string_info"
         tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.example.bookshelf.SettingsFragment"
+        android:label="@string/string_settings" />
+    <fragment
+        android:id="@+id/bookDetailFragment"
+        android:name="com.example.bookshelf.BookDetailFragment"
+        android:label="fragment_book_detail"
+        tools:layout="@layout/fragment_book_detail" />
 </navigation>

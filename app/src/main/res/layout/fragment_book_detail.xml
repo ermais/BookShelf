@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".BookDetailFragment">
+
+        <ImageView
+            android:id="@+id/imgBookCover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.85"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_background"
+            android:contentDescription="@string/book_cover_desc" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/white"
+            android:clipToPadding="true"
+            android:elevation="2dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="12dp"
+            app:cardPreventCornerOverlap="false"
+            app:layout_anchorGravity="bottom" >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/txtViewBookTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/akaya_telivigala"
+                    android:text="The Other Side of The Sky"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtViewBookCategory"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/akaya_telivigala"
+                    android:text="Fiction"
+                    android:textAlignment="center"
+                    android:textColor="@color/primaryDark"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="@+id/txtViewBookTitle"
+                    app:layout_constraintStart_toStartOf="@+id/txtViewBookTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/txtViewBookTitle" />
+
+                <TextView
+                    android:id="@+id/txtViewBookDesc"
+                    android:layout_width="0dp"
+                    android:layout_height="120dp"
+                    android:text="&quot;Amie Kaufman and Meagan Spooner prove they are two living goddesses of writing, creating two compelling worlds with high stakes and gripping emotions.&quot; "
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="@+id/txtViewBookCategory"
+                    app:layout_constraintStart_toStartOf="@+id/txtViewBookCategory"
+                    app:layout_constraintTop_toBottomOf="@+id/txtViewBookCategory" />
+
+                <Button
+                    android:id="@+id/btnReadBook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginBottom="24dp"
+                    android:text="Read Book"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

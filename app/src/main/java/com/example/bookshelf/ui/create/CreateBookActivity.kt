@@ -350,8 +350,9 @@ class CreateBookActivity : AppCompatActivity() {
 
     }
     private fun getBookDoc() {
-        val bookDocIntent = Intent(Intent.ACTION_PICK)
-        bookDocIntent.type = "*/*"
+        val bookDocIntent = Intent(Intent.ACTION_GET_CONTENT)
+        bookDocIntent.type = "application/pdf*"
+        bookDocIntent.addCategory(Intent.CATEGORY_OPENABLE)
         startActivityForResult(bookDocIntent, GET_BOOK_DOC)
     }
 
@@ -384,6 +385,7 @@ class CreateBookActivity : AppCompatActivity() {
         const val BOOK_DOC_RE_CODE = 343
         const val GET_BOOK_DOC = 443
         const val PHOTO_READ_PERMISSION = android.Manifest.permission.READ_EXTERNAL_STORAGE
+        const val WRITE_PERMISSION = android.Manifest.permission.WRITE_EXTERNAL_STORAGE
     }
 
 

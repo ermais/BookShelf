@@ -59,6 +59,7 @@ class CreateBookViewModel(
 
     }
 
+
     fun publishBook() = viewModelScope.launch {
             val book = Book(
                 auth.currentUser?.uid.toString(),
@@ -67,8 +68,8 @@ class CreateBookViewModel(
                 bookCategory.value.toString(),
                 bookDesc.value,
                 Calendar.getInstance().timeInMillis,
-                bookDocUriFromFirebase.value.toString(),
                 bookCoverUriFromFirebase.value.toString(),
+                bookDocUriFromFirebase.value.toString(),
                 "0.0",
                 downloadCount = 0
             )
