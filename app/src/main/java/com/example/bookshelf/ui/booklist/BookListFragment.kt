@@ -57,6 +57,7 @@ class BookListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentBookListBinding.inflate(inflater, container, false)
+        println("Book List -----------------------------------------------")
         layout = binding.rvBookList
         db = Firebase.firestore
         cloudStorage = FirebaseStorage.getInstance()
@@ -106,17 +107,19 @@ class BookListFragment : Fragment() {
 //        }
         bookListModel.filteredBooks.observe(viewLifecycleOwner) {
             adapter.data = it.asDomainModel()
+            println("Filtered Book provided to List--------------------")
+            println(it.asDomainModel())
         }
 
-        mainViewModel.filterByCategory.observe(viewLifecycleOwner){
-            if (it != "All"){
-                bookListModel.filterByCategory(it)
-            }else{
-                bookListModel.getBooks()
-            }
+//        mainViewModel.filterByCategory.observe(viewLifecycleOwner){
+//            if (it != "All"){
+//                bookListModel.filterByCategory(it)
+//            }else{
+//                bookListModel.getBooks()
+//            }
 
 
-        }
+//        }
 
         requestPermissionLauncher =
             registerForActivityResult(
@@ -130,19 +133,19 @@ class BookListFragment : Fragment() {
                 }
             }
 
-        mainViewModel.query.observe(viewLifecycleOwner){
-            bookListModel.filterBooks(it)
-        }
-
-        mainViewModel.sortBy.observe(viewLifecycleOwner){
-            when(it){
-                "date"->bookListModel.sortByPubDate()
-                "author"->bookListModel.sortByAuthor()
-                "title"->bookListModel.sortByTitle()
-                else->bookListModel.sortByPubDate()
-            }
-        }
-
+//        mainViewModel.query.observe(viewLifecycleOwner){
+//            bookListModel.filterBooks(it)
+//        }
+//
+//        mainViewModel.sortBy.observe(viewLifecycleOwner){
+//            when(it){
+//                "date"->bookListModel.sortByPubDate()
+//                "author"->bookListModel.sortByAuthor()
+//                "title"->bookListModel.sortByTitle()
+//                else->bookListModel.sortByPubDate()
+//            }
+//        }
+//
 
         binding.rvBookList.adapter = adapter
         val root: View = binding.root

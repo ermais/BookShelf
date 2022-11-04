@@ -10,4 +10,11 @@ class HomeViewModel : ViewModel() {
         value = "This is home Fragment"
     }
     val text: LiveData<String> = _text
+    val filterByCategory : MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+
+    val sortBy : MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
 }

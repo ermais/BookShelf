@@ -3,46 +3,30 @@ package com.example.bookshelf.ui.main
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
-import com.example.bookshelf.ui.create.CreateBookActivity
+import com.example.bookshelf.R
 import com.example.bookshelf.databinding.ActivityMainBinding
+import com.example.bookshelf.ui.create.CreateBookActivity
+import com.example.bookshelf.ui.login.LoginActivity
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import androidx.appcompat.widget.SearchView.*
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
-import androidx.viewpager2.widget.ViewPager2
-import com.example.bookshelf.R
-import com.example.bookshelf.ui.Utils.showSnackBar
-import com.example.bookshelf.ui.booklist.BookListFragment
-import com.example.bookshelf.ui.login.LoginActivity
-import com.example.bookshelf.ui.recent.RecentFragment
-import com.example.bookshelf.ui.toprated.TopRatedFragment
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayoutMediator
-import java.util.jar.Manifest
 
-class MainActivity : AppCompatActivity() , OnQueryTextListener,IMainInterface {
+class MainActivity : AppCompatActivity() , OnQueryTextListener
+{
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var layout: View
@@ -80,56 +64,56 @@ class MainActivity : AppCompatActivity() , OnQueryTextListener,IMainInterface {
 
 
 
-        val sortByAdapter = ArrayAdapter.createFromResource(
-            this,
-            R.array.sort_by,
-            android.R.layout.simple_spinner_item
-        )
-        sortByAdapter.also {
-            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.appBarMain.sortBy.adapter = it
-        }
-
-        val filterByAdapter = ArrayAdapter.createFromResource(
-            this,
-            R.array.filter_by,
-            android.R.layout.simple_spinner_item
-        )
-
-        filterByAdapter.also {
-            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.appBarMain.filterBy.adapter = it
-        }
-
-        binding.appBarMain.sortBy.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                val itemSelected = p0?.getItemAtPosition(p2)
-                viewModel.sortBy.value = itemSelected.toString()
-                val toast = Toast.makeText(applicationContext,itemSelected.toString(),Toast.LENGTH_LONG)
-                toast.show()
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                val itemSelected  = p0?.getItemAtPosition(0)
-                viewModel.sortBy.value = itemSelected.toString()
-            }
-
-
-        }
-
-
-        binding.appBarMain.filterBy.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                val itemSelected = p0?.getItemAtPosition(p2)
-                viewModel.filterByCategory.value = itemSelected.toString()
-                val toast = Toast.makeText(applicationContext,itemSelected.toString(),Toast.LENGTH_LONG)
-                toast.show()
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                val itemSelected  = p0?.getItemAtPosition(0)
-            }
-        }
+//        val sortByAdapter = ArrayAdapter.createFromResource(
+//            this,
+//            R.array.sort_by,
+//            android.R.layout.simple_spinner_item
+//        )
+//        sortByAdapter.also {
+//            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//            binding.appBarMain.sortBy.adapter = it
+//        }
+//
+//        val filterByAdapter = ArrayAdapter.createFromResource(
+//            this,
+//            R.array.filter_by,
+//            android.R.layout.simple_spinner_item
+//        )
+//
+//        filterByAdapter.also {
+//            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//            binding.appBarMain.filterBy.adapter = it
+//        }
+//
+//        binding.appBarMain.sortBy.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+//                val itemSelected = p0?.getItemAtPosition(p2)
+//                viewModel.sortBy.value = itemSelected.toString()
+//                val toast = Toast.makeText(applicationContext,itemSelected.toString(),Toast.LENGTH_LONG)
+//                toast.show()
+//            }
+//
+//            override fun onNothingSelected(p0: AdapterView<*>?) {
+//                val itemSelected  = p0?.getItemAtPosition(0)
+//                viewModel.sortBy.value = itemSelected.toString()
+//            }
+//
+//
+//        }
+//
+//
+//        binding.appBarMain.filterBy.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+//                val itemSelected = p0?.getItemAtPosition(p2)
+//                viewModel.filterByCategory.value = itemSelected.toString()
+//                val toast = Toast.makeText(applicationContext,itemSelected.toString(),Toast.LENGTH_LONG)
+//                toast.show()
+//            }
+//
+//            override fun onNothingSelected(p0: AdapterView<*>?) {
+//                val itemSelected  = p0?.getItemAtPosition(0)
+//            }
+//        }
     }
 
 
@@ -181,17 +165,17 @@ class MainActivity : AppCompatActivity() , OnQueryTextListener,IMainInterface {
 //
 //    }
 
-        override fun attachTabWithViewPager(viewPager: ViewPager2, listOfTabs: List<String>) {
-        supportFragmentManager.fragments.forEach{
-            if (it is BookListFragment || it is RecentFragment || it is TopRatedFragment){
-                TabLayoutMediator(binding.appBarMain.homeTabs,viewPager) { tab, position ->
-                    tab.text = listOfTabs[position]
+//        override fun attachTabWithViewPager(viewPager: ViewPager2, listOfTabs: List<String>) {
+//        supportFragmentManager.fragments.forEach{
+//            if (it is BookListFragment || it is RecentFragment || it is TopRatedFragment){
+//                TabLayoutMediator(binding.appBarMain.homeTabs,viewPager) { tab, position ->
+//                    tab.text = listOfTabs[position]
+//
+//                }.attach()
+//            }
+//        }
 
-                }.attach()
-            }
-        }
-
-        }
+//        }
 
 
 }
