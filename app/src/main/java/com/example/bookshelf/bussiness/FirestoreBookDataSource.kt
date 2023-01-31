@@ -61,7 +61,7 @@ class FirestoreBookDataSource(db : FirebaseFirestore,cloudStorage: FirebaseStora
             val deleted = bookRef.document(bookId).delete().await()
             emit(Result.Success(deleted))
         }catch (e: Exception){
-            Result.Failure(e?.message ?: e.toString())
+            Result.Failure(e.message ?: e.toString())
         }
     }
 
@@ -127,7 +127,7 @@ class FirestoreBookDataSource(db : FirebaseFirestore,cloudStorage: FirebaseStora
                     .await()
                 emit(Result.Success(bookDocUpdated))
             }catch (e:Exception){
-                emit(Result.Failure(e?.message ?: e.toString()))
+                emit(Result.Failure(e.message ?: e.toString()))
             }
 
         }
@@ -146,7 +146,7 @@ class FirestoreBookDataSource(db : FirebaseFirestore,cloudStorage: FirebaseStora
                     .await()
                 emit(Result.Success(bookCoverUpdated))
             }catch (e:Exception){
-                emit(Result.Failure(e?.message ?: e.toString()))
+                emit(Result.Failure(e.message ?: e.toString()))
             }
         }
     }
@@ -160,7 +160,7 @@ class FirestoreBookDataSource(db : FirebaseFirestore,cloudStorage: FirebaseStora
                     .await()
                 emit(Result.Success(bookRated))
             }catch (e:Exception){
-                Result.Failure(e?.message ?: e.toString())
+                Result.Failure(e.message ?: e.toString())
             }
         }
     }

@@ -19,3 +19,28 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+# ServiceLoader support
+-keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
+-keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
+
+# Most of volatile fields are updated with AFU and should not be mangled
+-keepclassmembernames class kotlinx.** {
+    volatile <fields>;
+}
+
+# keep all classes in all packages of MyLib module
+-keep class com.example.mylib.*{
+    public protected *;
+}
+
+-keep class com.example.bookshelf.*{
+ *;
+}
+
+-keep class * extends com.example.bookshelf.bussiness.db.AppDatabase{}
+
+-allowaccessmodification interface * extends androidx.room.RoomDatabase
+-allowaccessmodification interface * extends com.example.bookshelf.bussiness.db.AppDatabase
+-allowaccessmodification class * extends com.example.bookshelf.bussiness.db.AppDatabase
+-keep class * extends androidx.room.RoomDatabase
+-dontwarn androidx.room.paging.**
