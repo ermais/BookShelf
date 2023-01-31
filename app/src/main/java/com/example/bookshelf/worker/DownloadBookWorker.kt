@@ -10,12 +10,19 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.example.bookshelf.bussiness.Result.Result.Success
+import com.example.bookshelf.bussiness.db.BookDatabase
+import com.example.bookshelf.bussiness.db.DownloadEntity
+import com.example.bookshelf.bussiness.repository.book.DownloadRepository
+import com.example.bookshelf.data.KEY_BOOK_ID
 import com.example.bookshelf.data.KEY_BOOK_TITLE
 import com.example.bookshelf.data.KEY_DOWNLOAD_BOOK_URI
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.storage.FileDownloadTask
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
@@ -29,14 +36,18 @@ class DownloadBookWorker(ctx: Context, params:WorkerParameters) : CoroutineWorke
     @SuppressLint("NewApi")
     override suspend fun doWork(): Result {
         return suspendCoroutine { continuation ->
+            val db = BookDatabase.getDatabase(applicationContext)
+            val downloadRepository : DownloadRepository = DownloadRepository(db)
             val downloadBookUri = inputData.getString(KEY_DOWNLOAD_BOOK_URI)
             val bookTitle = inputData.getString(KEY_BOOK_TITLE)
+            val bookId = inputData.getInt(KEY_BOOK_ID,0)
+            println("doWork book id ----------------------------------${bookId}")
             var localDownloadUri = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
             localDownloadUri = File(localDownloadUri.path + "/books")
             if (localDownloadUri.mkdirs()){
                 println("success!")
             }
-            val file = File.createTempFile("images",".jpg",localDownloadUri)
+            val file = File.createTempFile("book",".pdf",localDownloadUri)
 
             val downloadRef = FirebaseStorage.getInstance().getReferenceFromUrl(downloadBookUri.toString())
             downloadRef.getFile(file).addOnFailureListener{
@@ -52,7 +63,11 @@ class DownloadBookWorker(ctx: Context, params:WorkerParameters) : CoroutineWorke
                     .addOnCompleteListener {
                         println("Download Success ---------------------------")
                         println(it.result.toString())
-                        continuation.resume(Result.success((workDataOf(KEY_DOWNLOAD_BOOK_URI to localDownloadUri.toString()))))
+                        val download = DownloadEntity(file.toString(),bookId)
+                        CoroutineScope(Dispatchers.IO).launch {
+                         downloadRepository.downloadBook(download)
+                        }
+                        continuation.resume(Result.success((workDataOf(KEY_DOWNLOAD_BOOK_URI to file.toString(), KEY_BOOK_ID to bookId))))
                     }
             }
         }

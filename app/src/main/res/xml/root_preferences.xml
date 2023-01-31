@@ -1,24 +1,53 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory app:title="@string/messages_header">
+    <PreferenceCategory
+        app:title="Display"
+        >
 
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
+        <SeekBarPreference
+            android:title="Text Font size"
+            android:key="text_font_size"
+            android:defaultValue="12"
+            android:max="24"
+            android:summary="@string/text_font_size_seekbar_summary"
+            />
 
         <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="@string/reply_title"
+            app:defaultValue="Blue dark"
+            app:entries="@array/list_of_themes_entries"
+            app:entryValues="@array/list_of_themes_values"
+            app:key="theme_color"
+            app:title="Theme Color"
             app:useSimpleSummaryProvider="true" />
+        <SwitchPreference
+            android:title="Day Light"
+            android:key="day_light"
+            android:defaultValue="true"
+            />
 
     </PreferenceCategory>
-
+    <PreferenceCategory app:title="Storage">
+        <ListPreference
+            app:defaultValue="Phone Storage"
+            app:entries="@array/list_of_storage_entries"
+            app:entryValues="@array/list_of_storage_values"
+            app:key="download_storage"
+            app:title="Downloads"
+            app:useSimpleSummaryProvider="true"
+            />
+    </PreferenceCategory>
+    <PreferenceCategory app:title="Pdf Reader">
+        <ListPreference
+            app:defaultValue="Open in browser"
+            app:entries="@array/list_of_pdf_reader_entries"
+            app:entryValues="@array/list_of_pdf_reader_values"
+            app:key="pdf_reader"
+            app:title="Open in browser"
+            app:useSimpleSummaryProvider="true"
+            />
+    </PreferenceCategory>
     <PreferenceCategory app:title="@string/sync_header">
-
         <SwitchPreferenceCompat
             app:key="sync"
             app:title="@string/sync_title" />

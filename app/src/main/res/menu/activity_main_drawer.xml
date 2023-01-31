@@ -2,26 +2,53 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
-
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_home" />
-        <item
-            android:id="@+id/nav_notifications"
-            android:icon="@drawable/ic_notifications"
-            android:title="@string/string_notifications" />
-        <item
-            android:id="@+id/nav_info"
-            android:icon="@drawable/ic_info"
-            android:title="@string/string_info" />
-    </group>
-    <group>
-        <item
-            android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_settings"
-            android:title="@string/string_settings"
+        <item android:id="@+id/nav_home"
+            android:title="@string/nav_home"
+            android:icon="@drawable/ic_menu_book_24"
             />
+        <item android:id="@+id/nav_downloaded"
+            android:title="@string/nav_downloaded"
+            android:icon="@drawable/ic_download"
+            />
+        <item android:id="@+id/nav_notifications"
+            android:title="@string/nav_notifications"
+            android:icon="@drawable/ic_notifications"
+            />
+        <item android:id="@+id/nav_my_books"
+            android:title="@string/nav_my_books"
+            android:icon="@drawable/ic_shopping_bag_24"
+            />
+    </group>
+    <group android:checkableBehavior="single">
+        <item android:title=""
+            android:id="@+id/nav_settings_group"
+            >
+            <menu>
+                <item android:id="@+id/nav_settings"
+                    android:title="@string/nav_settings"
+                    android:icon="@drawable/ic_settings"
+                    />
+                <item android:id="@+id/nav_profile"
+                    android:title="@string/nav_profile"
+                    android:icon="@drawable/ic_account_circle_24"
+                    />
+                <item android:id="@+id/nav_contactus"
+                    android:title="@string/nav_contactus"
+                    android:icon="@drawable/ic_contacts_24"
+                    />
+            </menu>
+        </item>
+    </group>
+    <group android:checkableBehavior="single">
+        <item android:title="">
+            <menu>
+                <item android:id="@+id/nav_update"
+                    android:title="@string/nav_update"
+                    android:icon="@drawable/ic_update_24"
+                    />
+            </menu>
+        </item>
+
     </group>
 </menu>

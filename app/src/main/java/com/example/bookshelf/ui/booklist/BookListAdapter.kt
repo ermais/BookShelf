@@ -12,17 +12,22 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.bookshelf.R
 import com.example.bookshelf.bussiness.model.Book
+import com.example.bookshelf.ui.home.HomeFragmentDirections
 
-class BookListAdapter(context : Context,onBtnDownload : (view: View,downloadUri: Uri,bookTitle:String)->Unit)  : RecyclerView.Adapter<BookListAdapter.ViewHolder>() {
+class BookListAdapter(context : Context,onBtnDownload : (view: View,downloadUri: Uri,bookTitle:String,bookId:Int)->Unit)
+    : RecyclerView.Adapter<BookListAdapter.ViewHolder>() {
     private val mContext  by lazy {context}
     private val onBtnDownloadBookClicked = onBtnDownload
     var data  = listOf<Book>()
+    @SuppressLint("NotifyDataSetChanged")
     set(value){
         field = value
         notifyDataSetChanged()
@@ -47,8 +52,9 @@ class BookListAdapter(context : Context,onBtnDownload : (view: View,downloadUri:
         val tvAuthor = itemView.findViewById<TextView>(R.id.tvAuthor)
         val rbBook = itemView.findViewById(R.id.rbBook) as RatingBar
         val btnDownloadBook = itemView.findViewById<Button>(R.id.btnDownloadBook)
+        val cvBookItem = itemView.findViewById<CardView>(R.id.cvBookItem)
         @SuppressLint("SetTextI18n")
-        fun bind(item: Book, mContext:Context,onBtnDownloadBookClick:(view: View,downloadUri:Uri,bookTitle:String)->Unit){
+        fun bind(item: Book, mContext:Context,onBtnDownloadBookClick:(view: View,downloadUri:Uri,bookTitle:String,bookId:Int)->Unit){
             val requestOptions : RequestOptions = RequestOptions().placeholder(R.drawable.ic_launcher_background)
             tvBookTitle.text = item.title
             tvCategory.text = item.category
@@ -63,7 +69,11 @@ class BookListAdapter(context : Context,onBtnDownload : (view: View,downloadUri:
             btnDownloadBook.text = item.downloadCount.toString()
             btnDownloadBook.setOnClickListener {
                 Log.d("BOOKLISTADAPTER","btnDownload on clicked!")
-                onBtnDownloadBookClick(it,Uri.parse(item.bookUri),item.title)
+                onBtnDownloadBookClick(it,Uri.parse(item.bookUri),item.title,item.bookId)
+            }
+            cvBookItem.setOnClickListener {
+                val action = HomeFragmentDirections.actionNavHomeToBookDetailFragment(item.title)
+                findNavController(it).navigate(action)
             }
 
         }
@@ -71,9 +81,9 @@ class BookListAdapter(context : Context,onBtnDownload : (view: View,downloadUri:
             fun from(parent: ViewGroup) : ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val view = layoutInflater.inflate(R.layout.book_list_item,parent,false)
-                view.setOnClickListener {
-                    findNavController(it).navigate(R.id.bookDetailFragment)
-                }
+//                view.setOnClickListener {
+//                    val directions = HomeFragmentDirections.actionNavHomeToBookDetailFragment()
+//                }
                 return ViewHolder(view)
             }
         }

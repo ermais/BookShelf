@@ -3,16 +3,20 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
     id('kotlin-kapt')
+    id("com.google.devtools.ksp") version "1.8.0-1.0.8"
+
+//    id("androidx.navigation.safeargs")
 }
+apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.bookshelf"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -39,48 +43,53 @@ android {
     namespace 'com.example.bookshelf'
 }
 
-def room_ver = "2.4.3"
+def room_ver = "2.5.0"
 def worker_version = "2.7.1"
 
 dependencies {
 
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.7.10'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.8.0'
     implementation fileTree(dir: "libs",includes: ["*.jar"])
+
+
+    annotationProcessor("androidx.room:room-compiler:$room_ver")
+
+
     //Firebase
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-database-ktx:20.1.0'
     implementation platform('com.google.firebase:firebase-bom:29.1.0')
-    implementation('com.google.firebase:firebase-firestore-ktx:24.4.0')
+    implementation('com.google.firebase:firebase-firestore-ktx:24.4.2')
     implementation('com.google.firebase:firebase-storage-ktx:20.1.0')
 
     // Also declare the dependency for the Google Play services library and specify its version
-    implementation 'com.google.android.gms:play-services-auth:20.3.0'
+    implementation 'com.google.android.gms:play-services-auth:20.4.1'
 
 
     //KTX
     implementation("androidx.core:core-ktx:1.9.0")
 
 
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     //Lifecycle
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
-    implementation('androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha02')
+    implementation('androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha04')
 
 
     //Navigation
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.2'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.preference:preference-ktx:1.2.0'
 
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     //Android Room
     implementation("androidx.room:room-runtime:$room_ver")
@@ -88,6 +97,7 @@ dependencies {
 
     // To use Kotlin annotation processing tool (kapt)
     kapt("androidx.room:room-compiler:$room_ver")
+//    ksp("androidx.room:room-compiler:$room_ver")
 
 
     // optional - Kotlin Extensions and Coroutines support for Room
@@ -107,8 +117,8 @@ dependencies {
     //Worker Library
     implementation("androidx.work:work-runtime-ktx:$worker_version")
 
-    implementation "androidx.activity:activity-ktx:1.6.0"
-   implementation "androidx.fragment:fragment-ktx:1.5.3"
+    implementation "androidx.activity:activity-ktx:1.6.1"
+   implementation "androidx.fragment:fragment-ktx:1.5.5"
 
 
 

@@ -8,17 +8,22 @@
         android:layout_height="match_parent"
         tools:context=".ui.main.MainActivity"
         >
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            style="@style/Theme.BookShelf.AppBarOverlay"
-            >
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </androidx.appcompat.widget.Toolbar>
+<!--        <com.google.android.material.appbar.AppBarLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:fitsSystemWindows="true"-->
+<!--            android:background="@color/white"-->
+<!--            android:elevation="0dp"-->
+<!--            app:elevation="0dp"-->
+<!--            >-->
+<!--            <androidx.appcompat.widget.Toolbar-->
+<!--                android:id="@+id/toolbar"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:background="@color/white"-->
+<!--                android:elevation="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                >-->
+<!--            </androidx.appcompat.widget.Toolbar>-->
 
 <!--            <com.google.android.material.appbar.CollapsingToolbarLayout-->
 <!--                android:layout_width="match_parent"-->
@@ -108,18 +113,8 @@
 <!--            </com.google.android.material.appbar.CollapsingToolbarLayout>-->
 
 
-        </com.google.android.material.appbar.AppBarLayout>
+<!--        </com.google.android.material.appbar.AppBarLayout>-->
             <include layout="@layout/content_main" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabCreateBook"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="@dimen/fab_margin"
-            android:layout_marginBottom="16dp"
-            app:srcCompat="@android:drawable/ic_menu_add"
-            android:contentDescription="@string/navigate_to_create_book_fab_text" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

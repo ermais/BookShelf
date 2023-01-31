@@ -38,6 +38,7 @@ data class BookEntity(
     var bookId : Int=0
     fun asDomainModel():Book{
         return Book(
+            bookId,
             authorUID,
             title,
             authorName,
@@ -51,28 +52,29 @@ data class BookEntity(
             )
     }
 
-    fun BookEntity.asDomainModel() : Book{
-        return Book(this.authorUID,
-            this.title,
-            this.authorName,
-            this.category,
-            this.description,
-            this.pubDate,
-            this.bookCoverUri.toString(),
-            this.bookDocUri,
-            this.rating,
-            this.downloadCount
-            )
-    }
+
 
 }
 
-
+//fun BookEntity.asDomainModel() : Book{
+//    return Book(this.authorUID,
+//        this.title,
+//        this.authorName,
+//        this.category,
+//        this.description,
+//        this.pubDate,
+//        this.bookCoverUri.toString(),
+//        this.bookDocUri,
+//        this.rating,
+//        this.downloadCount
+//    )
+//}
 
 
 
 fun List<BookEntity>.asDomainModel() : List<Book>{
     return this.map { book->Book(
+        book.bookId,
         book.authorUID,
         book.title,
         book.authorName,

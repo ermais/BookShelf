@@ -7,4 +7,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="book_shelf_app_bar_size">112dp</dimen>
     <dimen name="book_shelf_app_bar_size_large">168dp</dimen>
+    <dimen name="downloaded_book_card_height">64dp</dimen>
+    <dimen name="actionCollapsableBar">192dp</dimen>
 </resources>

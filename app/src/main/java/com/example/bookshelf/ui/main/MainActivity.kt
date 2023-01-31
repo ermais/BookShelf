@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -30,38 +31,34 @@ class MainActivity : AppCompatActivity() , OnQueryTextListener
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var layout: View
-    private lateinit var binding: ActivityMainBinding
+    private var _binding : ActivityMainBinding? = null
+    val binding get() = _binding!!
     lateinit var viewModel: MainViewModel
     private lateinit var viewModelFactory: MainViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 //        initSearchView()
         layout = binding.root
         viewModelFactory = MainViewModelFactory(application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-        setSupportActionBar(binding.appBarMain.toolbar)
-        binding.appBarMain.fabCreateBook.setOnClickListener {
-            val createBookIntent = Intent(this, CreateBookActivity::class.java)
-            startActivity(createBookIntent)
-        }
-        val drawerLayout: DrawerLayout = binding.drawerLayout
-        val navView: NavigationView = binding.navView
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_home, R.id.nav_notifications, R.id.nav_info
-            ), drawerLayout
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
-        supportActionBar?.title = null
 
+        if (actionBar != null){
+
+            val drawerLayout = binding.drawerLayout
+            val navView  = binding.navView
+            val navController = findNavController(R.id.nav_host_fragment_content_main)
+            appBarConfiguration = AppBarConfiguration(
+                navController.graph,
+                drawerLayout
+            )
+            setupActionBarWithNavController(navController,appBarConfiguration)
+            navView.setupWithNavController(navController)
+
+        }
 
 
 //        val sortByAdapter = ArrayAdapter.createFromResource(
@@ -177,5 +174,74 @@ class MainActivity : AppCompatActivity() , OnQueryTextListener
 
 //        }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 
+    @Deprecated("Deprecated in Java")
+    override fun onAttachFragment(fragment: android.app.Fragment?) {
+        super.onAttachFragment(fragment)
+        println("Get attaching fragment ------------------------------------")
+        println(fragment)
+        if (actionBar != null){
+            val drawerLayout = binding.drawerLayout
+            val navView  = binding.navView
+            val navController = findNavController(R.id.nav_host_fragment_content_main)
+            appBarConfiguration = AppBarConfiguration(
+                navController.graph,
+                drawerLayout
+                )
+            setupActionBarWithNavController(navController,appBarConfiguration)
+            navView.setupWithNavController(navController)
+        }
+    }
+
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        if (actionBar != null){
+            println("onResume fragment -------------------------------------------------")
+            val drawerLayout = binding.drawerLayout
+            val navView  = binding.navView
+            val navController = findNavController(R.id.nav_host_fragment_content_main)
+            appBarConfiguration = AppBarConfiguration(
+                navController.graph,
+                drawerLayout
+            )
+            setupActionBarWithNavController(navController,appBarConfiguration)
+            navView.setupWithNavController(navController)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (actionBar != null){
+            println("onResume-------------------------------------------------")
+            val drawerLayout = binding.drawerLayout
+            val navView  = binding.navView
+            val navController = findNavController(R.id.nav_host_fragment_content_main)
+            appBarConfiguration = AppBarConfiguration(
+                navController.graph,
+                drawerLayout
+            )
+            setupActionBarWithNavController(navController,appBarConfiguration)
+            navView.setupWithNavController(navController)
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (actionBar != null){
+            println("onStart -------------------------------------------------")
+            val drawerLayout = binding.drawerLayout
+            val navView  = binding.navView
+            val navController = findNavController(R.id.nav_host_fragment_content_main)
+            appBarConfiguration = AppBarConfiguration(
+                navController.graph,
+                drawerLayout
+            )
+            setupActionBarWithNavController(navController,appBarConfiguration)
+            navView.setupWithNavController(navController)
+        }
+    }
 }

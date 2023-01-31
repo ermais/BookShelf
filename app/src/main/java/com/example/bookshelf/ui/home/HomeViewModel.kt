@@ -11,10 +11,14 @@ class HomeViewModel : ViewModel() {
     }
     val text: LiveData<String> = _text
     val filterByCategory : MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
+        MutableLiveData<String>("")
     }
 
     val sortBy : MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
+        MutableLiveData<String>("")
+    }
+
+    val createBookFabBtnVisible : MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>(false)
     }
 }

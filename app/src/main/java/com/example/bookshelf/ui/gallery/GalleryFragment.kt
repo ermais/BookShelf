@@ -31,6 +31,9 @@ class GalleryFragment : Fragment() {
                 ViewModelProvider.NewInstanceFactory()
             ).get(GalleryViewModel::class.java)
 
+        activity.let {
+            it?.actionBar?.setDisplayHomeAsUpEnabled(true)
+        }
         _binding = FragmentGalleryBinding.inflate(inflater, container, false)
         val root: View = binding.root
 

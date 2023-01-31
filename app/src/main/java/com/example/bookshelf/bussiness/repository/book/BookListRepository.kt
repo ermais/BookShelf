@@ -5,6 +5,7 @@ import com.example.bookshelf.bussiness.Result.Result
 import com.example.bookshelf.bussiness.Result.data
 import com.example.bookshelf.bussiness.db.BookDatabase
 import com.example.bookshelf.bussiness.db.BookEntity
+import com.example.bookshelf.bussiness.db.DownloadEntity
 import com.example.bookshelf.bussiness.model.Book
 import com.example.bookshelf.bussiness.model.asBookEntity
 import com.google.firebase.auth.FirebaseAuth
@@ -44,6 +45,8 @@ class BookListRepository(val firestoreBookDataSource: FirestoreBookDataSource,pr
     suspend fun sortByTitle() = db.bookDao().sortByTitle()
 
     suspend fun sortByPubDate() = db.bookDao().sortByPubDate()
+
+    suspend fun addDownload(_book:DownloadEntity) = db.downloadDao().addDownload(_book)
 
 
 }

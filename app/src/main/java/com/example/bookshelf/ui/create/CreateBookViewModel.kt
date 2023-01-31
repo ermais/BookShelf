@@ -62,6 +62,7 @@ class CreateBookViewModel(
 
     fun publishBook() = viewModelScope.launch {
             val book = Book(
+                0,
                 auth.currentUser?.uid.toString(),
                 bookTitle.value.toString(),
                 auth.currentUser?.displayName.toString(),

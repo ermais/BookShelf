@@ -9,10 +9,11 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.bookshelf.bussiness.model.Book
 import com.example.bookshelf.data.DATABASE_NAME
 
-@Database(entities = [BookEntity::class], version = 8, exportSchema = false)
+@Database(entities = [BookEntity::class,DownloadEntity::class], version = 21, exportSchema = false)
 @TypeConverters()
 abstract class BookDatabase : RoomDatabase(){
     abstract fun bookDao() : BookDao
+    abstract fun downloadDao() : DownloadDao
 
     companion object {
         @Volatile private var instance : BookDatabase? = null

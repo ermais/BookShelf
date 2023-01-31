@@ -7,6 +7,7 @@ import java.util.*
 
 @IgnoreExtraProperties
 data class Book(
+    val bookId:Int=0,
     val authorUID: String="",
     val title: String="",
     val authorName: String="",

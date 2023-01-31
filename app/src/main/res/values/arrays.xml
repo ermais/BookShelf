@@ -9,4 +9,36 @@
         <item>reply</item>
         <item>reply_all</item>
     </string-array>
+    <string-array name="list_of_themes_values">
+        <item>blue_dark</item>
+        <item>blue_light</item>
+        <item>orange_dark</item>
+        <item>orange_light</item>
+    </string-array>
+    <string-array name="list_of_themes_entries">
+        <item> Blue dark</item>
+        <item>Blue Light</item>
+        <item>Orange dark</item>
+        <item>Orange Light</item>
+    </string-array>
+    <string-array name="list_of_storage_values">
+        <item>internal_storage</item>
+        <item>sd_card</item>
+    </string-array>
+    <string-array name="list_of_storage_entries">
+        <item> Internal storage</item>
+        <item>SD card</item>
+    </string-array>
+    <string-array name="list_of_pdf_reader_values">
+        <item>driver_pdf_reader</item>
+        <item>browser_reader</item>
+        <item>pdf_reader</item>
+        <item>samsung_pdf_reader</item>
+    </string-array>
+    <string-array name="list_of_pdf_reader_entries">
+        <item>Open in Driver pdf reader</item>
+        <item>Open in browser pdf reader</item>
+        <item>Open in Pdf reader</item>
+        <item>Open in Samsung pdf reader</item>
+    </string-array>
 </resources>

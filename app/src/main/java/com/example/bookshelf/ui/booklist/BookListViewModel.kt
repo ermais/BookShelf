@@ -5,14 +5,14 @@ import android.app.Application
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.*
-import androidx.work.Data
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.*
 import com.example.bookshelf.bussiness.Result.data
 import com.example.bookshelf.bussiness.db.BookEntity
+import com.example.bookshelf.bussiness.db.DownloadEntity
 import com.example.bookshelf.bussiness.model.asBookEntity
 import com.example.bookshelf.bussiness.repository.book.BookListRepository
 import com.example.bookshelf.data.DOWNLOAD_BOOK_WORKER_TAG
+import com.example.bookshelf.data.KEY_BOOK_ID
 import com.example.bookshelf.data.KEY_BOOK_TITLE
 import com.example.bookshelf.data.KEY_DOWNLOAD_BOOK_URI
 import com.example.bookshelf.worker.DownloadBookWorker
@@ -20,15 +20,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
+import java.util.concurrent.Executor
 
 class BookListViewModel(
     private val bookListRepository: BookListRepository,
     application:Application) : ViewModel(){
     internal var books : MutableLiveData<List<BookEntity>> = bookListRepository.getOfflineBooks().asLiveData() as MutableLiveData<List<BookEntity>>
-    var filteredBooks = books
-    val workManager = WorkManager.getInstance(application)
-    val downloadWorkerInfo = workManager.getWorkInfosByTag(DOWNLOAD_BOOK_WORKER_TAG)
+    val filteredBooks get() = books
+    internal var workManager = WorkManager.getInstance(application)
 
+    val workInfo : LiveData<List<WorkInfo>> by lazy {
+        workManager.getWorkInfosByTagLiveData(DOWNLOAD_BOOK_WORKER_TAG)
+    }
 
     init {
         refreshBooks()
@@ -44,11 +47,11 @@ class BookListViewModel(
 //    }
 
 
-    fun downloadBook(downloadUri:Uri,bookTitle:String) = viewModelScope.launch {
-        val downloadWorkRequest = OneTimeWorkRequestBuilder<DownloadBookWorker>()
-            .setInputData(inputDownloadData(downloadUri,bookTitle))
-            .addTag(KEY_DOWNLOAD_BOOK_URI)
-            .build()
+    fun downloadBook(downloadUri:Uri,bookTitle:String,bookId:Int) = viewModelScope.launch {
+            val downloadWorkRequest = OneTimeWorkRequestBuilder<DownloadBookWorker>()
+                .setInputData(inputDownloadData(downloadUri,bookTitle,bookId))
+                .addTag(DOWNLOAD_BOOK_WORKER_TAG)
+                .build()
         workManager.enqueue(downloadWorkRequest)
     }
 
@@ -97,6 +100,12 @@ class BookListViewModel(
     }
 
 
+    fun addDownloads(_download:DownloadEntity) = viewModelScope.launch(Dispatchers.IO) {
+        bookListRepository.addDownload(_download)
+    }
+
+
+
 //
 //    private fun filterByCategory(category: String) = viewModelScope.launch(Dispatchers.Unconfined) {
 //        bookListRepository.filterByCategory(category).collect{
@@ -128,10 +137,11 @@ class BookListViewModel(
 //    }
 
 
-    fun inputDownloadData(downloadUri:Uri,bookTitle:String) : Data {
+    fun inputDownloadData(downloadUri:Uri,bookTitle:String,bookId:Int) : Data {
         val builder = Data.Builder()
         builder.putString(KEY_DOWNLOAD_BOOK_URI, downloadUri.toString())
         builder.putString(KEY_BOOK_TITLE,bookTitle)
+        builder.putInt(KEY_BOOK_ID,bookId)
         return builder.build()
     }
 }

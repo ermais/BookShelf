@@ -1,15 +1,18 @@
 package com.example.bookshelf.bussiness.db
 
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import androidx.room.Relation
+import androidx.room.*
+import java.util.Date
 
-@Entity(tableName = "downloads")
+@Entity(tableName = "downloads",
+    indices = [Index(value = ["downloadBookId"], unique = true)],
+)
 data class DownloadEntity(
-val bookByteContent : Byte,
-val bookId : Int
+val bookUri : String,
+@ColumnInfo()
+val downloadBookId: Int,
+val downloadDate : Long=Date().time
 ){
     @PrimaryKey(autoGenerate = true)
     var downloadId : Int=0
 }
+
