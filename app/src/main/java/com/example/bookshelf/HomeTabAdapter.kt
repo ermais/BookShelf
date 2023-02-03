@@ -1,19 +1,15 @@
 package com.example.bookshelf
 
-import android.os.Parcel
-import android.os.Parcelable
-import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.bookshelf.ui.booklist.BookListFragment
-import com.example.bookshelf.ui.home.HomeFragment
 import com.example.bookshelf.ui.recent.RecentFragment
 import com.example.bookshelf.ui.toprated.TopRatedFragment
 
-class HomeTabAdapter(fm: FragmentManager,lifecycle: Lifecycle) : FragmentStateAdapter(fm,lifecycle) {
+class HomeTabAdapter(fm: FragmentManager, lifecycle: Lifecycle) :
+    FragmentStateAdapter(fm, lifecycle) {
 
     override fun getItemCount(): Int {
         return 3
@@ -29,7 +25,6 @@ class HomeTabAdapter(fm: FragmentManager,lifecycle: Lifecycle) : FragmentStateAd
             }
         }
     }
-
 
 
 }

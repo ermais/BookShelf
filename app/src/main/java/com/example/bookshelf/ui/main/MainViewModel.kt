@@ -8,15 +8,15 @@ class MainViewModel(application: Application) : ViewModel() {
     val query: MutableLiveData<String> by lazy {
         MutableLiveData<String>("")
     }
-    val sortBy : MutableLiveData<String> by lazy{
+    val sortBy: MutableLiveData<String> by lazy {
         MutableLiveData<String>("")
     }
 
-    val filterByCategory : MutableLiveData<String> by lazy {
+    val filterByCategory: MutableLiveData<String> by lazy {
         MutableLiveData<String>("")
     }
 
-    fun setQuery(queryText:String?){
-     query.value = queryText
+    fun setQuery(queryText: String?) {
+        query.value = queryText
     }
 }

@@ -11,59 +11,47 @@ import android.widget.Toast
 import android.widget.Toolbar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
 import com.example.bookshelf.R
-import com.example.bookshelf.ui.main.MainViewModel
-import com.example.bookshelf.databinding.FragmentBookListBinding
-import com.example.bookshelf.bussiness.model.Book
-import com.example.bookshelf.bussiness.FirestoreBookDataSource
 import com.example.bookshelf.bussiness.db.BookDatabase
-import com.example.bookshelf.bussiness.db.DownloadEntity
 import com.example.bookshelf.bussiness.db.asDomainModel
+import com.example.bookshelf.bussiness.networkdata.FirestoreBookDataSource
 import com.example.bookshelf.bussiness.repository.book.BookListRepository
-import com.example.bookshelf.data.*
-import com.example.bookshelf.isPermissionGranted
-import com.example.bookshelf.requestPermission
+import com.example.bookshelf.databinding.FragmentBookListBinding
 import com.example.bookshelf.ui.Utils.showSnackBar
 import com.example.bookshelf.ui.home.HomeViewModel
 import com.example.bookshelf.ui.main.MainActivity
+import com.example.bookshelf.ui.main.MainViewModel
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import java.util.*
 
 class BookListFragment : Fragment() {
 
-    private lateinit var layout:View
+    private lateinit var layout: View
     private lateinit var db: FirebaseFirestore
     private lateinit var firestoreBookDataSource: FirestoreBookDataSource
     private lateinit var bookListRepository: BookListRepository
     private lateinit var bookListModel: BookListViewModel
     private var _binding: FragmentBookListBinding? = null
     private lateinit var cloudStorage: FirebaseStorage
-    private lateinit var mainViewModel : MainViewModel
-    private  val homeViewModel : HomeViewModel by activityViewModels()
-    private lateinit var bookShelDb : BookDatabase
-    private lateinit var requestPermissionLauncher : ActivityResultLauncher<String>
-    private  var toolbar: Toolbar? = null
+    private lateinit var mainViewModel: MainViewModel
+    private val homeViewModel: HomeViewModel by activityViewModels()
+    private lateinit var bookShelDb: BookDatabase
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+    private var toolbar: Toolbar? = null
 
 
     // This property is only valid between onCreateView and
@@ -82,39 +70,49 @@ class BookListFragment : Fragment() {
         cloudStorage = FirebaseStorage.getInstance()
         firestoreBookDataSource = FirestoreBookDataSource(db, cloudStorage)
         bookShelDb = BookDatabase.getDatabase(requireContext())
-        bookListRepository = BookListRepository(firestoreBookDataSource,bookShelDb)
-        val bookListViewModelFactory = BookListViewModelFactory(bookListRepository, requireNotNull(activity).application)
-        bookListModel = ViewModelProvider(this,bookListViewModelFactory).get(BookListViewModel::class.java)
+        bookListRepository = BookListRepository(firestoreBookDataSource, bookShelDb)
+        val bookListViewModelFactory =
+            BookListViewModelFactory(bookListRepository, requireNotNull(activity).application)
+        bookListModel =
+            ViewModelProvider(this, bookListViewModelFactory).get(BookListViewModel::class.java)
 
-        val adapter = BookListAdapter(requireContext()){view, downloadUri , bookTitle,bookId ->
+        val adapter = BookListAdapter(requireContext()) { view, downloadUri, bookTitle, bookId ->
             println("onDownload callback---------------------------------- ${bookId} ")
-            when{
-                ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.WRITE_EXTERNAL_STORAGE)==
-                        PackageManager.PERMISSION_GRANTED-> {
-                    val toast = Toast.makeText(requireContext(),"Downloading ...",Toast.LENGTH_LONG)
+            when {
+                ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) ==
+                        PackageManager.PERMISSION_GRANTED -> {
+                    val toast =
+                        Toast.makeText(requireContext(), "Downloading ...", Toast.LENGTH_LONG)
                     toast.show()
                     println("Granted --------------")
-                    layout.showSnackBar(view,
+                    layout.showSnackBar(
+                        view,
                         getString(R.string.write_external_storage_permission),
                         Snackbar.LENGTH_SHORT,
-                        null){
-                        Log.d("BOOK-LIST","I am from inside the snack-bar")
-                       onDownloadBook(view,downloadUri,bookTitle,bookId)
+                        null
+                    ) {
+                        Log.d("BOOK-LIST", "I am from inside the snack-bar")
+                        onDownloadBook(view, downloadUri, bookTitle, bookId)
                     }
-                    onDownloadBook(view,downloadUri,bookTitle,bookId)
+                    onDownloadBook(view, downloadUri, bookTitle, bookId)
                 }
-                ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE)->{
+                ActivityCompat.shouldShowRequestPermissionRationale(
+                    requireActivity(),
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) -> {
                     layout.showSnackBar(
                         view,
                         getString(R.string.write_external_storage_permission),
                         Snackbar.LENGTH_INDEFINITE,
                         getString(R.string.ok),
-                    ){
+                    ) {
                         requestPermissionLauncher.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     }
                 }
-                else->{
+                else -> {
                     requestPermissionLauncher.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 }
             }
@@ -125,7 +123,7 @@ class BookListFragment : Fragment() {
         }
 
 
-        mainViewModel.query.observe(viewLifecycleOwner){query->
+        mainViewModel.query.observe(viewLifecycleOwner) { query ->
             bookListModel.filterBooks(query)
         }
         bookListModel.filteredBooks.observe(viewLifecycleOwner) {
@@ -162,37 +160,38 @@ class BookListFragment : Fragment() {
 //
 //        }
 
-        homeViewModel.filterByCategory.observe(viewLifecycleOwner){
-            if (it != "All"){
+        homeViewModel.filterByCategory.observe(viewLifecycleOwner) {
+            if (it != "All") {
                 bookListModel.filterByCategory(it)
-            }else{
+            } else {
                 bookListModel.getBooks()
             }
         }
 
         requestPermissionLauncher =
             registerForActivityResult(
-                ActivityResultContracts.RequestPermission()){ isGranted:Boolean->
-                if (isGranted){
-                    val toast = Toast.makeText(activity,"Permission Granted",Toast.LENGTH_LONG)
+                ActivityResultContracts.RequestPermission()
+            ) { isGranted: Boolean ->
+                if (isGranted) {
+                    val toast = Toast.makeText(activity, "Permission Granted", Toast.LENGTH_LONG)
                     toast.show()
-                }else {
-                    val toast = Toast.makeText(activity,"Permission Denied",Toast.LENGTH_LONG)
+                } else {
+                    val toast = Toast.makeText(activity, "Permission Denied", Toast.LENGTH_LONG)
                     toast.show()
                 }
             }
 
-        mainViewModel.query.observe(viewLifecycleOwner){
+        mainViewModel.query.observe(viewLifecycleOwner) {
             bookListModel.filterBooks(it)
         }
 
-        homeViewModel.sortBy.observe(viewLifecycleOwner){
-            Log.d("HOMEVIEWMODEL",it)
-            when(it){
-                "date"->bookListModel.sortByPubDate()
-                "author"->bookListModel.sortByAuthor()
-                "title"->bookListModel.sortByTitle()
-                else->bookListModel.sortByPubDate()
+        homeViewModel.sortBy.observe(viewLifecycleOwner) {
+            Log.d("HOMEVIEWMODEL", it)
+            when (it) {
+                "date" -> bookListModel.sortByPubDate()
+                "author" -> bookListModel.sortByAuthor()
+                "title" -> bookListModel.sortByTitle()
+                else -> bookListModel.sortByPubDate()
             }
         }
 
@@ -200,18 +199,18 @@ class BookListFragment : Fragment() {
 
 
         binding.rvBookList.adapter = adapter
-        with(binding.rvBookList){
-            this.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+        with(binding.rvBookList) {
+            this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
                 }
 
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    if (dy > 10){
+                    if (dy > 10) {
                         homeViewModel.createBookFabBtnVisible.value = false
                     }
-                    if (dy < -10){
+                    if (dy < -10) {
                         homeViewModel.createBookFabBtnVisible.value = true
                     }
                 }
@@ -233,16 +232,17 @@ class BookListFragment : Fragment() {
         toolbar = view.findViewById<Toolbar>(R.id.toolbarBookList)
         val layout = view.findViewById<CollapsingToolbarLayout>(R.id.toolbarBookListLayout)
         val drawerLayout = mainActivity.findViewById<DrawerLayout>(R.id.drawer_layout)
-        val appBarConfiguration = AppBarConfiguration(findNavController().graph,drawerLayout)
-        mainActivity.setupActionBarWithNavController(findNavController(),appBarConfiguration)
-        homeViewModel.filterByCategory.observe(viewLifecycleOwner){
-            if (it != "All"){
+        val appBarConfiguration = AppBarConfiguration(findNavController().graph, drawerLayout)
+        mainActivity.setupActionBarWithNavController(findNavController(), appBarConfiguration)
+        homeViewModel.filterByCategory.observe(viewLifecycleOwner) {
+            if (it != "All") {
                 bookListModel.filterByCategory(it)
-            }else{
+            } else {
                 bookListModel.getBooks()
             }
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -262,10 +262,10 @@ class BookListFragment : Fragment() {
 //        }
 
 
-        homeViewModel.filterByCategory.observe(viewLifecycleOwner){
-            if (it != "All"){
+        homeViewModel.filterByCategory.observe(viewLifecycleOwner) {
+            if (it != "All") {
                 bookListModel.filterByCategory(it)
-            }else{
+            } else {
                 bookListModel.getBooks()
             }
         }
@@ -273,19 +273,19 @@ class BookListFragment : Fragment() {
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        homeViewModel.sortBy.observe(viewLifecycleOwner){
-            Log.d("HOMEVIEWMODEL",it)
-            when(it){
-                "date"->bookListModel.sortByPubDate()
-                "author"->bookListModel.sortByAuthor()
-                "title"->bookListModel.sortByTitle()
-                else->bookListModel.sortByPubDate()
+        homeViewModel.sortBy.observe(viewLifecycleOwner) {
+            Log.d("HOMEVIEWMODEL", it)
+            when (it) {
+                "date" -> bookListModel.sortByPubDate()
+                "author" -> bookListModel.sortByAuthor()
+                "title" -> bookListModel.sortByTitle()
+                else -> bookListModel.sortByPubDate()
             }
         }
     }
 
-    fun onDownloadBook(view:View,uri:Uri,title:String,bookId:Int){
-        bookListModel.downloadBook(uri,title,bookId)
+    fun onDownloadBook(view: View, uri: Uri, title: String, bookId: String) {
+        bookListModel.downloadBook(uri, title, bookId)
     }
 
 }

@@ -1,7 +1,7 @@
 package com.example.bookshelf.bussiness.db
 
-import androidx.room.Entity
 import androidx.room.ColumnInfo
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.bookshelf.bussiness.model.Book
 import org.jetbrains.annotations.NotNull
@@ -10,33 +10,33 @@ import org.jetbrains.annotations.Nullable
 
 @Entity(tableName = "books")
 data class BookEntity(
-    @ColumnInfo(name="title")
-    val title : String,
-    @ColumnInfo(name="description")
+
+    @PrimaryKey
+    val bookId: String = "",
+    @ColumnInfo(name = "title")
+    val title: String,
+    @ColumnInfo(name = "description")
     val description: String?,
-    @ColumnInfo(name="category", defaultValue = "category")
-    val category : String,
-    @ColumnInfo(name="authorName")
+    @ColumnInfo(name = "category", defaultValue = "category")
+    val category: String,
+    @ColumnInfo(name = "authorName")
     val authorName: String,
-    @ColumnInfo(name="authorUID")
-    val authorUID : String,
+    @ColumnInfo(name = "authorUID")
+    val authorUID: String,
     @ColumnInfo(name = "book_cover_uri")
     @Nullable
-    val bookCoverUri : String?,
-    @ColumnInfo(name="book_doc_uri")
+    val bookCoverUri: String?,
+    @ColumnInfo(name = "book_doc_uri")
     @NotNull
-    val bookDocUri : String,
-    @ColumnInfo(name="pub_date")
-    val pubDate : Long=0,
-    @ColumnInfo(name="rating")
-    val rating : String,
-    @ColumnInfo(name="download_count", defaultValue = "0")
-    val downloadCount : Int
-    ){
-
-    @PrimaryKey(autoGenerate = true)
-    var bookId : Int=0
-    fun asDomainModel():Book{
+    val bookDocUri: String,
+    @ColumnInfo(name = "pub_date")
+    val pubDate: Long = 0,
+    @ColumnInfo(name = "rating")
+    val rating: String,
+    @ColumnInfo(name = "download_count", defaultValue = "0")
+    val downloadCount: Int
+) {
+    fun asDomainModel(): Book {
         return Book(
             bookId,
             authorUID,
@@ -49,9 +49,8 @@ data class BookEntity(
             bookDocUri,
             rating,
             downloadCount,
-            )
+        )
     }
-
 
 
 }
@@ -71,19 +70,20 @@ data class BookEntity(
 //}
 
 
-
-fun List<BookEntity>.asDomainModel() : List<Book>{
-    return this.map { book->Book(
-        book.bookId,
-        book.authorUID,
-        book.title,
-        book.authorName,
-        book.category,
-        book.description,
-        book.pubDate,
-        book.bookCoverUri.toString(),
-        book.bookDocUri,
-        book.rating,
-        book.downloadCount
-    ) }
+fun List<BookEntity>.asDomainModel(): List<Book> {
+    return this.map { book ->
+        Book(
+            book.bookId,
+            book.authorUID,
+            book.title,
+            book.authorName,
+            book.category,
+            book.description,
+            book.pubDate,
+            book.bookCoverUri.toString(),
+            book.bookDocUri,
+            book.rating,
+            book.downloadCount
+        )
+    }
 }

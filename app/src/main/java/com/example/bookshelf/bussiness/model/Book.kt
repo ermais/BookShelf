@@ -1,45 +1,47 @@
 package com.example.bookshelf.bussiness.model
+
 import com.example.bookshelf.bussiness.db.BookEntity
 import com.google.firebase.database.Exclude
 import com.google.firebase.database.IgnoreExtraProperties
-import java.util.*
 
 
 @IgnoreExtraProperties
 data class Book(
-    val bookId:Int=0,
-    val authorUID: String="",
-    val title: String="",
-    val authorName: String="",
-    val category:String="",
-    val desc: String?="",
+    val bookId: String = "",
+    val authorUID: String = "",
+    val title: String = "",
+    val authorName: String = "",
+    val category: String = "",
+    val desc: String? = "",
     val pubDate: Long = 0L,
-    val bookCover: String?="",
-    val bookUri : String = "",
-    val rating: String ="4.5",
+    val bookCover: String? = "",
+    val bookUri: String = "",
+    val rating: String = "4.5",
     val downloadCount: Int = 0
-){
+) {
 
     constructor() : this(
-        authorUID="",
-        title="",
+        authorUID = "",
+        title = "",
         authorName = "",
         category = "",
         desc = "",
         pubDate = 0L,
         bookCover = "",
-        bookUri =""
-        ,rating="4.5",
-        downloadCount=0
+        bookUri = "", rating = "4.5",
+        downloadCount = 0
     ) {
 
     }
+
     override fun toString(): String {
         return "$title by $authorName"
     }
+
     @Exclude
-    fun toMap() : Map<String,Any?>{
+    fun toMap(firebaseBookId: String): Map<String, Any?> {
         return mapOf(
+            "bookId" to firebaseBookId,
             "authorUID" to authorUID,
             "title" to title,
             "authorName" to authorName,
@@ -55,10 +57,11 @@ data class Book(
     }
 }
 
-fun List<Book>.asBookEntity() : List<BookEntity>{
-    return map { book->
+fun List<Book>.asBookEntity(): List<BookEntity> {
+    return map { book ->
         BookEntity(
-            title=book.title,
+            bookId = book.bookId,
+            title = book.title,
             description = book.desc,
             category = book.category,
             authorName = book.authorName,
@@ -68,5 +71,6 @@ fun List<Book>.asBookEntity() : List<BookEntity>{
             pubDate = book.pubDate,
             rating = book.rating,
             downloadCount = book.downloadCount
-        ) }
+        )
+    }
 }

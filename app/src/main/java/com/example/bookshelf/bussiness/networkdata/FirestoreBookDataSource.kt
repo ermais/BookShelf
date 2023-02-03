@@ -1,17 +1,19 @@
-package com.example.bookshelf.bussiness
+package com.example.bookshelf.bussiness.networkdata
 
 import android.net.Uri
 import android.util.Log
-import com.example.bookshelf.bussiness.model.Book
 import com.example.bookshelf.bussiness.Result.Result
+import com.example.bookshelf.bussiness.Result.Result.Success
+import com.example.bookshelf.bussiness.model.Book
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
-import com.example.bookshelf.bussiness.Result.Result.Success
 
-class FirestoreBookDataSource(db : FirebaseFirestore,cloudStorage: FirebaseStorage) :
+class FirestoreBookDataSource(db: FirebaseFirestore, cloudStorage: FirebaseStorage) :
     BookDataSource {
     val cloudRef = cloudStorage.reference
     val bookRef = db.collection("books")
@@ -19,18 +21,18 @@ class FirestoreBookDataSource(db : FirebaseFirestore,cloudStorage: FirebaseStora
         try {
             emit(Result.Loading)
             val bookId = bookRef.document().id
-            val bookAdded = bookRef.document(bookId).set(book.toMap())
+            val bookAdded = bookRef.document(bookId).set(book.toMap(bookId))
                 .await()
             emit(Result.Success(bookAdded))
-        }catch (e: Exception){
+        } catch (e: Exception) {
             emit(Result.Failure(e.message ?: e.toString()))
-    }
+        }
     }
 
     override suspend fun getBooksFromFirestore() = callbackFlow {
-        val snapShot = bookRef.orderBy("title").addSnapshotListener{snapshot,e->
-            val response = if (snapshot != null){
-                Log.d("FireStore",snapshot.joinToString("||||"))
+        val snapShot = bookRef.orderBy("title").addSnapshotListener { snapshot, e ->
+            val response = if (snapshot != null) {
+                Log.d("FireStore", snapshot.joinToString("||||"))
                 val books = snapshot.toObjects(Book::class.java)
                 Result.Success(books)
             } else {
@@ -43,55 +45,55 @@ class FirestoreBookDataSource(db : FirebaseFirestore,cloudStorage: FirebaseStora
         }
     }
 
-    override suspend fun updateBook(book: Book) = flow {
-        try {
-            emit(Result.Loading)
-            val bookData = book.toMap()
-            val updated = bookRef.document("${book.title}")
-                .update(bookData).await()
-            emit(Result.Success(updated))
-        }catch (e : Exception){
-            Result.Failure(e.message ?: e.toString())
-        }
-    }
+//    override suspend fun updateBook(book: Book) = flow {
+//        try {
+//            emit(Result.Loading)
+//            val bookData = book.toMap()
+//            val updated = bookRef.document("${book.title}")
+//                .update(bookData).await()
+//            emit(Result.Success(updated))
+//        }catch (e : Exception){
+//            Result.Failure(e.message ?: e.toString())
+//        }
+//    }
 
     override suspend fun deleteBook(bookId: String) = flow {
         try {
             emit(Result.Loading)
             val deleted = bookRef.document(bookId).delete().await()
             emit(Result.Success(deleted))
-        }catch (e: Exception){
+        } catch (e: Exception) {
             Result.Failure(e.message ?: e.toString())
         }
     }
 
     override suspend fun filterByCategory(category: String) = callbackFlow {
-        val snapShot = bookRef.orderBy("title").whereEqualTo("category",category)
-            .addSnapshotListener{snapshot,e->
-                val response = if (snapshot != null){
+        val snapShot = bookRef.orderBy("title").whereEqualTo("category", category)
+            .addSnapshotListener { snapshot, e ->
+                val response = if (snapshot != null) {
                     val books = snapshot.toObjects(Book::class.java)
                     Result.Success(books)
-                }else {
+                } else {
                     Result.Failure(e?.message ?: e.toString())
                 }
                 trySend(response)
             }
-        awaitClose{
+        awaitClose {
             snapShot.remove()
         }
     }
 
     override suspend fun filterByAuthor(author: String) = callbackFlow {
-        val snapShot = bookRef.orderBy("author").whereEqualTo("author",author)
-            .addSnapshotListener{snapshot,e->
-                val response = if (snapshot != null){
+        val snapShot = bookRef.orderBy("author").whereEqualTo("author", author)
+            .addSnapshotListener { snapshot, e ->
+                val response = if (snapshot != null) {
                     Result.Success(snapshot.toObjects(Book::class.java))
-                }else {
+                } else {
                     Result.Failure(e?.message ?: e.toString())
                 }
                 trySend(response)
             }
-        awaitClose{
+        awaitClose {
             snapShot.remove()
         }
     }
@@ -126,7 +128,7 @@ class FirestoreBookDataSource(db : FirebaseFirestore,cloudStorage: FirebaseStora
                     .update(mapOf("bookDocCover" to bookUriFromFile))
                     .await()
                 emit(Result.Success(bookDocUpdated))
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 emit(Result.Failure(e.message ?: e.toString()))
             }
 
@@ -145,7 +147,7 @@ class FirestoreBookDataSource(db : FirebaseFirestore,cloudStorage: FirebaseStora
                     .update(mapOf("bookCover" to bookCoverUriFromFile))
                     .await()
                 emit(Result.Success(bookCoverUpdated))
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 emit(Result.Failure(e.message ?: e.toString()))
             }
         }
@@ -159,7 +161,7 @@ class FirestoreBookDataSource(db : FirebaseFirestore,cloudStorage: FirebaseStora
                     .update(mapOf("rating" to rating))
                     .await()
                 emit(Result.Success(bookRated))
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 Result.Failure(e.message ?: e.toString())
             }
         }
@@ -173,33 +175,33 @@ class FirestoreBookDataSource(db : FirebaseFirestore,cloudStorage: FirebaseStora
         return getBooksFromFirestore()
     }
 
-    override suspend fun uploadBookDoc(uriFromFile: Uri,bookTitle: String) =
+    override suspend fun uploadBookDoc(uriFromFile: Uri, bookTitle: String) =
         callbackFlow {
-                Result.Loading
-                var downloadUri : Uri? = null
-                val imageRef = cloudRef.child("Books/${bookTitle}/document")
-                val uploadTask = imageRef.putFile(uriFromFile)
-                val loading = uploadTask.continueWithTask{
-                    imageRef.downloadUrl
-                }.addOnSuccessListener {
-                    downloadUri = it
-                    trySend(Success(it))
-                }.addOnCompleteListener {
-                    if (it.isSuccessful){
-                        Success(it.result)
-                    }else {
-                        Result.Failure(it.exception?.message.toString())
-                    }
-                }.addOnFailureListener{
-                    Result.Failure(it.message ?: it.toString())
+            Result.Loading
+            var downloadUri: Uri? = null
+            val imageRef = cloudRef.child("Books/${bookTitle}/document")
+            val uploadTask = imageRef.putFile(uriFromFile)
+            val loading = uploadTask.continueWithTask {
+                imageRef.downloadUrl
+            }.addOnSuccessListener {
+                downloadUri = it
+                trySend(Success(it))
+            }.addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Success(it.result)
+                } else {
+                    Result.Failure(it.exception?.message.toString())
                 }
+            }.addOnFailureListener {
+                Result.Failure(it.message ?: it.toString())
+            }
             awaitClose { loading.result }
-    }
+        }
 
-    override suspend fun uploadBookCover(uriFromFile: Uri,bookTitle: String): Flow<Result<Uri>> {
+    override suspend fun uploadBookCover(uriFromFile: Uri, bookTitle: String): Flow<Result<Uri>> {
         return callbackFlow {
             Result.Loading
-            var downloadUri : Uri? = null
+            var downloadUri: Uri? = null
             val imageRef = cloudRef.child("BookCover/${bookTitle}/cover")
             val uploadTask = imageRef.putFile(uriFromFile)
             val loading = uploadTask.continueWithTask {

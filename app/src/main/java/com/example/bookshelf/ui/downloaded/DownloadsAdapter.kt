@@ -12,33 +12,34 @@ import com.example.bookshelf.R
 import com.example.bookshelf.bussiness.db.DownloadAndBook
 import java.util.*
 
-class DownloadsAdapter(context: Context,onDownloadClicked:(bookUri:String)->Unit) : RecyclerView.Adapter<DownloadsAdapter.ViewHolder>() {
-    val mContext by lazy {context}
+class DownloadsAdapter(context: Context, onDownloadClicked: (bookUri: String) -> Unit) :
+    RecyclerView.Adapter<DownloadsAdapter.ViewHolder>() {
+    val mContext by lazy { context }
     private val onDownloadCardClicked = onDownloadClicked
     var downloads = listOf<DownloadAndBook>()
-    @SuppressLint("NotifyDataSetChanged")
-    set(value) {
-        field =value
-        notifyDataSetChanged()
-    }
+        @SuppressLint("NotifyDataSetChanged")
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
-    class ViewHolder(view:View) : RecyclerView.ViewHolder(view) {
-        val tvBookTitle : TextView = view.findViewById(R.id.txtViewDownloadedBookTitle)
-        val tvDownloadDate : TextView = view.findViewById(R.id.txtViewDownloadedBookWhen)
-        val cvDownload : CardView = view.findViewById(R.id.downloadCardView)
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val tvBookTitle: TextView = view.findViewById(R.id.txtViewDownloadedBookTitle)
+        val tvDownloadDate: TextView = view.findViewById(R.id.txtViewDownloadedBookWhen)
+        val cvDownload: CardView = view.findViewById(R.id.downloadCardView)
 
-        fun bind(book:DownloadAndBook,onDownloadClicked:(bookUri:String)->Unit){
+        fun bind(book: DownloadAndBook, onDownloadClicked: (bookUri: String) -> Unit) {
             tvBookTitle.text = book.title
             tvDownloadDate.text = "${Date()}"
-            cvDownload.setOnClickListener{
+            cvDownload.setOnClickListener {
                 onDownloadClicked(book.bookUri)
             }
         }
 
         companion object {
-            fun from(parent:ViewGroup): ViewHolder{
+            fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val view = layoutInflater.inflate(R.layout.item_downloaded,parent,false)
+                val view = layoutInflater.inflate(R.layout.item_downloaded, parent, false)
                 return ViewHolder(view)
             }
         }

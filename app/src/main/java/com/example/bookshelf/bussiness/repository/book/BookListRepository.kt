@@ -1,36 +1,37 @@
 package com.example.bookshelf.bussiness.repository.book
 
-import com.example.bookshelf.bussiness.FirestoreBookDataSource
-import com.example.bookshelf.bussiness.Result.Result
 import com.example.bookshelf.bussiness.Result.data
 import com.example.bookshelf.bussiness.db.BookDatabase
-import com.example.bookshelf.bussiness.db.BookEntity
 import com.example.bookshelf.bussiness.db.DownloadEntity
 import com.example.bookshelf.bussiness.model.Book
 import com.example.bookshelf.bussiness.model.asBookEntity
+import com.example.bookshelf.bussiness.networkdata.FirestoreBookDataSource
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.*
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.withContext
 
-class BookListRepository(val firestoreBookDataSource: FirestoreBookDataSource,private val db:BookDatabase) {
+class BookListRepository(
+    val firestoreBookDataSource: FirestoreBookDataSource,
+    private val db: BookDatabase
+) {
     var fireDb = Firebase.firestore
     var user = FirebaseAuth.getInstance().currentUser
 
-    suspend fun getBookList()  = firestoreBookDataSource.getBooksFromFirestore()
-    suspend fun filterByCategory(category: String) = firestoreBookDataSource.filterByCategory(category)
-    suspend fun filterByAuthor(author:String) = firestoreBookDataSource.filterByCategory(author)
+    suspend fun getBookList() = firestoreBookDataSource.getBooksFromFirestore()
+    suspend fun filterByCategory(category: String) =
+        firestoreBookDataSource.filterByCategory(category)
 
-    suspend fun refreshBooks()  {
+    suspend fun filterByAuthor(author: String) = firestoreBookDataSource.filterByCategory(author)
+
+    suspend fun refreshBooks() {
         var _books = listOf<Book>()
-            getBookList().collect{
-                _books = it.data as List<Book>
-                clearDatabase()
-                db.bookDao().insertBooks(_books.asBookEntity())
-            }
+        getBookList().collect {
+            _books = it.data as List<Book>
+            clearDatabase()
+            db.bookDao().insertBooks(_books.asBookEntity())
+        }
     }
+
     fun getOfflineBooks() =
         db.bookDao().getBooks()
 
@@ -38,7 +39,7 @@ class BookListRepository(val firestoreBookDataSource: FirestoreBookDataSource,pr
 
     suspend fun filterByCategoryOffline(category: String) = db.bookDao().filterByCategory(category)
 
-    suspend fun filterBooks(query:String) = db.bookDao().queryBooks(query)
+    suspend fun filterBooks(query: String) = db.bookDao().queryBooks(query)
 
     suspend fun sortByAuthor() = db.bookDao().sortByAuthor()
 
@@ -46,7 +47,7 @@ class BookListRepository(val firestoreBookDataSource: FirestoreBookDataSource,pr
 
     suspend fun sortByPubDate() = db.bookDao().sortByPubDate()
 
-    suspend fun addDownload(_book:DownloadEntity) = db.downloadDao().addDownload(_book)
+    suspend fun addDownload(_book: DownloadEntity) = db.downloadDao().addDownload(_book)
 
 
 }

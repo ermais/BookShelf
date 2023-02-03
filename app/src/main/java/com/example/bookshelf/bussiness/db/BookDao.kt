@@ -7,45 +7,46 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface BookDao {
 
-    @Insert(onConflict =OnConflictStrategy.REPLACE)
-    suspend fun insertBooks(books : List<BookEntity>)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertBooks(books: List<BookEntity>)
 
     @Insert
-    suspend fun createBook(vararg book:BookEntity)
+    suspend fun createBook(vararg book: BookEntity)
 
     @Query("SELECT * FROM books")
-    fun getBooks() : Flow<List<BookEntity>>
+    fun getBooks(): Flow<List<BookEntity>>
 
     @Query("SELECT * FROM books WHERE category = :query")
-    fun filterByCategory(query:String) : Flow<List<BookEntity>>
+    fun filterByCategory(query: String): Flow<List<BookEntity>>
 
     @Query("SELECT * FROM books WHERE authorName = :author")
-    fun filterByAuthor(author:String) : Flow<List<BookEntity>>
+    fun filterByAuthor(author: String): Flow<List<BookEntity>>
 
 
-    @Query("SELECT * FROM books WHERE authorName LIKE '%'||:query ||'%'" +
-            " OR title  LIKE '%' || :query || '%'" +
-            " OR category LIKE '%' || :query || '%'"
+    @Query(
+        "SELECT * FROM books WHERE authorName LIKE '%'||:query ||'%'" +
+                " OR title  LIKE '%' || :query || '%'" +
+                " OR category LIKE '%' || :query || '%'"
     )
-    fun queryBooks(query:String) : Flow<List<BookEntity>>
+    fun queryBooks(query: String): Flow<List<BookEntity>>
 
     @Update
-    suspend fun updateBook(vararg book:BookEntity)
+    suspend fun updateBook(vararg book: BookEntity)
 
     @Query("DELETE  FROM books")
     fun clear()
 
     @Query("SELECT * FROM books ORDER BY authorName ASC")
-    fun sortByAuthor() : Flow<List<BookEntity>>
+    fun sortByAuthor(): Flow<List<BookEntity>>
 
     @Query("SELECT * FROM books ORDER BY title ASC")
-    fun sortByTitle():Flow<List<BookEntity>>
+    fun sortByTitle(): Flow<List<BookEntity>>
 
     @Query("SELECT * FROM books ORDER BY pub_date ASC")
     fun sortByPubDate(): Flow<List<BookEntity>>
 
     @Query("SELECT * FROM books WHERE title = :title")
-    fun getBook(title:String) : Flow<BookEntity>
+    fun getBook(title: String): Flow<BookEntity>
 
 //
 //    @Transaction

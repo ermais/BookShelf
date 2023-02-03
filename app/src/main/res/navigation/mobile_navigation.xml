@@ -18,6 +18,9 @@
                 app:argType="string" />
 
         </action>
+        <action
+            android:id="@+id/action_nav_home_to_createBookFragment"
+            app:destination="@id/nav_create_book" />
 
     </fragment>
 
@@ -51,4 +54,16 @@
         android:name="com.example.bookshelf.ui.downloaded.DownloadedFragment"
         android:label="fragment_downloaded"
         tools:layout="@layout/fragment_downloaded" />
+    <fragment
+        android:id="@+id/nav_my_books"
+        android:name="com.example.bookshelf.ui.mybooks.MyBookFragment"
+        android:label="MyBookFragment" />
+    <fragment
+        android:id="@+id/nav_create_book"
+        android:name="com.example.bookshelf.ui.create.CreateBookFragment"
+        android:label="CreateBookFragment" >
+        <action
+            android:id="@+id/action_createBookFragment_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
 </navigation>

@@ -1,13 +1,13 @@
 package com.example.bookshelf.ui.login
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import com.example.bookshelf.ui.main.MainActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.example.bookshelf.R
 import com.example.bookshelf.databinding.ActivityLoginBinding
+import com.example.bookshelf.ui.main.MainActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -23,9 +23,10 @@ class LoginActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "LoginActivity"
     }
+
     private val RC_SIGN_IN: Int = 265
     private lateinit var googleSignInClient: GoogleSignInClient
-    private lateinit var binding : ActivityLoginBinding
+    private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
 
 
@@ -46,8 +47,8 @@ class LoginActivity : AppCompatActivity() {
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        Log.d(LoginActivity::getLocalClassName.toString(),"On create")
-        binding.btnUserLogin.setOnClickListener { view->
+        Log.d(LoginActivity::getLocalClassName.toString(), "On create")
+        binding.btnUserLogin.setOnClickListener { view ->
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
@@ -91,7 +92,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
-        val toast = Toast.makeText(applicationContext,"Signing with google",Toast.LENGTH_LONG)
+        val toast = Toast.makeText(applicationContext, "Signing with google", Toast.LENGTH_LONG)
         toast.show()
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
@@ -103,7 +104,8 @@ class LoginActivity : AppCompatActivity() {
                     updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user
-                        val toast = Toast.makeText(applicationContext,"Signing Fail",Toast.LENGTH_LONG)
+                    val toast =
+                        Toast.makeText(applicationContext, "Signing Fail", Toast.LENGTH_LONG)
                     toast.show()
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
                     updateUI(null)
@@ -112,7 +114,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun updateUI(user: FirebaseUser?) {
-        if (user !=null){
+        if (user != null) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()

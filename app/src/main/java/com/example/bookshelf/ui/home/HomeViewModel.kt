@@ -10,15 +10,15 @@ class HomeViewModel : ViewModel() {
         value = "This is home Fragment"
     }
     val text: LiveData<String> = _text
-    val filterByCategory : MutableLiveData<String> by lazy {
+    val filterByCategory: MutableLiveData<String> by lazy {
         MutableLiveData<String>("")
     }
 
-    val sortBy : MutableLiveData<String> by lazy {
+    val sortBy: MutableLiveData<String> by lazy {
         MutableLiveData<String>("")
     }
 
-    val createBookFabBtnVisible : MutableLiveData<Boolean> by lazy {
+    val createBookFabBtnVisible: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>(false)
     }
 }

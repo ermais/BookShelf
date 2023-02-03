@@ -10,8 +10,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -20,18 +18,15 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.bookshelf.R
 import com.example.bookshelf.databinding.ActivityMainBinding
-import com.example.bookshelf.ui.create.CreateBookActivity
 import com.example.bookshelf.ui.login.LoginActivity
-import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-class MainActivity : AppCompatActivity() , OnQueryTextListener
-{
+class MainActivity : AppCompatActivity(), OnQueryTextListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var layout: View
-    private var _binding : ActivityMainBinding? = null
+    private var _binding: ActivityMainBinding? = null
     val binding get() = _binding!!
     lateinit var viewModel: MainViewModel
     private lateinit var viewModelFactory: MainViewModelFactory
@@ -46,16 +41,16 @@ class MainActivity : AppCompatActivity() , OnQueryTextListener
         viewModelFactory = MainViewModelFactory(application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
 
-        if (actionBar != null){
+        if (actionBar != null) {
 
             val drawerLayout = binding.drawerLayout
-            val navView  = binding.navView
+            val navView = binding.navView
             val navController = findNavController(R.id.nav_host_fragment_content_main)
             appBarConfiguration = AppBarConfiguration(
                 navController.graph,
                 drawerLayout
             )
-            setupActionBarWithNavController(navController,appBarConfiguration)
+            setupActionBarWithNavController(navController, appBarConfiguration)
             navView.setupWithNavController(navController)
 
         }
@@ -114,45 +109,45 @@ class MainActivity : AppCompatActivity() , OnQueryTextListener
     }
 
 
-        override fun onOptionsItemSelected(item: MenuItem): Boolean {
-            when (item.itemId) {
-                R.id.action_settings -> {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_settings -> {
 
-                    val intent = Intent(this, LoginActivity::class.java)
-                    startActivity(intent)
-                    Firebase.auth.signOut()
-                }
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                Firebase.auth.signOut()
             }
-            return super.onOptionsItemSelected(item)
         }
+        return super.onOptionsItemSelected(item)
+    }
 
-        override fun onCreateOptionsMenu(menu: Menu): Boolean {
-            // Inflate the menu; this adds items to the action bar if it is present.
-            menuInflater.inflate(R.menu.main, menu)
-            val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-            (menu.findItem(R.id.action_search).actionView as SearchView).apply {
-                setSearchableInfo(searchManager.getSearchableInfo(componentName))
-                maxWidth = Int.MAX_VALUE
-                setIconifiedByDefault(false)
-                setOnQueryTextListener(this@MainActivity)
-            }
-            return true
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.main, menu)
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        (menu.findItem(R.id.action_search).actionView as SearchView).apply {
+            setSearchableInfo(searchManager.getSearchableInfo(componentName))
+            maxWidth = Int.MAX_VALUE
+            setIconifiedByDefault(false)
+            setOnQueryTextListener(this@MainActivity)
         }
+        return true
+    }
 
-        override fun onSupportNavigateUp(): Boolean {
-            val navController = findNavController(R.id.nav_host_fragment_content_main)
-            return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-        }
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
 
-        override fun onQueryTextSubmit(query: String?): Boolean {
-            viewModel.setQuery(query)
-            return false
-        }
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        viewModel.setQuery(query)
+        return false
+    }
 
-        override fun onQueryTextChange(newText: String?): Boolean {
-            viewModel.setQuery(newText)
-            return false
-        }
+    override fun onQueryTextChange(newText: String?): Boolean {
+        viewModel.setQuery(newText)
+        return false
+    }
 
 //    fun initSearchView(){
 //        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
@@ -184,63 +179,63 @@ class MainActivity : AppCompatActivity() , OnQueryTextListener
         super.onAttachFragment(fragment)
         println("Get attaching fragment ------------------------------------")
         println(fragment)
-        if (actionBar != null){
+        if (actionBar != null) {
             val drawerLayout = binding.drawerLayout
-            val navView  = binding.navView
+            val navView = binding.navView
             val navController = findNavController(R.id.nav_host_fragment_content_main)
             appBarConfiguration = AppBarConfiguration(
                 navController.graph,
                 drawerLayout
-                )
-            setupActionBarWithNavController(navController,appBarConfiguration)
+            )
+            setupActionBarWithNavController(navController, appBarConfiguration)
             navView.setupWithNavController(navController)
         }
     }
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        if (actionBar != null){
+        if (actionBar != null) {
             println("onResume fragment -------------------------------------------------")
             val drawerLayout = binding.drawerLayout
-            val navView  = binding.navView
+            val navView = binding.navView
             val navController = findNavController(R.id.nav_host_fragment_content_main)
             appBarConfiguration = AppBarConfiguration(
                 navController.graph,
                 drawerLayout
             )
-            setupActionBarWithNavController(navController,appBarConfiguration)
+            setupActionBarWithNavController(navController, appBarConfiguration)
             navView.setupWithNavController(navController)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        if (actionBar != null){
+        if (actionBar != null) {
             println("onResume-------------------------------------------------")
             val drawerLayout = binding.drawerLayout
-            val navView  = binding.navView
+            val navView = binding.navView
             val navController = findNavController(R.id.nav_host_fragment_content_main)
             appBarConfiguration = AppBarConfiguration(
                 navController.graph,
                 drawerLayout
             )
-            setupActionBarWithNavController(navController,appBarConfiguration)
+            setupActionBarWithNavController(navController, appBarConfiguration)
             navView.setupWithNavController(navController)
         }
     }
 
     override fun onStart() {
         super.onStart()
-        if (actionBar != null){
+        if (actionBar != null) {
             println("onStart -------------------------------------------------")
             val drawerLayout = binding.drawerLayout
-            val navView  = binding.navView
+            val navView = binding.navView
             val navController = findNavController(R.id.nav_host_fragment_content_main)
             appBarConfiguration = AppBarConfiguration(
                 navController.graph,
                 drawerLayout
             )
-            setupActionBarWithNavController(navController,appBarConfiguration)
+            setupActionBarWithNavController(navController, appBarConfiguration)
             navView.setupWithNavController(navController)
         }
     }
