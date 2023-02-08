@@ -347,7 +347,7 @@ class CreateBookFragment : Fragment() {
         const val GET_BOOK_DOC = 443
         const val PHOTO_READ_PERMISSION = android.Manifest.permission.READ_MEDIA_IMAGES
         const val BOOK_COVER_RE_CODE = 453
-        const val BOOK_DOC_RE_CODE =786
+        const val BOOK_DOC_RE_CODE = 786
     }
 
     override fun onDestroy() {

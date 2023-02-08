@@ -14,7 +14,7 @@ class BookDetailViewModelFactory(
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(BookDetailViewModel::class.java)) {
-            return BookDetailViewModel(bookDetailRepository,myBooksRepository, application) as T
+            return BookDetailViewModel(bookDetailRepository, myBooksRepository, application) as T
         } else {
             IllegalAccessException("Unknown Viewmodel class")
         }

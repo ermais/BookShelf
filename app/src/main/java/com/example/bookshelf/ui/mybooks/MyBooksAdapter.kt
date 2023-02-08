@@ -13,11 +13,11 @@ import com.example.bookshelf.bussiness.db.MyBooksQuery
 class MyBooksAdapter() : RecyclerView.Adapter<MyBooksAdapter.ViewHolder>() {
 
     var myBooks = listOf<MyBooksQuery>()
-    @SuppressLint("NotifyDataSetChanged")
-    set(value) {
-        field = value
-        notifyDataSetChanged()
-    }
+        @SuppressLint("NotifyDataSetChanged")
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvMyBookTitle = itemView.findViewById<TextView>(R.id.tvMyBookTitle)

@@ -33,8 +33,9 @@ class BookDetailViewModel(
     }
 
     fun buyBook() = viewModelScope.launch {
-        val myBook = MyBooksEntity(FirebaseAuth.getInstance().currentUser!!.uid,book.value!!.bookId,)
-        myBooksRepository.buyBook(myBook).collect{
+        val myBook =
+            MyBooksEntity(FirebaseAuth.getInstance().currentUser!!.uid, book.value!!.bookId)
+        myBooksRepository.buyBook(myBook).collect {
             println("Book successfully created ++++++++++++++++++++++++++++++++++++")
         }
     }

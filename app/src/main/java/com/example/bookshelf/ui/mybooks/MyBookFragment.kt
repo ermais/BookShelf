@@ -24,8 +24,6 @@ import com.example.bookshelf.ui.main.MainActivity
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 
 
 class MyBookFragment : Fragment() {
@@ -140,7 +138,7 @@ class MyBookFragment : Fragment() {
         navView.setupWithNavController(navController)
         toolbar.title = "My Books"
         layout.title = "My Books"
-        myBooksViewModel.myBooks.observe(viewLifecycleOwner){
+        myBooksViewModel.myBooks.observe(viewLifecycleOwner) {
             myBooksAdapter.myBooks = it
         }
 

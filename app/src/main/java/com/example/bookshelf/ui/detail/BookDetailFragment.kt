@@ -23,8 +23,6 @@ import com.example.bookshelf.bussiness.repository.book.BookDetailRepository
 import com.example.bookshelf.bussiness.repository.book.MyBooksRepository
 import com.example.bookshelf.databinding.FragmentBookDetailBinding
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 
 class BookDetailFragment : Fragment() {
     private var _binding: FragmentBookDetailBinding? = null
@@ -55,10 +53,11 @@ class BookDetailFragment : Fragment() {
         bookDao = db.bookDao()
         bookDetailRepository = BookDetailRepository(bookDao)
         firestoreMyBooksDataSource = FirestoreMyBooksDataSource(FirebaseFirestore.getInstance())
-        myBooksRepository = MyBooksRepository(db,firestoreMyBooksDataSource)
+        myBooksRepository = MyBooksRepository(db, firestoreMyBooksDataSource)
         toolbar = binding.toolbarBookDetail
         val application = requireNotNull(activity).application
-        bookDetailViewModelFactory = BookDetailViewModelFactory(bookDetailRepository,myBooksRepository, application)
+        bookDetailViewModelFactory =
+            BookDetailViewModelFactory(bookDetailRepository, myBooksRepository, application)
         bookDetailViewModel = ViewModelProvider(
             this,
             bookDetailViewModelFactory
@@ -74,10 +73,14 @@ class BookDetailFragment : Fragment() {
         }
 
         binding.btnBuyBook.isEnabled = true
-        binding.btnBuyBook.setOnClickListener{
-            if (bookDetailViewModel.book.value != null){
+        binding.btnBuyBook.setOnClickListener {
+            if (bookDetailViewModel.book.value != null) {
                 bookDetailViewModel.buyBook()
-                val toast = Toast.makeText(requireContext(),"Transaction completed successfully!",Toast.LENGTH_LONG)
+                val toast = Toast.makeText(
+                    requireContext(),
+                    "Transaction completed successfully!",
+                    Toast.LENGTH_LONG
+                )
                 toast.show()
                 findNavController().navigate(R.id.nav_my_books)
             }
