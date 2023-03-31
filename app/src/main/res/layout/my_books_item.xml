@@ -2,19 +2,24 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="104dp"
+    android:id="@+id/myBooksLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
     android:paddingTop="0dp">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/shadow"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:id="@+id/cvMyBooks"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        app:cardCornerRadius="4dp"
+        android:elevation="2dp"
+        android:fadingEdgeLength="2dp"
+        app:cardCornerRadius="2dp"
+        app:cardElevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,70 +27,57 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imvMyBooks"
+                android:layout_width="0dp"
+                android:layout_height="92dp"
+                android:alpha="0.75"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_launcher_background" />
 
             <TextView
                 android:id="@+id/tvMyBookTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="8dp"
-                android:capitalize="sentences"
-                android:fontFamily="@font/akaya_telivigala"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:text="TextView"
+                android:textAlignment="textStart"
                 android:textAllCaps="false"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintBottom_toTopOf="@+id/btnMyBooksReview"
+                app:layout_constraintEnd_toEndOf="@+id/imvMyBooks"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/imvMyBooks"
+                app:layout_constraintTop_toBottomOf="@+id/imvMyBooks" />
 
-            <TextView
-                android:id="@+id/tvMyBookDate"
-                android:layout_width="0dp"
+            <Button
+                android:id="@+id/btnMyBooksReview"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:fontFamily="@font/akaya_telivigala"
-                android:text="bought date"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="@+id/tvMyBookTitle"
-                app:layout_constraintTop_toBottomOf="@+id/tvMyBookTitle" />
-
-            <RatingBar
-                android:id="@+id/rbMyBooks"
-                style="@style/Widget.AppCompat.RatingBar.Small"
-                android:layout_width="130dp"
-                android:layout_height="16dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="4dp"
-                android:rating="3.5"
-                android:stepSize="0.5"
-                android:textAlignment="center"
+                android:background="@drawable/btn_shape"
+                android:text="review"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/tvMyBookDate"
-                app:layout_constraintTop_toBottomOf="@+id/tvMyBookDate" />
+                app:layout_constraintStart_toStartOf="parent" />
 
-            <TextView
-                android:id="@+id/tvMyBooksReview"
-                android:layout_width="98dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginBottom="2dp"
-                android:capitalize="words"
-                android:clickable="true"
-                android:enabled="true"
-                android:filterTouchesWhenObscured="true"
-                android:fontFamily="@font/akaya_telivigala"
-                android:gravity="bottom|center_horizontal|end"
-                android:text="Review Book"
-                android:textAlignment="center"
-                android:textAllCaps="true"
+            <Button
+                android:id="@+id/btnMyBooksDownload"
+                style="@style/Widget.Material3.Button.TextButton.Icon"
+                android:layout_width="48dp"
+                android:layout_height="0dp"
+                android:drawableTop="@drawable/ic_download"
+                android:layout_weight="1"
                 android:textSize="14sp"
-                app:flow_horizontalAlign="center"
+                android:text=""
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/rbMyBooks"
-                app:layout_constraintTop_toBottomOf="@+id/tvMyBookTitle"
-                app:layout_constraintVertical_bias="0.823" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnMyBooksReview"
+                app:layout_constraintTop_toTopOf="@+id/btnMyBooksReview" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

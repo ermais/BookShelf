@@ -202,6 +202,9 @@ class BookListFragment : Fragment() {
         with(binding.rvBookList) {
             this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    if(RecyclerView.SCROLL_STATE_IDLE == newState){
+                        homeViewModel.createBookFabBtnVisible.value = true
+                    }
                     super.onScrollStateChanged(recyclerView, newState)
                 }
 

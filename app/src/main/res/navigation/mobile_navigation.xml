@@ -51,9 +51,9 @@
     </fragment>
     <fragment
         android:id="@+id/nav_downloaded"
-        android:name="com.example.bookshelf.ui.downloaded.DownloadedFragment"
+        android:name="com.example.bookshelf.ui.downloads.DownloadsFragment"
         android:label="fragment_downloaded"
-        tools:layout="@layout/fragment_downloaded" />
+        tools:layout="@layout/fragment_downloads" />
     <fragment
         android:id="@+id/nav_my_books"
         android:name="com.example.bookshelf.ui.mybooks.MyBookFragment"

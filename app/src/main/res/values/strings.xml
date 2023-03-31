@@ -57,7 +57,7 @@
     </string-array>
 
     <string-array name="sort_by">
-        <item>date</item>
+        <item>Date</item>
         <item>Author</item>
         <item>Title</item>
     </string-array>
@@ -91,7 +91,7 @@
     <string name="book_cover_desc">"book cover "</string>
     <string name="book_list_app_bar_title">Book Shelf</string>
     <string name="nav_home">BookShelf</string>
-    <string name="nav_downloaded">Downloaded</string>
+    <string name="nav_downloads">Downloads</string>
     <string name="nav_notifications">New Releases</string>
     <string name="nav_settings">Settings</string>
     <string name="nav_profile">Profile</string>
@@ -100,4 +100,10 @@
     <string name="nav_group_settings">Settings</string>
     <string name="nav_my_books">My Books</string>
     <string name="text_font_size_seekbar_summary">Text font size of book title</string>
+    <string name="user_email_string">example@gamil.com</string>
+    <string name="mypassword_string">mypassword</string>
+    <string name="forget_password_string">Forget Password</string>
+    <string name="have_an_account_string">have an account</string>
+    <string name="create_account_string">create account</string>
+    <string name="your_web_client_id">731245511798-1qcug65ejmhl1t56h11fkc2kn47cpjru.apps.googleusercontent.com</string>
 </resources>

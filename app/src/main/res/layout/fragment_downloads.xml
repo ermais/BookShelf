@@ -39,7 +39,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:itemCount="12"
-                tools:listitem="@layout/item_downloaded" />
+                tools:listitem="@layout/item_download" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

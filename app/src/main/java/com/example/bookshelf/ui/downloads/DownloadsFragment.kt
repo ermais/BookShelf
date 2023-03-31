@@ -1,4 +1,4 @@
-package com.example.bookshelf.ui.downloaded
+package com.example.bookshelf.ui.downloads
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -18,11 +18,11 @@ import com.example.bookshelf.BuildConfig
 import com.example.bookshelf.R
 import com.example.bookshelf.bussiness.db.BookDatabase
 import com.example.bookshelf.bussiness.repository.book.DownloadRepository
-import com.example.bookshelf.databinding.FragmentDownloadedBinding
+import com.example.bookshelf.databinding.FragmentDownloadsBinding
 import java.io.File
 
-class DownloadedFragment : Fragment() {
-    private var _binding: FragmentDownloadedBinding? = null
+class DownloadsFragment : Fragment() {
+    private var _binding: FragmentDownloadsBinding? = null
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var toolbar: Toolbar
     private val binding get() = _binding!!
@@ -43,7 +43,7 @@ class DownloadedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentDownloadedBinding.inflate(inflater, container, false)
+        _binding = FragmentDownloadsBinding.inflate(inflater, container, false)
 
         /**
          * Initialize lazy variables before they have been used!

@@ -1,14 +1,21 @@
 package com.example.bookshelf.ui.mybooks
 
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.NightMode
+import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -33,7 +40,7 @@ class MyBookFragment : Fragment() {
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
-    private lateinit var mainActivity: MainActivity
+//    private lateinit var mainActivity: MainActivity
     private lateinit var drawerLayout: DrawerLayout
     private var _binding: FragmentMyBookBinding? = null
     private val binding get() = _binding!!
@@ -55,15 +62,15 @@ class MyBookFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentMyBookBinding.inflate(inflater, container, false)
-        layout = binding.clvMyBooks
+//        layout = binding.clvMyBooks
         toolbar = binding.toolbarMybooks
-        mainActivity = activity as MainActivity
-        navHostFragment =
-            mainActivity.supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
-        navController = navHostFragment.findNavController()
-        drawerLayout = mainActivity.findViewById(R.id.drawer_layout)
-        appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
-        navView = mainActivity.findViewById(R.id.nav_view)
+//        mainActivity = activity as MainActivity
+//        navHostFragment =
+//            mainActivity.supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
+//        navController = navHostFragment.findNavController()
+//        drawerLayout = mainActivity.findViewById(R.id.drawer_layout)
+//        appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
+//        navView = mainActivity.findViewById(R.id.nav_view)
         val application = requireNotNull(activity).application
         firestoreMyBooksDataSource = FirestoreMyBooksDataSource(FirebaseFirestore.getInstance())
         db = BookDatabase.getDatabase(application)
@@ -71,7 +78,7 @@ class MyBookFragment : Fragment() {
         myBooksViewModelFactory = MyBooksViewModelFactory(myBooksRepository, application)
         myBooksViewModel =
             ViewModelProvider(this, myBooksViewModelFactory)[MyBooksViewModel::class.java]
-        myBooksAdapter = MyBooksAdapter()
+        myBooksAdapter = MyBooksAdapter(activity as MainActivity)
 
         myBooksViewModel.myBooks.observe(viewLifecycleOwner) {
             myBooksAdapter.myBooks = it
@@ -87,57 +94,56 @@ class MyBookFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        drawerLayout = mainActivity.findViewById(R.id.drawer_layout)
-        toolbar.setNavigationIcon(R.drawable.ic_baseline_menu_24)
-        layout.isTitleEnabled = true
-        layout.title = "My Books"
-        toolbar.setTitle(getString(R.string.book_list_app_bar_title))
-        mainActivity.setSupportActionBar(toolbar)
-        mainActivity.actionBar?.setDisplayHomeAsUpEnabled(true)
-        layout.setupWithNavController(toolbar, navController)
+        val _drawerLayout = view.findViewById<DrawerLayout>(R.id.drawer_layout)
+        appBarConfiguration = AppBarConfiguration(setOf(),_drawerLayout)
+        toolbar.setTitle("My Books")
+//        layout.isTitleEnabled = true
+//        layout.title = "My Books"
+//        mainActivity.setSupportActionBar(toolbar)
+//        mainActivity.actionBar?.setDisplayHomeAsUpEnabled(true)
+//        layout.setupWithNavController(toolbar, navController)
         NavigationUI.setupWithNavController(
-            layout,
-            toolbar,
-            findNavController(),
+//            layout,
+            toolbar as Toolbar,
+            navController=findNavController(),
             appBarConfiguration
         )
-        val toggle = ActionBarDrawerToggle(
-            mainActivity,
-            drawerLayout,
-            toolbar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
+//        val toggle = ActionBarDrawerToggle(
+//            mainActivity,
+//            drawerLayout,
+//            toolbar,
+//            R.string.navigation_drawer_open,
+//            R.string.navigation_drawer_close
+//        )
+//        drawerLayout.addDrawerListener(toggle)
+//        toggle.syncState()
     }
 
     override fun onStart() {
         super.onStart()
-        val homeActivity = activity as MainActivity
-        val drawerHome = homeActivity.findViewById<DrawerLayout>(R.id.drawer_layout)
-        if (drawerHome != null) {
-            Log.d("HOME_FRAGMENT", "ON-START$drawerHome")
-        }
-        mainActivity = requireContext() as MainActivity
-        navHostFragment =
-            mainActivity.supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
-        navController = navHostFragment.findNavController()
-        navView = mainActivity.findViewById(R.id.nav_view)
-        drawerLayout = mainActivity.findViewById(R.id.drawer_layout)
-        appBarConfiguration = AppBarConfiguration(
-            navController.graph,
-            drawerLayout
-        )
+//        val homeActivity = activity as MainActivity
+//        val drawerHome = homeActivity.findViewById<DrawerLayout>(R.id.drawer_layout)
+//        if (drawerHome != null) {
+//            Log.d("HOME_FRAGMENT", "ON-START$drawerHome")
+//        }
+//        mainActivity = requireContext() as MainActivity
+//        navHostFragment =
+//            mainActivity.supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
+//        navController = navHostFragment.findNavController()
+//        navView = mainActivity.findViewById(R.id.nav_view)
+//        drawerLayout = mainActivity.findViewById(R.id.drawer_layout)
+//        appBarConfiguration = AppBarConfiguration(
+//            navController.graph,
+//            drawerLayout
+//        )
 
-        mainActivity.setSupportActionBar(toolbar)
-        mainActivity.actionBar?.title = getString(R.string.book_list_app_bar_title)
-        mainActivity.actionBar?.setDisplayHomeAsUpEnabled(true)
-        layout.setupWithNavController(toolbar, navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+//        mainActivity.setSupportActionBar(toolbar)
+//        mainActivity.actionBar?.title = getString(R.string.book_list_app_bar_title)
+//        mainActivity.actionBar?.setDisplayHomeAsUpEnabled(true)
+//        layout.setupWithNavController(toolbar, navController, appBarConfiguration)
+//        navView.setupWithNavController(navController)
         toolbar.title = "My Books"
-        layout.title = "My Books"
+//        layout.title = "My Books"
         myBooksViewModel.myBooks.observe(viewLifecycleOwner) {
             myBooksAdapter.myBooks = it
         }

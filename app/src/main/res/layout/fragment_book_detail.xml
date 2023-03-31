@@ -2,7 +2,8 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    >
     <data>
         <variable
             name="bookDetail"
@@ -13,16 +14,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.detail.BookDetailFragment">
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+<!--        <com.google.android.material.appbar.AppBarLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbarBookDetail"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:theme="?attr/actionBarTheme"
                 app:title="@string/book_list_app_bar_title" />
-        </com.google.android.material.appbar.AppBarLayout>
+<!--        </com.google.android.material.appbar.AppBarLayout>-->
 
         <ImageView
             android:id="@+id/imgBookCover"
@@ -40,10 +42,8 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@color/white"
             android:clipToPadding="true"
             android:elevation="2dp"
-            app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="12dp"
             app:cardElevation="12dp"
             app:cardPreventCornerOverlap="false"
@@ -73,15 +73,12 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:fontFamily="@font/akaya_telivigala"
                     android:text="@{bookDetail.category}"
                     android:textAlignment="center"
-                    android:textColor="@color/primaryDark"
                     android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="@+id/txtViewBookTitle"
                     app:layout_constraintStart_toStartOf="@+id/txtViewBookTitle"
                     app:layout_constraintTop_toBottomOf="@+id/txtViewBookTitle" />
-
                 <TextView
                     android:id="@+id/txtViewBookDesc"
                     android:layout_width="0dp"

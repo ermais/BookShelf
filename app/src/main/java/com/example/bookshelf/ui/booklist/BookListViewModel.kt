@@ -3,10 +3,7 @@ package com.example.bookshelf.ui.booklist
 import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.*
-import androidx.work.Data
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
+import androidx.work.*
 import com.example.bookshelf.bussiness.db.BookEntity
 import com.example.bookshelf.bussiness.db.DownloadEntity
 import com.example.bookshelf.bussiness.repository.book.BookListRepository
@@ -17,6 +14,7 @@ import com.example.bookshelf.data.KEY_DOWNLOAD_BOOK_URI
 import com.example.bookshelf.worker.DownloadBookWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 class BookListViewModel(
     private val bookListRepository: BookListRepository,
@@ -46,7 +44,14 @@ class BookListViewModel(
 
 
     fun downloadBook(downloadUri: Uri, bookTitle: String, bookId: String) = viewModelScope.launch {
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            .setRequiresStorageNotLow(true)
+            .build()
         val downloadWorkRequest = OneTimeWorkRequestBuilder<DownloadBookWorker>()
+            .setConstraints(constraints)
             .setInputData(inputDownloadData(downloadUri, bookTitle, bookId))
             .addTag(DOWNLOAD_BOOK_WORKER_TAG)
             .build()

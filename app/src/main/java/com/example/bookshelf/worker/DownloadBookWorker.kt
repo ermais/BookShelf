@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
-import androidx.work.CoroutineWorker
-import androidx.work.WorkerParameters
-import androidx.work.workDataOf
+import androidx.work.*
 import com.example.bookshelf.bussiness.db.BookDatabase
 import com.example.bookshelf.bussiness.db.DownloadEntity
 import com.example.bookshelf.bussiness.repository.book.DownloadRepository
@@ -15,6 +13,7 @@ import com.example.bookshelf.data.KEY_BOOK_TITLE
 import com.example.bookshelf.data.KEY_DOWNLOAD_BOOK_URI
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
+import com.google.common.util.concurrent.ListenableFuture
 import com.google.firebase.storage.FileDownloadTask
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
@@ -73,5 +72,14 @@ class DownloadBookWorker(ctx: Context, params: WorkerParameters) : CoroutineWork
                     }
             }
         }
+    }
+
+
+    override suspend fun getForegroundInfo(): ForegroundInfo {
+        return super.getForegroundInfo()
+    }
+
+    override fun setProgressAsync(data: Data): ListenableFuture<Void> {
+        return super.setProgressAsync(data)
     }
 }

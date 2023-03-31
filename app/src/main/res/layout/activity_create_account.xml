@@ -46,15 +46,19 @@
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/ic_baseline_account_circle_24"
                     android:ems="10"
-                    android:inputType="textPersonName"
                     android:selectAllOnFocus="true"
                     android:singleLine="true"
                     android:text="@string/user_name_input_text"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textSize="24sp"
+
                     app:layout_constraintEnd_toStartOf="@+id/guidelineVerEnd"
                     app:layout_constraintStart_toStartOf="@+id/guidelineVerStart"
-                    app:layout_constraintTop_toTopOf="@+id/guidelineTop" />
+                    app:layout_constraintTop_toTopOf="@+id/guidelineTop"
+                    android:importantForAutofill="no"
+                    android:autofillHints=""
+                    android:inputType="textEmailAddress"
+                    tools:ignore="LabelFor" />
 
                 <EditText
                     android:id="@+id/editTextEmail"
@@ -67,12 +71,14 @@
                     android:inputType="textPersonName"
                     android:selectAllOnFocus="true"
                     android:singleLine="true"
-                    android:text="example@gamil.com"
+                    android:text="@string/user_email_string"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textSize="24sp"
                     app:layout_constraintEnd_toStartOf="@+id/guidelineVerEnd"
                     app:layout_constraintStart_toStartOf="@+id/guidelineVerStart"
-                    app:layout_constraintTop_toBottomOf="@+id/editTextUserName" />
+                    app:layout_constraintTop_toBottomOf="@+id/editTextUserName"
+                    tools:ignore="LabelFor,TextFields"
+                    android:autofillHints="" />
 
                 <EditText
                     android:id="@+id/editTextPassword"
@@ -84,14 +90,16 @@
                     android:ems="10"
                     android:inputType="textPassword"
                     android:singleLine="true"
-                    android:text="mypassword"
+                    android:text="@string/mypassword_string"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="@+id/editTextEmail"
                     app:layout_constraintEnd_toStartOf="@+id/guidelineVerEnd"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/editTextEmail"
-                    app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
+                    app:layout_constraintTop_toBottomOf="@+id/editTextEmail"
+                    android:autofillHints=""
+                    tools:ignore="LabelFor" />
 
                 <Button
                     android:id="@+id/btnCreateAccount"
@@ -99,13 +107,12 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
-                    android:capitalize="characters"
                     android:elevation="20dp"
                     android:includeFontPadding="true"
                     android:letterSpacing="0.025"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="create account"
+                    android:text="@string/create_account_string"
                     android:textAllCaps="true"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textSize="24sp"
@@ -122,7 +129,7 @@
                     android:layout_marginTop="32dp"
                     android:fontFamily="sans-serif-light"
                     android:letterSpacing="0.025"
-                    android:text="Forget Password"
+                    android:text="@string/forget_password_string"
                     android:textAllCaps="true"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textSize="24sp"
@@ -139,7 +146,7 @@
                     android:layout_marginTop="28dp"
                     android:fontFamily="sans-serif-light"
                     android:letterSpacing="0.025"
-                    android:text="have an account"
+                    android:text="@string/have_an_account_string"
                     android:textAllCaps="true"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textSize="24sp"

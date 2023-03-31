@@ -109,7 +109,6 @@ class HomeFragment : Fragment() {
         toolbar.setTitle(getString(R.string.book_list_app_bar_title))
         mainActivity.setSupportActionBar(toolbar)
         mainActivity.actionBar?.setDisplayHomeAsUpEnabled(true)
-        layout.title = ""
         layout.isTitleEnabled = false
         layout.setupWithNavController(toolbar, navController)
         NavigationUI.setupWithNavController(
@@ -167,6 +166,13 @@ class HomeFragment : Fragment() {
 
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
+                Log.d("PAGER",position.toString())
+                when {
+                    position==0 -> binding.homeViewPager.setCurrentItem(0,true)
+                    position==1 -> binding.homeViewPager.setCurrentItem(1,true)
+                    position==2 -> binding.homeViewPager.setCurrentItem(2,true)
+                }
+
             }
 
             override fun onPageScrollStateChanged(state: Int) {
@@ -277,11 +283,12 @@ class HomeFragment : Fragment() {
         mainActivity.actionBar?.setDisplayHomeAsUpEnabled(true)
         layout.setupWithNavController(toolbar, navController, appBarConfiguration)
         navView?.setupWithNavController(navController)
-        toolbar.title = "My Books"
+        toolbar.title = "Book Shelf"
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
+        binding.appBarBookList.toolbarBookList.title = "Book Shelf"
         val homeActivity = activity as MainActivity
         val drawerHome = homeActivity.findViewById<DrawerLayout>(R.id.drawer_layout)
         if (drawerHome != null) {

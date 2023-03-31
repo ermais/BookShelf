@@ -3,6 +3,7 @@ package com.example.bookshelf.ui.create
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -31,6 +33,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 
 
+@Suppress("DEPRECATION")
 class CreateBookFragment : Fragment() {
 
     private lateinit var toolbar: Toolbar
@@ -169,6 +172,8 @@ class CreateBookFragment : Fragment() {
 
         binding.layoutBookCreate.btnBookCover.setOnClickListener {
             if (createBookViewModel.canUploadBookCover()) {
+                val toast = Toast.makeText(requireContext(),"loading ...",Toast.LENGTH_SHORT)
+                toast.show()
                 if (isPermissionGranted(
                         requireContext(),
                         PHOTO_READ_PERMISSION
@@ -177,7 +182,7 @@ class CreateBookFragment : Fragment() {
                     getImageIntent()
                 } else {
                     requestPermission(
-                        requireNotNull(activity),
+                        requireActivity(),
                         PHOTO_READ_PERMISSION,
                         BOOK_COVER_RE_CODE
                     )
@@ -200,14 +205,14 @@ class CreateBookFragment : Fragment() {
             if (createBookViewModel.canUploadBookDoc()) {
                 if (isPermissionGranted(
                         requireContext(),
-                        PHOTO_READ_PERMISSION
+                        BOOk_DOCUMENT_PERMISSION
                     )
                 ) {
                     getBookDoc()
                 } else {
                     requestPermission(
-                        requireNotNull(activity),
-                        PHOTO_READ_PERMISSION,
+                        requireActivity(),
+                        BOOk_DOCUMENT_PERMISSION,
                         BOOK_DOC_RE_CODE
                     )
                 }
@@ -329,8 +334,11 @@ class CreateBookFragment : Fragment() {
      * Set of private function goes here forward
      */
     private fun getImageIntent() {
-        val imageIntent = Intent(Intent.ACTION_PICK)
+        val toast = Toast.makeText(requireContext(),"getting image ...",Toast.LENGTH_LONG)
+        toast.show()
+        val imageIntent = Intent(Intent.ACTION_GET_CONTENT)
         imageIntent.type = "image/*"
+        imageIntent.addCategory(Intent.CATEGORY_OPENABLE)
         startActivityForResult(imageIntent, GET_BCI)
 
     }
@@ -345,7 +353,8 @@ class CreateBookFragment : Fragment() {
     companion object {
         val GET_BCI: Int = 233
         const val GET_BOOK_DOC = 443
-        const val PHOTO_READ_PERMISSION = android.Manifest.permission.READ_MEDIA_IMAGES
+        const val PHOTO_READ_PERMISSION = android.Manifest.permission.READ_EXTERNAL_STORAGE
+        const val BOOk_DOCUMENT_PERMISSION = android.Manifest.permission.READ_EXTERNAL_STORAGE
         const val BOOK_COVER_RE_CODE = 453
         const val BOOK_DOC_RE_CODE = 786
     }

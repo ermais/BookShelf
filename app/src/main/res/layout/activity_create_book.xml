@@ -22,7 +22,6 @@
                 android:id="@+id/bookCreateToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
                 android:minHeight="?attr/actionBarSize"
                 android:theme="?attr/actionBarTheme" />
         </com.google.android.material.appbar.AppBarLayout>

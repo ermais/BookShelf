@@ -1,13 +1,18 @@
 package com.example.bookshelf.ui.main
 
 import android.app.SearchManager
+import android.app.UiModeManager
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.NightMode
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.lifecycle.ViewModelProvider
@@ -19,6 +24,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.bookshelf.R
 import com.example.bookshelf.databinding.ActivityMainBinding
 import com.example.bookshelf.ui.login.LoginActivity
+import com.example.bookshelf.util.getConnMgr
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -30,12 +36,15 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
     val binding get() = _binding!!
     lateinit var viewModel: MainViewModel
     private lateinit var viewModelFactory: MainViewModelFactory
+    private lateinit var connMgr  : ConnectivityManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         _binding = ActivityMainBinding.inflate(layoutInflater)
+//        setNightMode(applicationContext,true)
         setContentView(binding.root)
+//        setNightMode(applicationContext,true)
 //        initSearchView()
         layout = binding.root
         viewModelFactory = MainViewModelFactory(application)
@@ -54,68 +63,18 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
             navView.setupWithNavController(navController)
 
         }
-
-
-//        val sortByAdapter = ArrayAdapter.createFromResource(
-//            this,
-//            R.array.sort_by,
-//            android.R.layout.simple_spinner_item
-//        )
-//        sortByAdapter.also {
-//            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//            binding.appBarMain.sortBy.adapter = it
-//        }
-//
-//        val filterByAdapter = ArrayAdapter.createFromResource(
-//            this,
-//            R.array.filter_by,
-//            android.R.layout.simple_spinner_item
-//        )
-//
-//        filterByAdapter.also {
-//            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//            binding.appBarMain.filterBy.adapter = it
-//        }
-//
-//        binding.appBarMain.sortBy.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-//                val itemSelected = p0?.getItemAtPosition(p2)
-//                viewModel.sortBy.value = itemSelected.toString()
-//                val toast = Toast.makeText(applicationContext,itemSelected.toString(),Toast.LENGTH_LONG)
-//                toast.show()
-//            }
-//
-//            override fun onNothingSelected(p0: AdapterView<*>?) {
-//                val itemSelected  = p0?.getItemAtPosition(0)
-//                viewModel.sortBy.value = itemSelected.toString()
-//            }
-//
-//
-//        }
-//
-//
-//        binding.appBarMain.filterBy.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-//                val itemSelected = p0?.getItemAtPosition(p2)
-//                viewModel.filterByCategory.value = itemSelected.toString()
-//                val toast = Toast.makeText(applicationContext,itemSelected.toString(),Toast.LENGTH_LONG)
-//                toast.show()
-//            }
-//
-//            override fun onNothingSelected(p0: AdapterView<*>?) {
-//                val itemSelected  = p0?.getItemAtPosition(0)
-//            }
-//        }
+        connMgr = getConnMgr(applicationContext,::getSystemService)
     }
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_settings -> {
-
+                Firebase.auth.signOut()
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
-                Firebase.auth.signOut()
+                finish()
+
             }
         }
         return super.onOptionsItemSelected(item)
@@ -226,17 +185,36 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
 
     override fun onStart() {
         super.onStart()
-        if (actionBar != null) {
-            println("onStart -------------------------------------------------")
-            val drawerLayout = binding.drawerLayout
-            val navView = binding.navView
-            val navController = findNavController(R.id.nav_host_fragment_content_main)
-            appBarConfiguration = AppBarConfiguration(
-                navController.graph,
-                drawerLayout
-            )
-            setupActionBarWithNavController(navController, appBarConfiguration)
-            navView.setupWithNavController(navController)
-        }
+//        try {
+//            if (actionBar != null) {
+//                println("onStart -------------------------------------------------")
+//                val drawerLayout = binding.drawerLayout
+//                val navView = binding.navView
+//                val navController = findNavController(R.id.nav_host_fragment_content_main)
+//                appBarConfiguration = AppBarConfiguration(
+//                    navController.graph,
+//                    drawerLayout
+//                )
+//                setupActionBarWithNavController(navController, appBarConfiguration)
+//                navView.setupWithNavController(navController)
+//            }
+//        }catch (e : Exception){
+//            Log.d("MAIN_ACTIVITY",e?.message.toString() ?: e.toString())
+//        }
     }
+
+    companion object {
+
+        fun setNightMode(context: Context,isNight  : Boolean){
+            if (isNight){
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
+
+
+
+    }
+
 }
