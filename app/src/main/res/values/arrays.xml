@@ -10,16 +10,18 @@
         <item>reply_all</item>
     </string-array>
     <string-array name="list_of_themes_values">
-        <item>blue_dark</item>
-        <item>blue_light</item>
-        <item>orange_dark</item>
-        <item>orange_light</item>
+        <item>bookshelf</item>
+        <item>bookshelf_green_dark</item>
+        <item>bookshelf_orange_dark</item>
+        <item>bookshelf_light_dark</item>
+        <item>bookshelf_white</item>
     </string-array>
     <string-array name="list_of_themes_entries">
-        <item> Blue dark</item>
-        <item>Blue Light</item>
-        <item>Orange dark</item>
-        <item>Orange Light</item>
+        <item>Default</item>
+        <item>Green Dark</item>
+        <item>Orange Dark</item>
+        <item>Light Dark</item>
+        <item>Light White</item>
     </string-array>
     <string-array name="list_of_storage_values">
         <item>internal_storage</item>
@@ -40,5 +42,15 @@
         <item>Open in browser pdf reader</item>
         <item>Open in Pdf reader</item>
         <item>Open in Samsung pdf reader</item>
+    </string-array>
+    <string-array name="list_of_language_values">
+        <item>am</item>
+        <item>en-us</item>
+        <item>om</item>
+    </string-array>
+    <string-array name="list_of_language_entries">
+        <item>amharic</item>
+        <item>english</item>
+        <item>afan ormoo</item>
     </string-array>
 </resources>

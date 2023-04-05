@@ -14,7 +14,7 @@
             />
 
         <ListPreference
-            app:defaultValue="Blue dark"
+            app:defaultValue="bookshelf_default"
             app:entries="@array/list_of_themes_entries"
             app:entryValues="@array/list_of_themes_values"
             app:key="theme_color"
@@ -44,6 +44,16 @@
             app:entryValues="@array/list_of_pdf_reader_values"
             app:key="pdf_reader"
             app:title="Open in browser"
+            app:useSimpleSummaryProvider="true"
+            />
+    </PreferenceCategory>
+    <PreferenceCategory app:title="Language">
+        <ListPreference
+            app:defaultValue="English"
+            app:entries="@array/list_of_language_entries"
+            app:entryValues="@array/list_of_language_values"
+            app:key="language"
+            app:title="Language"
             app:useSimpleSummaryProvider="true"
             />
     </PreferenceCategory>

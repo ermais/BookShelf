@@ -1,12 +1,14 @@
 package com.example.bookshelf.ui.login
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import com.example.bookshelf.R
 import com.example.bookshelf.databinding.ActivityLoginBinding
 import com.example.bookshelf.ui.main.MainActivity
@@ -22,8 +24,10 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import java.util.*
 
 
+@Suppress("DEPRECATION")
 class LoginActivity : AppCompatActivity() {
 
     companion object {
@@ -31,6 +35,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
+    private lateinit var locale: Locale
+    private lateinit var prefListener: SharedPreferences.OnSharedPreferenceChangeListener
+    private lateinit var prefManager : SharedPreferences
     private lateinit var oneTapClient: SignInClient
     private val REQ_ONE_TAP = 2  // Can be any integer unique to the Activity
     private var showOneTapUI = true
@@ -52,8 +59,16 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
+        prefManager = PreferenceManager.getDefaultSharedPreferences(this)
+        val lang = prefManager.getString("language","en-us")
+        setupLan(lang)
+        prefListener = object : SharedPreferences.OnSharedPreferenceChangeListener {
+            override fun onSharedPreferenceChanged(p0: SharedPreferences?, p1: String?) {
+                val lan = p0?.getString("language", "en-us")
+                setupLan(lan)
+            }
+        }
+        prefManager.registerOnSharedPreferenceChangeListener(prefListener)
         // ...
         // Initialize Firebase Auth
         auth = Firebase.auth
@@ -153,6 +168,16 @@ class LoginActivity : AppCompatActivity() {
             updateUI(currentUser)
         }
 
+    override fun onPause() {
+        super.onPause()
+        prefManager.unregisterOnSharedPreferenceChangeListener(prefListener)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        prefManager.registerOnSharedPreferenceChangeListener(prefListener)
+    }
+
         private fun signIn() {
             val signInIntent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
@@ -183,6 +208,16 @@ class LoginActivity : AppCompatActivity() {
 
         }
 
+    fun setupLan(lan:String?){
+        if (lan.equals("not-set")) locale = Locale.getDefault()
+        else
+            locale = Locale(lan.toString())
+        Locale.setDefault(locale)
+        val config = baseContext.resources.configuration
+        config.locale = locale
+        baseContext.resources.updateConfiguration(config, baseContext.resources.displayMetrics)
+
+    }
     private fun updateUI(user: FirebaseUser?){
         if(user != null){
             val intent = Intent(this,MainActivity::class.java)

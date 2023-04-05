@@ -39,4 +39,119 @@
         <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary</item>
     </style>
 
+    <style name="Theme.BookShelf.GreenDark" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/dgreen_theme_dark_primary</item>
+        <item name="colorOnPrimary">@color/dgreen_theme_dark_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/dgreen_theme_dark_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/dgreen_theme_dark_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/dgreen_theme_dark_secondary</item>
+        <item name="colorOnSecondary">@color/dgreen_theme_dark_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/dgreen_theme_dark_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/dgreen_theme_dark_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/dgreen_theme_dark_tertiary</item>
+        <item name="colorOnTertiary">@color/dgreen_theme_dark_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/dgreen_theme_dark_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/dgreen_theme_dark_onTertiaryContainer</item>
+        <item name="colorError">@color/dgreen_theme_dark_error</item>
+        <item name="colorErrorContainer">@color/dgreen_theme_dark_errorContainer</item>
+        <item name="colorOnError">@color/dgreen_theme_dark_onError</item>
+        <item name="colorOnErrorContainer">@color/dgreen_theme_dark_onErrorContainer</item>
+        <item name="android:colorBackground">@color/dgreen_theme_dark_background</item>
+        <item name="colorOnBackground">@color/dgreen_theme_dark_onBackground</item>
+        <item name="colorSurface">@color/dgreen_theme_dark_surface</item>
+        <item name="colorOnSurface">@color/dgreen_theme_dark_onSurface</item>
+        <item name="colorSurfaceVariant">@color/dgreen_theme_dark_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/dgreen_theme_dark_onSurfaceVariant</item>
+        <item name="colorOutline">@color/dgreen_theme_dark_outline</item>
+        <item name="colorOnSurfaceInverse">@color/dgreen_theme_dark_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/dgreen_theme_dark_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/dgreen_theme_dark_inversePrimary</item>
+    </style>
+
+    <style name="Theme.BookShelf.OrangeDark" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/dark_orange_theme_dark_primary</item>
+        <item name="colorOnPrimary">@color/dark_orange_theme_dark_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/dark_orange_theme_dark_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/dark_orange_theme_dark_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/dark_orange_theme_dark_secondary</item>
+        <item name="colorOnSecondary">@color/dark_orange_theme_dark_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/dark_orange_theme_dark_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/dark_orange_theme_dark_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/dark_orange_theme_dark_tertiary</item>
+        <item name="colorOnTertiary">@color/dark_orange_theme_dark_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/dark_orange_theme_dark_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/dark_orange_theme_dark_onTertiaryContainer</item>
+        <item name="colorError">@color/dark_orange_theme_dark_error</item>
+        <item name="colorErrorContainer">@color/dark_orange_theme_dark_errorContainer</item>
+        <item name="colorOnError">@color/dark_orange_theme_dark_onError</item>
+        <item name="colorOnErrorContainer">@color/dark_orange_theme_dark_onErrorContainer</item>
+        <item name="android:colorBackground">@color/dark_orange_theme_dark_background</item>
+        <item name="colorOnBackground">@color/dark_orange_theme_dark_onBackground</item>
+        <item name="colorSurface">@color/dark_orange_theme_dark_surface</item>
+        <item name="colorOnSurface">@color/dark_orange_theme_dark_onSurface</item>
+        <item name="colorSurfaceVariant">@color/dark_orange_theme_dark_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/dark_orange_theme_dark_onSurfaceVariant</item>
+        <item name="colorOutline">@color/dark_orange_theme_dark_outline</item>
+        <item name="colorOnSurfaceInverse">@color/dark_orange_theme_dark_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/dark_orange_theme_dark_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/dark_orange_theme_dark_inversePrimary</item>
+    </style>
+
+    <style name="Theme.BookShelf.LightDark" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/light_dark_theme_dark_primary</item>
+        <item name="colorOnPrimary">@color/light_dark_theme_dark_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/light_dark_theme_dark_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/light_dark_theme_dark_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/light_dark_theme_dark_secondary</item>
+        <item name="colorOnSecondary">@color/light_dark_theme_dark_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/light_dark_theme_dark_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/light_dark_theme_dark_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/light_dark_theme_dark_tertiary</item>
+        <item name="colorOnTertiary">@color/light_dark_theme_dark_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/light_dark_theme_dark_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/light_dark_theme_dark_onTertiaryContainer</item>
+        <item name="colorError">@color/light_dark_theme_dark_error</item>
+        <item name="colorErrorContainer">@color/light_dark_theme_dark_errorContainer</item>
+        <item name="colorOnError">@color/light_dark_theme_dark_onError</item>
+        <item name="colorOnErrorContainer">@color/light_dark_theme_dark_onErrorContainer</item>
+        <item name="android:colorBackground">@color/light_dark_theme_dark_background</item>
+        <item name="colorOnBackground">@color/light_dark_theme_dark_onBackground</item>
+        <item name="colorSurface">@color/light_dark_theme_dark_surface</item>
+        <item name="colorOnSurface">@color/light_dark_theme_dark_onSurface</item>
+        <item name="colorSurfaceVariant">@color/light_dark_theme_dark_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/light_dark_theme_dark_onSurfaceVariant</item>
+        <item name="colorOutline">@color/light_dark_theme_dark_outline</item>
+        <item name="colorOnSurfaceInverse">@color/light_dark_theme_dark_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/light_dark_theme_dark_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/light_dark_theme_dark_inversePrimary</item>
+    </style>
+
+    <style name="Theme.BookShelf.White" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/white_theme_dark_primary</item>
+        <item name="colorOnPrimary">@color/white_theme_dark_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/white_theme_dark_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/white_theme_dark_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/white_theme_dark_secondary</item>
+        <item name="colorOnSecondary">@color/white_theme_dark_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/white_theme_dark_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/white_theme_dark_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/white_theme_dark_tertiary</item>
+        <item name="colorOnTertiary">@color/white_theme_dark_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/white_theme_dark_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/white_theme_dark_onTertiaryContainer</item>
+        <item name="colorError">@color/white_theme_dark_error</item>
+        <item name="colorErrorContainer">@color/white_theme_dark_errorContainer</item>
+        <item name="colorOnError">@color/white_theme_dark_onError</item>
+        <item name="colorOnErrorContainer">@color/white_theme_dark_onErrorContainer</item>
+        <item name="android:colorBackground">@color/white_theme_dark_background</item>
+        <item name="colorOnBackground">@color/white_theme_dark_onBackground</item>
+        <item name="colorSurface">@color/white_theme_dark_surface</item>
+        <item name="colorOnSurface">@color/white_theme_dark_onSurface</item>
+        <item name="colorSurfaceVariant">@color/white_theme_dark_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/white_theme_dark_onSurfaceVariant</item>
+        <item name="colorOutline">@color/white_theme_dark_outline</item>
+        <item name="colorOnSurfaceInverse">@color/white_theme_dark_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/white_theme_dark_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/white_theme_dark_inversePrimary</item>
+    </style>
 </resources>

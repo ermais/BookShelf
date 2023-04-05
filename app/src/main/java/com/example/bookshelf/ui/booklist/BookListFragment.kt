@@ -1,5 +1,6 @@
 package com.example.bookshelf.ui.booklist
 
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -20,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookshelf.R
 import com.example.bookshelf.bussiness.db.BookDatabase
@@ -65,6 +67,11 @@ class BookListFragment : Fragment() {
     ): View? {
         _binding = FragmentBookListBinding.inflate(inflater, container, false)
         println("Book List -----------------------------------------------")
+
+        val prefManager = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        val lan = prefManager.getString("language","english")
+        Log.d("LANGUAGE",lan.toString())
+
         layout = binding.rvBookList
         db = Firebase.firestore
         cloudStorage = FirebaseStorage.getInstance()
@@ -236,7 +243,10 @@ class BookListFragment : Fragment() {
         val layout = view.findViewById<CollapsingToolbarLayout>(R.id.toolbarBookListLayout)
         val drawerLayout = mainActivity.findViewById<DrawerLayout>(R.id.drawer_layout)
         val appBarConfiguration = AppBarConfiguration(findNavController().graph, drawerLayout)
-        mainActivity.setupActionBarWithNavController(findNavController(), appBarConfiguration)
+        if(toolbar != null){
+            mainActivity.setupActionBarWithNavController(findNavController(), appBarConfiguration)
+
+        }
         homeViewModel.filterByCategory.observe(viewLifecycleOwner) {
             if (it != "All") {
                 bookListModel.filterByCategory(it)
