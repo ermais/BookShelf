@@ -36,11 +36,22 @@ class SettingsFragment : PreferenceFragmentCompat() {
          prefManager = PreferenceManager.getDefaultSharedPreferences(requireContext())
          prefListener = SharedPreferences.OnSharedPreferenceChangeListener { p0, p1 ->
              val lan =  p0?.getString("language","en-us")
-             setupLan(lan.toString())
              val theme = p0?.getString("theme_color","bookshelf")
-             setCustomTheme(theme.toString())
              val fontSize : Float? = p0?.getInt("text_font_size",1)?.div(12)?.toFloat()
-             fontSize?.let { setCustomFontSize(it) }
+             val isNight : Boolean? = p0?.getBoolean("night_mode",false)
+
+             lan?.let {
+                 setupLan(it)
+             }
+             theme?.let {
+                 setCustomTheme(it)
+             }
+             fontSize?.let {
+                 setCustomFontSize(it)
+             }
+             isNight?.let {
+                 _setNightMode(it)
+             }
          }
 
         prefManager.registerOnSharedPreferenceChangeListener(prefListener)
@@ -92,7 +103,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         else
             locale = Locale(lan.toString())
         Locale.setDefault(locale)
-        val context = requireActivity().applicationContext as ContextWrapper
+        val context = requireActivity().baseContext
         val config = context.resources.configuration
         config?.locale = locale
        context.resources.updateConfiguration(
@@ -135,6 +146,14 @@ class SettingsFragment : PreferenceFragmentCompat() {
         metrics.scaledDensity  = config.fontScale * metrics.density
         _context.createConfigurationContext(config)
         _context.resources.displayMetrics.setTo(metrics)
+    }
+
+    private fun _setNightMode(is_night: Boolean){
+        if (is_night){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
     }
 
     fun showSettingSelection(setting:String){

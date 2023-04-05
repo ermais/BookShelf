@@ -9,7 +9,7 @@
             android:title="Text Font size"
             android:key="text_font_size"
             android:defaultValue="12"
-            android:max="24"
+            android:max="36"
             android:summary="@string/text_font_size_seekbar_summary"
             />
 
@@ -21,9 +21,9 @@
             app:title="Theme Color"
             app:useSimpleSummaryProvider="true" />
         <SwitchPreference
-            android:title="Day Light"
-            android:key="day_light"
-            android:defaultValue="true"
+            android:title="Night Mode"
+            android:key="night_mode"
+            android:defaultValue="false"
             />
 
     </PreferenceCategory>

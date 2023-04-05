@@ -9,14 +9,11 @@ import android.content.res.Configuration
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.app.AppCompatDelegate.NightMode
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.lifecycle.ViewModelProvider
@@ -33,8 +30,7 @@ import com.example.bookshelf.util.LocaleHelper
 import com.example.bookshelf.util.getConnMgr
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import java.util.Locale
-import java.util.Objects
+import java.util.*
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity(), OnQueryTextListener {
@@ -66,22 +62,30 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
 
         val lang = prefManager.getString("language","en-us")
         setupLan(lang)
+        val fontSize = prefManager.getInt("text_font_size",1).div(12).toFloat()
+        setCustomFontSize(fontSize)
+        val isNight = prefManager.getBoolean("night_mode",false)
+        isNight?.let {
+            _setCustomNightMode(it)
+        }
         prefListener = SharedPreferences.OnSharedPreferenceChangeListener { p0, p1 ->
             val lan = p0?.getString("language", "en-us")
             val _theme = p0?.getString("theme_color","bookshelf")
+            val _fontSize = p0?.getInt("text_font_size",1)?.div(12)?.toFloat()
+            val isNight = p0?.getBoolean("night_mode",false)
             setupLan(lan)
-            Log.d("THEME",theme.toString())
-            setCustomTheme(_theme.toString())
-            val fontSize : Float? = (p0?.getInt("text_font_size",1)?.div(12))?.toFloat()
-            fontSize?.let {
+            _theme?.let {
+                setCustomTheme(it)
+            }
+            _fontSize?.let {
                 setCustomFontSize(it)
+            }
+            isNight?.let {
+                _setCustomNightMode(isNight)
             }
             recreate()
         }
         prefManager.registerOnSharedPreferenceChangeListener(prefListener)
-
-//        setNightMode(applicationContext,true)
-//        initSearchView()
         layout = binding.root
         viewModelFactory = MainViewModelFactory(application)
         viewModel = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
@@ -167,25 +171,6 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
         return false
     }
 
-//    fun initSearchView(){
-//        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-//        binding.appBarMain.actionSearch.setSearchableInfo(searchManager.getSearchableInfo(this.componentName))
-//        binding.appBarMain.actionSearch.maxWidth = Int.MAX_VALUE
-//        binding.appBarMain.actionSearch.setOnQueryTextListener(this)
-//
-//    }
-
-//        override fun attachTabWithViewPager(viewPager: ViewPager2, listOfTabs: List<String>) {
-//        supportFragmentManager.fragments.forEach{
-//            if (it is BookListFragment || it is RecentFragment || it is TopRatedFragment){
-//                TabLayoutMediator(binding.appBarMain.homeTabs,viewPager) { tab, position ->
-//                    tab.text = listOfTabs[position]
-//
-//                }.attach()
-//            }
-//        }
-
-//        }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -298,17 +283,21 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
         _context.createConfigurationContext(config)
         _context.resources.displayMetrics.setTo(metrics)
     }
-    companion object {
 
-        fun setNightMode(context: Context, isNight: Boolean) {
-            if (isNight) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
+    private fun _setCustomNightMode(isNight: Boolean){
+        val vm : WindowManager  = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val metrics = resources.displayMetrics
+        vm.defaultDisplay.getMetrics(metrics)
+        val config = baseContext.resources.configuration
+        val context = baseContext
+        if (isNight){
+            config.uiMode = Configuration.UI_MODE_NIGHT_YES
+        }else{
+            config.uiMode = Configuration.UI_MODE_NIGHT_NO
         }
-
-
+        context.createConfigurationContext(config)
+        context.resources.displayMetrics.setTo(metrics)
     }
+
 
 }
