@@ -14,12 +14,12 @@ class MyBooksRepository(
 ) {
     private val auth = FirebaseAuth.getInstance().currentUser
 
-    suspend fun getMyBooks() = myBooksNetworkResource.getMyBooks(auth!!.uid)
+    private suspend fun getMyBooks() = myBooksNetworkResource.getMyBooks(auth!!.uid)
 
     suspend fun buyBook(book: MyBooksEntity) = myBooksNetworkResource.buyBook(book)
 
     suspend fun refreshMyBooks() {
-        var myBooks = listOf<MyBooksEntity>()
+        var myBooks: List<MyBooksEntity>
         getMyBooks().collect {
             myBooks = it.data!!.asMyBookEntity()
             println("Network data -------------------------------")

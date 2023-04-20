@@ -18,32 +18,30 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
+import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.example.bookshelf.HomeTabAdapter
 import com.example.bookshelf.R
 import com.example.bookshelf.databinding.FragmentHomeBinding
 import com.example.bookshelf.ui.booklist.BookListFragment
-import com.example.bookshelf.ui.main.IMainInterface
 import com.example.bookshelf.ui.main.MainActivity
-import com.example.bookshelf.ui.main.MainViewModel
 import com.example.bookshelf.ui.recent.RecentFragment
 import com.example.bookshelf.ui.toprated.TopRatedFragment
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 
+@Suppress("DEPRECATION")
 class HomeFragment : Fragment() {
 
 
     private lateinit var layout: CollapsingToolbarLayout
-    private lateinit var mInterface: IMainInterface
     private val sharedViewModel: HomeViewModel by activityViewModels()
     private var _binding: FragmentHomeBinding? = null
     private lateinit var homeTabAdapter: HomeTabAdapter
-    private lateinit var fragment: Fragment
-    private var tabList = arrayListOf<String>("Books", "Top Rated", "Recent")
-    private lateinit var mainViewModel: MainViewModel
+    private var tabList = arrayListOf("Books", "Top Rated", "Recent")
     private var drawerLayout: DrawerLayout? = null
     private lateinit var mainActivity: MainActivity
     private var navView: NavigationView? = null
@@ -60,14 +58,8 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-//        homeViewModel =
-//            ViewModelProvider(
-//                this,
-//                ViewModelProvider.NewInstanceFactory()
-//            ).get(HomeViewModel::class.java)
-
         mainActivity = requireContext() as MainActivity
         toolbar = binding.appBarBookList.toolbarBookList
         navHostFragment =
@@ -85,28 +77,18 @@ class HomeFragment : Fragment() {
         val homeActivity = activity as MainActivity
         val drawerHome = homeActivity.findViewById<DrawerLayout>(R.id.drawer_layout)
         if (drawerHome != null) {
-            Log.d("HOME_FRAGMENT", "ONVIEWCREATE${drawerHome.toString()}")
+            Log.d("HOME_FRAGMENT", "ONVIEWCREATE$drawerHome")
         }
         return binding.root
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-//        super.onCreate(savedInstanceState)
-//        val homeActivity: MainActivity = activity as MainActivity
-//        val drawerHome:DrawerLayout = homeActivity.findViewById<DrawerLayout>(R.id.drawer_layout)
-//       if(drawerHome != null){
-//           Log.d("HOME_FRAGMENT","ONCREATE ${drawerHome.toString()}")
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        mInterface = requireContext() as IMainInterface
 
         drawerLayout = mainActivity.findViewById(R.id.drawer_layout)
         toolbar.setNavigationIcon(R.drawable.ic_baseline_menu_24)
-        toolbar.setTitle(getString(R.string.book_list_app_bar_title))
+        toolbar.title = getString(R.string.book_list_app_bar_title)
         mainActivity.setSupportActionBar(toolbar)
         mainActivity.actionBar?.setDisplayHomeAsUpEnabled(true)
         layout.isTitleEnabled = false
@@ -143,7 +125,6 @@ class HomeFragment : Fragment() {
 
         homeTabAdapter = HomeTabAdapter(requireActivity().supportFragmentManager, lifecycle)
         binding.homeViewPager.adapter = homeTabAdapter
-//        mInterface.attachTabWithViewPager(binding.homeViewPager,tabList)
         fragmentManager?.fragments?.forEach {
             if (it is BookListFragment || it is RecentFragment || it is TopRatedFragment) {
                 TabLayoutMediator(
@@ -154,36 +135,21 @@ class HomeFragment : Fragment() {
                 }.attach()
             }
         }
-        binding.homeViewPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-
+        val homeTabs = binding.appBarBookList.homeTabs
+        homeTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                tab?.position?.let { binding.homeViewPager.currentItem = it }
             }
 
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                Log.d("PAGER",position.toString())
-                when {
-                    position==0 -> binding.homeViewPager.setCurrentItem(0,true)
-                    position==1 -> binding.homeViewPager.setCurrentItem(1,true)
-                    position==2 -> binding.homeViewPager.setCurrentItem(2,true)
-                }
-
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                TODO("Not yet implemented")
             }
 
-            override fun onPageScrollStateChanged(state: Int) {
-                super.onPageScrollStateChanged(state)
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                TODO("Not yet implemented")
             }
         })
-//        TabLayoutMediator(binding.homeTabs,binding.homeViewPager){tab,position->
-//            tab.text = tabList[position]
-//        }.attach()
 
-        val pageAdapter =
             binding.fabCreateBook.setOnClickListener {
                 findNavController().navigate(R.id.nav_create_book)
             }
@@ -262,12 +228,6 @@ class HomeFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         super.onResume()
-        val homeActivity = activity as MainActivity
-        val drawerHome = homeActivity.findViewById<DrawerLayout>(R.id.drawer_layout)
-        if (drawerHome != null) {
-            Log.d("HOME_FRAGMENT", "ONSTART$drawerHome")
-        }
-        mainActivity = requireContext() as MainActivity
         navHostFragment =
             mainActivity.supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
         navController = navHostFragment.findNavController()
@@ -289,27 +249,15 @@ class HomeFragment : Fragment() {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         binding.appBarBookList.toolbarBookList.title = "Book Shelf"
-        val homeActivity = activity as MainActivity
-        val drawerHome = homeActivity.findViewById<DrawerLayout>(R.id.drawer_layout)
-        if (drawerHome != null) {
-            Log.d("HOME_FRAGMENT", "ONVIEWSTATERESTORED $drawerHome")
-        }
-
-
-//        val toggle = ActionBarDrawerToggle(5
-//            mainActivity,
-//            drawerLayout,
-//            toolbar,
-//            R.string.navigation_drawer_open,
-//            R.string.navigation_drawer_close)
-//        drawerLayout?.addDrawerListener(toggle)
-//        if (drawerLayout != null){
-//            toggle.syncState()
-//        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         _binding = null
     }
 

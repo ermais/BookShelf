@@ -3,22 +3,72 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.bookshelf.ui.login.LoginViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ele"
+        android:id="@+id/LoginLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="20dp"
         android:focusable="auto"
-        app:circularflow_radiusInDP="100"
         android:theme="@style/Theme.BookShelf"
+        android:visibility="visible"
+        app:circularflow_radiusInDP="100"
         tools:context=".ui.login.LoginActivity">
+
+        <TextView
+            android:id="@+id/loginError"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/password_or_email_is_not_correct_string"
+            android:textAlignment="center"
+            android:textColor="#DD2C00"
+            android:textSize="12sp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="@+id/btnUserLogin"
+            app:layout_constraintStart_toStartOf="@+id/btnUserLogin"
+            app:layout_constraintTop_toBottomOf="@+id/btnUserLogin" />
+
+        <TextView
+            android:id="@+id/paswordEditTextError"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/password_error_string"
+            android:textAlignment="center"
+            android:textColor="#DD2C00"
+            android:textSize="12sp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="@+id/editTextUserPassword"
+            app:layout_constraintStart_toStartOf="@+id/editTextUserPassword"
+            app:layout_constraintTop_toBottomOf="@+id/editTextUserPassword" />
+
+        <ProgressBar
+            android:id="@+id/loginSpinner"
+            android:layout_width="0dp"
+            android:layout_height="72dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="32dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline"
+            app:layout_constraintVertical_bias="0.13" />
 
         <EditText
             android:id="@+id/editTextUsername"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
             android:autofillHints=""
             android:cursorVisible="true"
@@ -28,34 +78,46 @@
             android:inputType="textPersonName"
             android:padding="6dp"
             android:paddingBottom="0dp"
-            android:text=""
-            android:textSize="24sp"
+            android:text="@={viewModel.email}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+        <TextView
+            android:id="@+id/emailEditTextError"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="invalid email or not found "
+            android:textAlignment="center"
+            android:textColor="#DD2C00"
+            android:textSize="12sp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="@+id/editTextUsername"
+            app:layout_constraintStart_toStartOf="@+id/editTextUsername"
+            app:layout_constraintTop_toBottomOf="@+id/editTextUsername" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="120dp" />
+            android:visibility="invisible"
+            app:layout_constraintGuide_begin="60dp" />
 
         <EditText
             android:id="@+id/editTextUserPassword"
             android:layout_width="0dp"
             android:layout_height="48dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="32dp"
             android:autofillHints=""
             android:drawableStart="@drawable/ic_baseline_lock_24"
             android:ems="10"
-            android:fontFamily="sans-serif-light"
             android:hint="@string/password_hint"
             android:inputType="textPassword"
             android:padding="6dp"
             android:paddingBottom="0dp"
-            android:text=""
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:text="@={viewModel.password}"
             app:layout_constraintEnd_toEndOf="@+id/editTextUsername"
             app:layout_constraintStart_toStartOf="@+id/editTextUsername"
             app:layout_constraintTop_toBottomOf="@+id/editTextUsername" />
@@ -72,14 +134,14 @@
             style="@style/Widget.AppCompat.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginHorizontal="40dp"
             android:elevation="12dp"
             android:insetBottom="5dp"
             android:letterSpacing="0.2"
             android:paddingStart="20sp"
             android:paddingEnd="20sp"
             android:text="@string/login_button_text"
-            android:textSize="20sp"
             app:barrierMargin="100dp"
             app:circularflow_angles="100"
             app:cornerRadius="100pt"
@@ -93,14 +155,13 @@
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="32dp"
             android:letterSpacing="0.05"
             android:text="@string/forget_password_button_text"
             android:textAllCaps="false"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            android:textSize="20sp"
             app:circularflow_radiusInDP="20dp"
             app:layout_constraintEnd_toEndOf="@+id/btnUserLogin"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/btnUserLogin"
             app:layout_constraintTop_toBottomOf="@+id/btnUserLogin" />
 
@@ -109,23 +170,21 @@
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginTop="16dp"
             android:letterSpacing="0.05"
+            android:paddingHorizontal="40dp"
             android:text="@string/i_don_t_have_an_account_button_text"
             android:textAllCaps="false"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline2"
             app:layout_constraintEnd_toEndOf="@+id/btnUserLogin"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/btnUserLogin"
-            app:layout_constraintTop_toBottomOf="@+id/btnPasswordForget"
-            app:layout_constraintVertical_bias="0.257" />
+            app:layout_constraintTop_toBottomOf="@+id/btnPasswordForget" />
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/signInBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="40dp"
             app:buttonSize="standard"
             app:layout_constraintBottom_toTopOf="@+id/guideline2"
             app:layout_constraintEnd_toEndOf="@+id/btnCreateUser"

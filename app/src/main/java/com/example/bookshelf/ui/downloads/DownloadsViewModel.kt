@@ -1,7 +1,6 @@
 package com.example.bookshelf.ui.downloads
 
 //import com.example.bookshelf.bussiness.db.BookAndDownloads
-import android.app.Application
 import androidx.lifecycle.*
 import com.example.bookshelf.bussiness.db.DownloadAndBook
 import com.example.bookshelf.bussiness.repository.book.DownloadRepository
@@ -9,8 +8,7 @@ import kotlinx.coroutines.launch
 
 @Suppress("UNCHECKED_CAST")
 class DownloadsViewModel(
-    private val downloadRepository: DownloadRepository,
-    application: Application
+    private val downloadRepository: DownloadRepository
 ) : ViewModel() {
 
 
@@ -23,7 +21,7 @@ class DownloadsViewModel(
     init {
 //        println("Downloads only ............................${downloadsOnly.value.toString()}")
         viewModelScope.launch {
-            downloadRepository.getDownloads().collect() {
+            downloadRepository.getDownloads().collect {
                 println("Download only --------------------------------------")
                 println(it)
             }
@@ -33,7 +31,7 @@ class DownloadsViewModel(
     }
 
     private fun getDownloadsAndBooks() = viewModelScope.launch {
-        downloadRepository.getDownloadsAndBooks().collect() {
+        downloadRepository.getDownloadsAndBooks().collect {
             downloads.value = it
             println("Downloads -------------------------------------------------")
             println(it.size)

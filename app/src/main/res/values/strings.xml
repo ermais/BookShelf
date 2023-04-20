@@ -34,6 +34,7 @@
     <string name="save_button_text">SAVE</string>
     <string name="upload_book_doc_button_text">Upload Book Doc</string>
     <string name="user_name_hint" translatable="false">User Name</string>
+    <string name="display_name_hint" translatable="false">ermias mesfin</string>
     <string name="password_hint" translatable="false">*********</string>
     <string name="login_button_text">Login</string>
     <string name="forget_password_button_text">Forget Password</string>
@@ -106,4 +107,8 @@
     <string name="have_an_account_string">have an account</string>
     <string name="create_account_string">create account</string>
     <string name="your_web_client_id" translatable="false">731245511798-1qcug65ejmhl1t56h11fkc2kn47cpjru.apps.googleusercontent.com</string>
+    <string name="create_app_bar_title_string">Create Book</string>
+    <string name="my_books_app_bar_title_string">My Books</string>
+    <string name="password_or_email_is_not_correct_string">password or email is not correct</string>
+    <string name="password_error_string">invalid password, It must be at least 8 character</string>
 </resources>

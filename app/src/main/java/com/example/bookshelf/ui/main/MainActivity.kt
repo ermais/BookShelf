@@ -1,7 +1,6 @@
 package com.example.bookshelf.ui.main
 
 import android.app.SearchManager
-import android.app.UiModeManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -65,9 +64,7 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
         val fontSize = prefManager.getInt("text_font_size",1).div(12).toFloat()
         setCustomFontSize(fontSize)
         val isNight = prefManager.getBoolean("night_mode",false)
-        isNight?.let {
-            _setCustomNightMode(it)
-        }
+        _setCustomNightMode(isNight)
         prefListener = SharedPreferences.OnSharedPreferenceChangeListener { p0, p1 ->
             val lan = p0?.getString("language", "en-us")
             val _theme = p0?.getString("theme_color","bookshelf")
@@ -231,10 +228,6 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
     override fun onPause() {
         super.onPause()
         prefManager.unregisterOnSharedPreferenceChangeListener(prefListener)
-    }
-
-    override fun onStart() {
-        super.onStart()
     }
 
     override fun onRestoreInstanceState(

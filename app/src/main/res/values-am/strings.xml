@@ -53,4 +53,6 @@
     <string name="forget_password_string">የይለፍ ቃሌን እረስቸዋለሁ</string>
     <string name="have_an_account_string">አካውንት አለኝ</string>
     <string name="create_account_string">አካውንት ክፈት</string>
+    <string name="create_app_bar_title_string">መጽሐፍ አትም</string>
+    <string name="my_books_app_bar_title_string">My Books</string>
 </resources>

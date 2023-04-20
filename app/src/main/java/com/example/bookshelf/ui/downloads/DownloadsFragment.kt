@@ -32,16 +32,12 @@ class DownloadsFragment : Fragment() {
     private lateinit var downloadsRepository: DownloadRepository
     private lateinit var downloadsViewModelFactory: DownloadsViewModelFactory
     private lateinit var adapter: DownloadsAdapter
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     @SuppressLint("IntentReset")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentDownloadsBinding.inflate(inflater, container, false)
 
@@ -53,12 +49,12 @@ class DownloadsFragment : Fragment() {
         val application = requireNotNull(activity).application
         db = BookDatabase.getDatabase(_context)
         downloadsRepository = DownloadRepository(db)
-        downloadsViewModelFactory = DownloadsViewModelFactory(application, downloadsRepository)
+        downloadsViewModelFactory = DownloadsViewModelFactory(downloadsRepository)
         downloadsViewModel = ViewModelProvider(
             this,
             downloadsViewModelFactory
         )[DownloadsViewModel::class.java]
-        adapter = DownloadsAdapter(_context) { bookUri ->
+        adapter = DownloadsAdapter { bookUri ->
 
 
             val file = File(bookUri)

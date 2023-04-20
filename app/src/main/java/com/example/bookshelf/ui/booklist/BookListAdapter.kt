@@ -46,13 +46,13 @@ class BookListAdapter(
 
     override fun getItemCount(): Int = data.size
     class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val ivBookCover = itemView.findViewById<ImageView>(R.id.imBookCover)
-        val tvBookTitle = itemView.findViewById(R.id.tvBookTitle) as TextView
-        val tvCategory = itemView.findViewById<TextView>(R.id.tvCategory)
-        val tvAuthor = itemView.findViewById<TextView>(R.id.tvAuthor)
-        val rbBook = itemView.findViewById(R.id.rbBook) as RatingBar
-        val btnDownloadBook = itemView.findViewById<Button>(R.id.btnDownloadBook)
-        val cvBookItem = itemView.findViewById<CardView>(R.id.cvBookItem)
+        private val ivBookCover: ImageView = itemView.findViewById(R.id.imBookCover)
+        private val tvBookTitle = itemView.findViewById(R.id.tvBookTitle) as TextView
+        private val tvCategory: TextView = itemView.findViewById(R.id.tvCategory)
+        private val tvAuthor: TextView = itemView.findViewById(R.id.tvAuthor)
+        private val rbBook = itemView.findViewById(R.id.rbBook) as RatingBar
+        private val btnDownloadBook: Button = itemView.findViewById(R.id.btnDownloadBook)
+        private val cvBookItem: CardView = itemView.findViewById(R.id.cvBookItem)
 
         @SuppressLint("SetTextI18n")
         fun bind(
@@ -74,7 +74,7 @@ class BookListAdapter(
             }
             btnDownloadBook.text = item.downloadCount.toString()
             btnDownloadBook.setOnClickListener {
-                Log.d("BOOKLISTADAPTER", "btnDownload on clicked!")
+                Log.d("BOOK_LIST_ADAPTER", "btnDownload on clicked!")
                 onBtnDownloadBookClick(it, Uri.parse(item.bookUri), item.title, item.bookId)
             }
             cvBookItem.setOnClickListener {

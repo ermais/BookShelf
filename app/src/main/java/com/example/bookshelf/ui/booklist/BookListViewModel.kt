@@ -14,7 +14,6 @@ import com.example.bookshelf.data.KEY_DOWNLOAD_BOOK_URI
 import com.example.bookshelf.worker.DownloadBookWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 
 class BookListViewModel(
     private val bookListRepository: BookListRepository,
@@ -23,24 +22,12 @@ class BookListViewModel(
     internal var books: MutableLiveData<List<BookEntity>> =
         bookListRepository.getOfflineBooks().asLiveData() as MutableLiveData<List<BookEntity>>
     val filteredBooks get() = books
-    internal var workManager = WorkManager.getInstance(application)
-
-    val workInfo: LiveData<List<WorkInfo>> by lazy {
-        workManager.getWorkInfosByTagLiveData(DOWNLOAD_BOOK_WORKER_TAG)
-    }
+    private var workManager = WorkManager.getInstance(application)
 
     init {
         refreshBooks()
     }
 
-
-//    @SuppressLint("LongLogTag")
-//    private  fun getBooks()  = viewModelScope.launch {
-//       bookListRepository.getOfflineBooks().collect{
-//           Log.d("BOOKLISTVIEWMODEL",it.toString())
-//           books.value = it
-//       }
-//    }
 
 
     fun downloadBook(downloadUri: Uri, bookTitle: String, bookId: String) = viewModelScope.launch {
@@ -77,25 +64,25 @@ class BookListViewModel(
     }
 
     fun getBooks() = viewModelScope.launch {
-        bookListRepository.getOfflineBooks().collect() {
+        bookListRepository.getOfflineBooks().collect {
             books.value = it
         }
     }
 
     fun sortByAuthor() = viewModelScope.launch {
-        bookListRepository.sortByAuthor().collect() {
+        bookListRepository.sortByAuthor().collect {
             books.value = it
         }
     }
 
     fun sortByTitle() = viewModelScope.launch {
-        bookListRepository.sortByTitle().collect() {
+        bookListRepository.sortByTitle().collect {
             books.value = it
         }
     }
 
     fun sortByPubDate() = viewModelScope.launch {
-        bookListRepository.sortByPubDate().collect() {
+        bookListRepository.sortByPubDate().collect {
             books.value = it
         }
     }
@@ -106,38 +93,8 @@ class BookListViewModel(
     }
 
 
-//
-//    private fun filterByCategory(category: String) = viewModelScope.launch(Dispatchers.Unconfined) {
-//        bookListRepository.filterByCategory(category).collect{
-//            books.value = it.data?.asBookEntity()
-//        }
-//    }
-//
-//
-//    private fun filterByAuthor(author: String) = viewModelScope.launch {
-//        bookListRepository.filterByAuthor(author).collect{
-//            books.value = it.data?.asBookEntity()
-//        }
-//    }
-//
-//    fun filter(query:String?) = viewModelScope.launch {
-//        if (!query.isNullOrEmpty()){
-//            val _filteredBooks = books.value?.filter { book: BookEntity -> query.let {
-//                book.title.contains(
-//                    it
-//                )
-//            }
-//                ?: true }
-//            filteredBooks.value = (_filteredBooks as MutableList<BookEntity>?)!!
-//        }else{
-//            filteredBooks = books
-//            println("Check out the list of books ---------------------------")
-//            println(books)
-//        }
-//    }
 
-
-    fun inputDownloadData(downloadUri: Uri, bookTitle: String, bookId: String): Data {
+    private fun inputDownloadData(downloadUri: Uri, bookTitle: String, bookId: String): Data {
         val builder = Data.Builder()
         builder.putString(KEY_DOWNLOAD_BOOK_URI, downloadUri.toString())
         builder.putString(KEY_BOOK_TITLE, bookTitle)

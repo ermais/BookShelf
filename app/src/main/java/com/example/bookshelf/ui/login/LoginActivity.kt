@@ -6,15 +6,15 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.example.bookshelf.R
 import com.example.bookshelf.databinding.ActivityLoginBinding
 import com.example.bookshelf.ui.main.MainActivity
 import com.example.bookshelf.util.getConnMgr
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -35,32 +35,36 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
+    private lateinit var connMgr: ConnectivityManager
     private lateinit var locale: Locale
     private lateinit var prefListener: SharedPreferences.OnSharedPreferenceChangeListener
-    private lateinit var prefManager : SharedPreferences
-    private lateinit var oneTapClient: SignInClient
-    private val REQ_ONE_TAP = 2  // Can be any integer unique to the Activity
-    private var showOneTapUI = true
-    private lateinit var signInRequest: BeginSignInRequest
+    private lateinit var prefManager: SharedPreferences
 
     //
     private val RC_SIGN_IN: Int = 265
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
-
+    private lateinit var loginViewModel: LoginViewModel
+    private lateinit var loginViewModelFactory: LoginViewModelFactory
 
     override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onPostCreate(savedInstanceState, persistentState)
-        val connMgr = getConnMgr(applicationContext,::getSystemService)
+        connMgr = getConnMgr(applicationContext, ::getSystemService)
 
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        auth = Firebase.auth
+        loginViewModelFactory = LoginViewModelFactory(auth)
+        loginViewModel =
+            ViewModelProvider(this, loginViewModelFactory).get(LoginViewModel::class.java)
+        connMgr = getConnMgr(applicationContext, ::getSystemService)
         prefManager = PreferenceManager.getDefaultSharedPreferences(this)
-        val lang = prefManager.getString("language","en-us")
+        val lang = prefManager.getString("language", "en-us")
         setupLan(lang)
         prefListener = object : SharedPreferences.OnSharedPreferenceChangeListener {
             override fun onSharedPreferenceChanged(p0: SharedPreferences?, p1: String?) {
@@ -71,7 +75,7 @@ class LoginActivity : AppCompatActivity() {
         prefManager.registerOnSharedPreferenceChangeListener(prefListener)
         // ...
         // Initialize Firebase Auth
-        auth = Firebase.auth
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -80,93 +84,95 @@ class LoginActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
 
+        binding.viewModel = loginViewModel
+
 
         Log.d(LoginActivity::getLocalClassName.toString(), "On create")
         binding.btnUserLogin.setOnClickListener { view ->
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            if (isConnected()) {
+                Log.d("LOGIN", "log-in")
+                loginViewModel.loginWithEmailPassword(::loginSuccess, ::loginFail)
+            } else {
+                val toast = Toast.makeText(
+                    this,
+                    "connection unavalilable, check your connection",
+                    Toast.LENGTH_SHORT
+                )
+                toast.show()
+            }
         }
 
         binding.signInBtn.setOnClickListener {
-            signIn()
-//            signInRequest = BeginSignInRequest.builder()
-//                .setGoogleIdTokenRequestOptions(
-//                    BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-//                        .setSupported(true)
-//                        // Your server's client ID, not your Android client ID.
-//                        .setServerClientId(getString(R.string.default_web_client_id))
-//                        // Only show accounts previously used to sign in.
-//                        .setFilterByAuthorizedAccounts(true)
-//                        .build())
-//                .build()
-//
-//        }
+            if (isConnected()) {
+                signIn()
+            } else {
+                val toast = Toast.makeText(this, "Network Unavailable ", Toast.LENGTH_SHORT)
+                toast.show()
+            }
+        }
+        loginViewModel.email.observe(this) {
+            loginViewModel.validEmail()
+        }
+        loginViewModel.password.observe(this) {
+            loginViewModel.validPassword()
+        }
+        loginViewModel.invalidPassword.observe(this) {
+            if (it) {
+                binding.paswordEditTextError.visibility = View.VISIBLE
+            } else {
+                binding.paswordEditTextError.visibility = View.INVISIBLE
+            }
+        }
 
+        loginViewModel.invalidEmail.observe(this) {
+            if (it) {
+                binding.emailEditTextError.visibility = View.VISIBLE
+            } else {
+                binding.emailEditTextError.visibility = View.INVISIBLE
+            }
+        }
+        loginViewModel.invalidPasswordOrEmail.observe(this) {
+            if (it) {
+                binding.loginError.visibility = View.VISIBLE
+            } else {
+                binding.loginError.visibility = View.INVISIBLE
+            }
+        }
+        loginViewModel.showProgressBar.observe(this) {
+            if (it) {
+                binding.loginSpinner.visibility = View.VISIBLE
+            } else {
+                binding.loginSpinner.visibility = View.GONE
+            }
         }
 
     }
 
-        @Deprecated("Deprecated in Java")
-        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-            super.onActivityResult(requestCode, resultCode, data)
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-            if (requestCode == RC_SIGN_IN) {
-                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-                try {
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
 
-                    // Google Sign In was successful, authenticate with Firebase
-                    val account = task.getResult(ApiException::class.java)!!
-                    Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
-                    firebaseAuthWithGoogle(account.idToken!!)
-                } catch (e: ApiException) {
-                    // Google Sign In failed, update UI appropriately
-                    Log.w(TAG, "Google sign in failed", e)
-                }
+                // Google Sign In was successful, authenticate with Firebase
+                val account = task.getResult(ApiException::class.java)!!
+                Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
+                firebaseAuthWithGoogle(account.idToken!!)
+            } catch (e: ApiException) {
+                // Google Sign In failed, update UI appropriately
+                Log.w(TAG, "Google sign in failed", e)
             }
-
-//        when (requestCode) {
-//            REQ_ONE_TAP -> {
-//                try {
-//                    val credential = oneTapClient.getSignInCredentialFromIntent(data)
-//                    val idToken = credential.googleIdToken
-//                    when {
-//                        idToken != null -> {
-//                            // Got an ID token from Google. Use it to authenticate
-//                            // with Firebase.
-//                            val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
-//                            auth.signInWithCredential(firebaseCredential)
-//                                .addOnCompleteListener(this) { task ->
-//                                    if (task.isSuccessful) {
-//                                        // Sign in success, update UI with the signed-in user's information
-//                                        Log.d(TAG, "signInWithCredential:success")
-//                                        val user = auth.currentUser
-//                                        updateUI(user)
-//                                    } else {
-//                                        // If sign in fails, display a message to the user.
-//                                        Log.w(TAG, "signInWithCredential:failure", task.exception)
-//                                        updateUI(null)
-//                                    }
-//                                }
-//                            Log.d(TAG, "Got ID token.")
-//                        }
-//                        else -> {
-//                            // Shouldn't happen.
-//                            Log.d(TAG, "No ID token!")
-//                        }
-//                    }
-//                } catch (e: ApiException) {
-//                    // ...
-//                }
-//            }
-//        }
         }
+    }
 
-        override fun onStart() {
-            super.onStart()
+    override fun onStart() {
+        super.onStart()
 //             Check if user is signed in (non-null) and update UI accordingly.
-            val currentUser = auth.currentUser
-            updateUI(currentUser)
-        }
+        val currentUser = auth.currentUser
+        updateUI(currentUser)
+    }
 
     override fun onPause() {
         super.onPause()
@@ -178,37 +184,36 @@ class LoginActivity : AppCompatActivity() {
         prefManager.registerOnSharedPreferenceChangeListener(prefListener)
     }
 
-        private fun signIn() {
-            val signInIntent = googleSignInClient.signInIntent
-            startActivityForResult(signInIntent, RC_SIGN_IN)
+    private fun signIn() {
+        val signInIntent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
 
-        }
 
-
-        private fun firebaseAuthWithGoogle(idToken: String) {
-            val toast = Toast.makeText(applicationContext, "Signing with google", Toast.LENGTH_LONG)
-            toast.show()
-            val credential = GoogleAuthProvider.getCredential(idToken, null)
-            auth.signInWithCredential(credential)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInWithCredential:success")
-                        val user = auth.currentUser
-                        updateUI(user)
-                    } else {
-                        // If sign in fails, display a message to the user
-                        val toast =
-                            Toast.makeText(applicationContext, "Signing Fail", Toast.LENGTH_LONG)
-                        toast.show()
-                        Log.w(TAG, "signInWithCredential:failure", task.exception)
-                        updateUI(null)
-                    }
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val toast = Toast.makeText(applicationContext, "Signing with google", Toast.LENGTH_LONG)
+        toast.show()
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithCredential:success")
+                    val user = auth.currentUser
+                    updateUI(user)
+                } else {
+                    // If sign in fails, display a message to the user
+                    val toast =
+                        Toast.makeText(applicationContext, "Signing Fail", Toast.LENGTH_LONG)
+                    toast.show()
+                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    updateUI(null)
                 }
+            }
 
-        }
+    }
 
-    fun setupLan(lan:String?){
+    fun setupLan(lan: String?) {
         if (lan.equals("not-set")) locale = Locale.getDefault()
         else
             locale = Locale(lan.toString())
@@ -218,12 +223,30 @@ class LoginActivity : AppCompatActivity() {
         baseContext.resources.updateConfiguration(config, baseContext.resources.displayMetrics)
 
     }
-    private fun updateUI(user: FirebaseUser?){
-        if(user != null){
-            val intent = Intent(this,MainActivity::class.java)
+
+    private fun updateUI(user: FirebaseUser?) {
+        if (user != null) {
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
         }
     }
+
+    private fun isConnected(): Boolean {
+        val networkInfo = connMgr.activeNetworkInfo
+        return networkInfo?.isConnected == true
+    }
+
+    private fun loginSuccess(): Unit {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun loginFail(): Unit {
+        val toast = Toast.makeText(this, "username or password not found", Toast.LENGTH_LONG)
+        toast.show()
+    }
+
 }
 

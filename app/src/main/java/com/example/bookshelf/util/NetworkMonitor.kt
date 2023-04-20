@@ -19,36 +19,6 @@ import java.nio.channels.NetworkChannel
         val connMgr = service(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
 
-
-//    @RequiresApi(Build.VERSION_CODES.M)
-//    fun isConnected(service:(ser:String)->Any): Boolean {
-//        val connMgr = getConnMgr(service)
-//        val activeNetworkInfo : NetworkInfo? = connMgr.activeNetworkInfo
-//
-//        if (activeNetworkInfo?.isConnected  == true){
-//            return true
-//        }
-//        return false
-//    }
-//
-//    fun isWifiNet(service:(ser:String)->Any) : Boolean {
-//        val connMgr = getConnMgr(service)
-//        val activeNetworkInfo : NetworkInfo? = connMgr.activeNetworkInfo
-//        if (activeNetworkInfo?.type == ConnectivityManager.TYPE_WIFI){
-//            return true
-//        }
-//        return false
-//    }
-//
-//    fun isCellularNet(service:(ser:String)->Any) : Boolean {
-//        val activeNetworkInfo : NetworkInfo? = getConnMgr(service).activeNetworkInfo
-//        if (activeNetworkInfo?.type == ConnectivityManager.TYPE_MOBILE){
-//            return true
-//        }
-//
-//        return false
-//    }
-
     val networkRequest = NetworkRequest.Builder()
         .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
         .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)

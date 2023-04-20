@@ -18,7 +18,7 @@
             android:id="@+id/abMyBooks"
 
             android:layout_width="match_parent"
-            android:layout_height="64dp" >
+            android:layout_height="64dp">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/bookCreateToolbar"
@@ -26,8 +26,10 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
                 android:minHeight="?attr/actionBarSize"
-                android:theme="?attr/actionBarTheme" />
+                android:theme="?attr/actionBarTheme"
+                app:title="@string/create_app_bar_title_string" />
         </com.google.android.material.appbar.AppBarLayout>
+
         <include
             android:id="@+id/layout_book_create"
             layout="@layout/content_create_book"

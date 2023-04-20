@@ -25,6 +25,4 @@ class HomeTabAdapter(fm: FragmentManager, lifecycle: Lifecycle) :
             }
         }
     }
-
-
 }

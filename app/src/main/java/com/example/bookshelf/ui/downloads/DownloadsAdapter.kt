@@ -1,7 +1,6 @@
 package com.example.bookshelf.ui.downloads
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +11,8 @@ import com.example.bookshelf.R
 import com.example.bookshelf.bussiness.db.DownloadAndBook
 import java.util.*
 
-class DownloadsAdapter(context: Context, onDownloadClicked: (bookUri: String) -> Unit) :
+class DownloadsAdapter(onDownloadClicked: (bookUri: String) -> Unit) :
     RecyclerView.Adapter<DownloadsAdapter.ViewHolder>() {
-    val mContext by lazy { context }
     private val onDownloadCardClicked = onDownloadClicked
     var downloads = listOf<DownloadAndBook>()
         @SuppressLint("NotifyDataSetChanged")

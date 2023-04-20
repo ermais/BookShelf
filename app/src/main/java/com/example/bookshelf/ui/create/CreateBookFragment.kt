@@ -3,7 +3,6 @@ package com.example.bookshelf.ui.create
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -49,31 +47,10 @@ class CreateBookFragment : Fragment() {
     private lateinit var createBookViewModel: CreateBookViewModel
     private lateinit var firebaseBooksDataSource: FirestoreMyBooksDataSource
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        /**
-         * Binding element
-         */
-
-
-        /**
-         *Observe book document upload work info
-         * If WorkInfo state is succeed, retrieve outPutData and
-         * return the result uri
-         */
-
-
-        /**
-         * Observe book title
-         * and set bookTitle observer here
-         */
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCreateBookBinding.inflate(inflater, container, false)
         db = FirebaseFirestore.getInstance()
         cloudStorage = FirebaseStorage.getInstance()
@@ -82,7 +59,7 @@ class CreateBookFragment : Fragment() {
         firebaseBooksDataSource = FirestoreMyBooksDataSource(Firebase.firestore)
         repository = CreateBookRepository(firestoreBookDataSource, FirebaseStorage.getInstance())
         auth = FirebaseAuth.getInstance()
-        createBookViewModelFactory = CreateBookViewModelFactory(auth, repository, application)
+        createBookViewModelFactory = CreateBookViewModelFactory(auth, repository)
         createBookViewModel = ViewModelProvider(
             this,
             createBookViewModelFactory
@@ -129,11 +106,11 @@ class CreateBookFragment : Fragment() {
         createBookViewModel.bookCoverUriFromFirebase.observe(viewLifecycleOwner) {
             if (it.isNullOrEmpty()) {
                 with(binding.layoutBookCreate) {
-                    btnAddBook.visibility = android.view.View.GONE
+                    btnAddBook.visibility = View.GONE
                 }
             } else {
                 with(binding.layoutBookCreate) {
-                    btnAddBook.visibility = android.view.View.VISIBLE
+                    btnAddBook.visibility = View.VISIBLE
                 }
             }
         }
@@ -198,7 +175,7 @@ class CreateBookFragment : Fragment() {
         /**
          * Handling UPLOAD BOOK DOC
          * It is the event listener that handle get uri of book to uploaded and return it uri
-         * @param onActivityResult process the returned  data and run  bookWorker manager
+         * @param savedInstanceState the returned  data and run  bookWorker manager
          *
          */
         binding.layoutBookCreate.btnUploadBook.setOnClickListener {
@@ -229,7 +206,7 @@ class CreateBookFragment : Fragment() {
          * It get all book attribute from view model and pass to book object creator
          */
 
-        binding.layoutBookCreate.btnAddBook.setOnClickListener { view ->
+        binding.layoutBookCreate.btnAddBook.setOnClickListener {
             if (createBookViewModel.canSaveBook()) {
                 createBookViewModel.publishBook()
                 findNavController().navigate(R.id.action_createBookFragment_to_nav_home)
@@ -255,18 +232,13 @@ class CreateBookFragment : Fragment() {
                             Toast.LENGTH_LONG
                         )
                         toast.show()
-                        with(binding) {
-                            toast.show()
-                            createBookViewModel?.bookCategory?.postValue(selectedItem.toString())
-                        }
+                        createBookViewModel.bookCategory.postValue(selectedItem.toString())
                     }
                 }
 
                 override fun onNothingSelected(p0: AdapterView<*>?) {
                     val selectedItem = p0!!.getItemAtPosition(0).toString()
-                    with(binding) {
-                        createBookViewModel?.bookCategory?.postValue(selectedItem)
-                    }
+                    createBookViewModel.bookCategory.postValue(selectedItem)
                 }
 
             }
@@ -314,7 +286,7 @@ class CreateBookFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.title = "Create Book"
+        toolbar.title = getString(R.string.create_app_bar_title_string)
         val drawerLayout = view.findViewById<DrawerLayout>(R.id.drawer_layout)
         appBarConfiguration = AppBarConfiguration(setOf(), drawerLayout)
         NavigationUI.setupWithNavController(
@@ -324,10 +296,15 @@ class CreateBookFragment : Fragment() {
         )
     }
 
+    override fun onResume() {
+        super.onResume()
+        toolbar.title = getString(R.string.create_app_bar_title_string)
+    }
+
 
     override fun onStart() {
         super.onStart()
-        toolbar.title = "Create Book "
+        toolbar.title = getString(R.string.create_app_bar_title_string)
     }
 
     /**
@@ -351,7 +328,7 @@ class CreateBookFragment : Fragment() {
     }
 
     companion object {
-        val GET_BCI: Int = 233
+        const val GET_BCI: Int = 233
         const val GET_BOOK_DOC = 443
         const val PHOTO_READ_PERMISSION = android.Manifest.permission.READ_EXTERNAL_STORAGE
         const val BOOk_DOCUMENT_PERMISSION = android.Manifest.permission.READ_EXTERNAL_STORAGE

@@ -1,12 +1,10 @@
 package com.example.bookshelf.ui.create
 
-import android.content.Context
 import android.net.Uri
 import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.work.WorkManager
 import com.example.bookshelf.bussiness.Result.data
 import com.example.bookshelf.bussiness.model.Book
 import com.example.bookshelf.bussiness.repository.book.CreateBookRepository
@@ -18,10 +16,9 @@ import java.util.*
 class CreateBookViewModel(
     private val auth: FirebaseAuth,
     private val createBookRepository: CreateBookRepository,
-    application: Context,
 ) : ViewModel() {
 
-    val bookTitle by lazy { MutableLiveData<String>("") }
+    val bookTitle by lazy { MutableLiveData("") }
     val bookDesc by lazy { MutableLiveData<String>() }
     val bookCategory by lazy { MutableLiveData<String>() }
     var bookCoverUriFromFile = MutableLiveData<String>()
@@ -32,7 +29,7 @@ class CreateBookViewModel(
     val bookCoverUriFromFirebase: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
-    var bookCreated = MutableLiveData<Boolean>(false)
+    var bookCreated = MutableLiveData(false)
 
     //     val bookDocUploadWorkInfo  : LiveData<List<WorkInfo>> by lazy {
 //         workManager.getWorkInfosByTagLiveData(UPLOAD_BOOK_DOC_WORKER_TAG)
@@ -50,12 +47,6 @@ class CreateBookViewModel(
 
     val loading: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>(false)
-    }
-    var workManager: WorkManager = WorkManager.getInstance(application)
-
-
-    init {
-
     }
 
 
@@ -78,11 +69,11 @@ class CreateBookViewModel(
         }
     }
 
-    fun titleNotNullOREmpty(): Boolean {
+    private fun titleNotNullOREmpty(): Boolean {
         return (!TextUtils.isEmpty(bookTitle.value)) && (bookTitle.value != null)
     }
 
-    fun bookDocNotNullOREmpty(): Boolean {
+    private fun bookDocNotNullOREmpty(): Boolean {
         return (!TextUtils.isEmpty(bookDocUriFromFirebase.value) && bookDocUriFromFirebase.value != null)
     }
 

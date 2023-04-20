@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide
 import com.example.bookshelf.R
 import com.example.bookshelf.bussiness.db.BookDao
 import com.example.bookshelf.bussiness.db.BookDatabase
-import com.example.bookshelf.bussiness.model.Book
 import com.example.bookshelf.bussiness.networkdata.FirestoreMyBooksDataSource
 import com.example.bookshelf.bussiness.repository.book.BookDetailRepository
 import com.example.bookshelf.bussiness.repository.book.MyBooksRepository
@@ -34,21 +33,14 @@ class BookDetailFragment : Fragment() {
     private lateinit var firestoreMyBooksDataSource: FirestoreMyBooksDataSource
     private lateinit var bookDao: BookDao
     val args: BookDetailFragmentArgs by navArgs()
-    private lateinit var book: Book
     private var toolbar: Toolbar? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         _binding = FragmentBookDetailBinding.inflate(inflater, container, false)
-//        val navView  = requireActivity().findViewById<NavigationView>(R.id.nav_view)
-//        navView.setupWithNavController(findNavController())
         val db = BookDatabase.getDatabase(requireContext())
         bookDao = db.bookDao()
         bookDetailRepository = BookDetailRepository(bookDao)
@@ -66,7 +58,7 @@ class BookDetailFragment : Fragment() {
         bookDetailViewModel.getBook(args.title)
         bookDetailViewModel.book.observe(viewLifecycleOwner) {
             binding.bookDetail = it
-            toolbar?.setTitle(it.title)
+            toolbar?.title = it.title
             Glide.with(requireContext())
                 .load(it.bookCover)
                 .into(binding.imgBookCover)
@@ -91,7 +83,7 @@ class BookDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar?.setTitle(binding.bookDetail?.title)
+        toolbar?.title = binding.bookDetail?.title
         val drawerLayout = view.findViewById<DrawerLayout>(R.id.drawer_layout)
         val appBarConfiguration = AppBarConfiguration(setOf(), drawerLayout)
         NavigationUI.setupWithNavController(

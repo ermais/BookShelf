@@ -1,19 +1,15 @@
 package com.example.bookshelf.ui.settings
 
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.SharedPreferences
-import android.media.VolumeShaper.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
-import androidx.core.os.LocaleListCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -34,7 +30,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
          prefManager = PreferenceManager.getDefaultSharedPreferences(requireContext())
-         prefListener = SharedPreferences.OnSharedPreferenceChangeListener { p0, p1 ->
+         prefListener = SharedPreferences.OnSharedPreferenceChangeListener { p0, _ ->
              val lan =  p0?.getString("language","en-us")
              val theme = p0?.getString("theme_color","bookshelf")
              val fontSize : Float? = p0?.getInt("text_font_size",1)?.div(12)?.toFloat()
@@ -64,7 +60,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     ): View {
         val defaultView =  super.onCreateView(inflater, container, savedInstanceState)
         val _view = inflater.inflate(R.layout.pre_template,container,false) as ViewGroup
-        var _container = _view.findViewById<FrameLayout>(R.id.setting_container)
+        val _container = _view.findViewById<FrameLayout>(R.id.setting_container)
         _container.addView(defaultView)
 
         return _view
@@ -154,11 +150,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
-    }
-
-    fun showSettingSelection(setting:String){
-        val toast = Toast.makeText(requireContext(),setting,Toast.LENGTH_LONG)
-        toast.show()
     }
 
 
