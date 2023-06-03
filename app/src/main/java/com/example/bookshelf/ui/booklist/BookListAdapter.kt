@@ -88,9 +88,6 @@ class BookListAdapter(
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val view = layoutInflater.inflate(R.layout.book_list_item, parent, false)
-//                view.setOnClickListener {
-//                    val directions = HomeFragmentDirections.actionNavHomeToBookDetailFragment()
-//                }
                 return ViewHolder(view)
             }
         }

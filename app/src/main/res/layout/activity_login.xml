@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
@@ -8,7 +7,6 @@
             name="viewModel"
             type="com.example.bookshelf.ui.login.LoginViewModel" />
     </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/LoginLayout"
         android:layout_width="match_parent"
@@ -19,7 +17,6 @@
         android:visibility="visible"
         app:circularflow_radiusInDP="100"
         tools:context=".ui.login.LoginActivity">
-
         <TextView
             android:id="@+id/loginError"
             android:layout_width="0dp"
@@ -88,7 +85,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="invalid email or not found "
+            android:text="@string/email_error_string"
             android:textAlignment="center"
             android:textColor="#DD2C00"
             android:textSize="12sp"
@@ -134,13 +131,13 @@
             style="@style/Widget.AppCompat.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             android:layout_marginHorizontal="40dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
             android:elevation="12dp"
             android:insetBottom="5dp"
             android:letterSpacing="0.2"
-            android:paddingStart="20sp"
-            android:paddingEnd="20sp"
             android:text="@string/login_button_text"
             app:barrierMargin="100dp"
             app:circularflow_angles="100"

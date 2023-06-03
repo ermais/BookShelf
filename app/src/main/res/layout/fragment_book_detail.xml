@@ -1,39 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="bookDetail"
             type="com.example.bookshelf.bussiness.model.Book" />
     </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.detail.BookDetailFragment">
-<!--        <com.google.android.material.appbar.AppBarLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content">-->
+        <!--        <com.google.android.material.appbar.AppBarLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content">-->
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbarBookDetail"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:theme="?attr/actionBarTheme"
-                app:title="@string/book_list_app_bar_title" />
-<!--        </com.google.android.material.appbar.AppBarLayout>-->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarBookDetail"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:title="@string/book_list_app_bar_title" />
+        <!--        </com.google.android.material.appbar.AppBarLayout>-->
 
         <ImageView
             android:id="@+id/imgBookCover"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="0.85"
+            android:contentDescription="@string/book_cover_desc"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_background"
-            android:contentDescription="@string/book_cover_desc" />
+            android:src="@drawable/ic_launcher_background" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -47,7 +48,7 @@
             app:cardCornerRadius="12dp"
             app:cardElevation="12dp"
             app:cardPreventCornerOverlap="false"
-            app:layout_anchorGravity="bottom" >
+            app:layout_anchorGravity="bottom">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -79,6 +80,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/txtViewBookTitle"
                     app:layout_constraintStart_toStartOf="@+id/txtViewBookTitle"
                     app:layout_constraintTop_toBottomOf="@+id/txtViewBookTitle" />
+
                 <TextView
                     android:id="@+id/txtViewBookDesc"
                     android:layout_width="0dp"

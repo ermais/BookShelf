@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context=".ui.home.HomeFragment"
-        >
-        <include android:id="@+id/appBarBookList" layout="@layout/book_list_app_bar" />
+        tools:context=".ui.home.HomeFragment">
+
+        <include
+            android:id="@+id/appBarBookList"
+            layout="@layout/book_list_app_bar" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            >
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/homeViewPager"
@@ -27,6 +28,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabCreateBook"
             android:layout_width="wrap_content"
@@ -34,8 +36,8 @@
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="@dimen/fab_margin"
             android:layout_marginBottom="16dp"
-            app:srcCompat="@android:drawable/ic_menu_add"
-            android:contentDescription="@string/navigate_to_create_book_fab_text" />
+            android:contentDescription="@string/navigate_to_create_book_fab_text"
+            app:srcCompat="@android:drawable/ic_menu_add" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

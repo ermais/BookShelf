@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 
-class CreateAccountViewModel(private val auth:FirebaseAuth):ViewModel() {
-    val displayName  by lazy {
+class CreateAccountViewModel(private val auth: FirebaseAuth) : ViewModel() {
+    val displayName by lazy {
         MutableLiveData<String>("")
     }
 
@@ -41,66 +41,66 @@ class CreateAccountViewModel(private val auth:FirebaseAuth):ViewModel() {
         MutableLiveData<Boolean>(false)
     }
 
-    fun validDisplayName(){
-        if (isValidDisplayName()){
+    fun validDisplayName() {
+        if (isValidDisplayName()) {
             showDisplayError.postValue(false)
-        }else{
+        } else {
             showDisplayError.postValue(true)
         }
     }
 
-    fun validEmail(){
-        if (isValidEmail()){
+    fun validEmail() {
+        if (isValidEmail()) {
             showEmailError.postValue(false)
-        }else{
+        } else {
             showEmailError.postValue(true)
         }
     }
 
-    fun validPassword(){
-        if (isValidPassword()){
+    fun validPassword() {
+        if (isValidPassword()) {
             showPasswordError.postValue(false)
-        }else{
+        } else {
             showPasswordError.postValue(true)
         }
     }
 
-    fun validConfirmPassword(){
-        if (isPasswordMatch()){
+    fun validConfirmPassword() {
+        if (isPasswordMatch()) {
             showConfirmPasswordError.postValue(false)
-        }else{
+        } else {
             showConfirmPasswordError.postValue(true)
         }
     }
 
-    fun isPasswordMatch():Boolean{
+    fun isPasswordMatch(): Boolean {
         return password.value!!.length == confirmPassword.value!!.length
     }
 
-    fun isValidPassword():Boolean{
+    fun isValidPassword(): Boolean {
         return password.value!!.length >= 8
     }
 
-    fun isValidDisplayName():Boolean{
-        return displayName.value!!.length >=4 || displayName.value!!.isEmpty()
+    fun isValidDisplayName(): Boolean {
+        return displayName.value!!.length >= 4 || displayName.value!!.isEmpty()
     }
 
-    fun isValidEmail():Boolean{
+    fun isValidEmail(): Boolean {
         return email.value!!.contains("@gmail.com")
     }
 
-    fun canICreate():Boolean{
+    fun canICreate(): Boolean {
         return isPasswordMatch() && isValidDisplayName() && isValidEmail() && isValidPassword()
     }
 
-    fun createUserEmailAndPassword(callbackOnSuccess:()->Unit,callbackOnFailure:()->Unit){
-        if (canICreate()){
-            auth.createUserWithEmailAndPassword(email.value!!,password.value!!)
+    fun createUserEmailAndPassword(callbackOnSuccess: () -> Unit, callbackOnFailure: () -> Unit) {
+        if (canICreate()) {
+            auth.createUserWithEmailAndPassword(email.value!!, password.value!!)
                 .addOnCompleteListener {
-                    if (it.isSuccessful){
+                    if (it.isSuccessful) {
                         showCreateAccountError.postValue(false)
                         callbackOnSuccess()
-                    }else{
+                    } else {
                         showCreateAccountError.postValue(true)
                         callbackOnFailure()
                     }

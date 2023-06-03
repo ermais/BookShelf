@@ -9,12 +9,13 @@ import com.example.bookshelf.bussiness.repository.book.BookListRepository
 @Suppress("UNCHECKED_CAST")
 class BookListViewModelFactory(
     private val bookListRepository: BookListRepository,
-    private val application: Application
+    private val isConnected : Boolean,
+    private val application: Application,
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(BookListViewModel::class.java)) {
-            return BookListViewModel(bookListRepository, application) as T
+            return BookListViewModel(bookListRepository, isConnected, application) as T
         } else {
             IllegalAccessException("Unknown Viewmodel class")
         }

@@ -16,7 +16,8 @@ import com.example.bookshelf.bussiness.db.MyBooksQuery
 import java.util.*
 
 @Suppress("DEPRECATION")
-class MyBooksAdapter(val activity: FragmentActivity) : RecyclerView.Adapter<MyBooksAdapter.ViewHolder>() {
+class MyBooksAdapter(val activity: FragmentActivity) :
+    RecyclerView.Adapter<MyBooksAdapter.ViewHolder>() {
 
     var myBooks = listOf<MyBooksQuery>()
         @SuppressLint("NotifyDataSetChanged")
@@ -37,8 +38,8 @@ class MyBooksAdapter(val activity: FragmentActivity) : RecyclerView.Adapter<MyBo
             activity.windowManager.defaultDisplay.getMetrics(dm)
             val dVH = dm.heightPixels
             val dVW = dm.widthPixels
-            val myBooksVH : Int = (dVH.div(3)).dec() - 20
-            val myBooksVW : Int = (dVW.div(2)).dec() - 20
+            val myBooksVH: Int = (dVH.div(3)).dec() - 20
+            val myBooksVW: Int = (dVW.div(2)).dec() - 20
             myBooksLayout.minHeight = myBooksVH
             myBooksLayout.maxWidth = myBooksVW
             tvMyBookTitle.text = myBooks.title
@@ -65,6 +66,6 @@ class MyBooksAdapter(val activity: FragmentActivity) : RecyclerView.Adapter<MyBo
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(myBooks[position],activity)
+        holder.bind(myBooks[position], activity)
     }
 }

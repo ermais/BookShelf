@@ -28,8 +28,8 @@ object Utils {
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun bookShelfDateFormatter(date: Date):String{
-        val df = DateFormat.getDateInstance(DateFormat.RELATIVE_MEDIUM,Locale.US)
+    fun bookShelfDateFormatter(date: Date): String {
+        val df = DateFormat.getDateInstance(DateFormat.RELATIVE_MEDIUM, Locale.US)
         val stringDate = df.format(date)
         return stringDate
     }

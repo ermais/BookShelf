@@ -1,5 +1,6 @@
 package com.example.bookshelf.ui.main
 
+import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
@@ -43,11 +44,11 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
     private lateinit var connMgr: ConnectivityManager
     private lateinit var locale: Locale
     private lateinit var prefListener: SharedPreferences.OnSharedPreferenceChangeListener
-    private lateinit var prefManager : SharedPreferences
+    private lateinit var prefManager: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         prefManager = PreferenceManager.getDefaultSharedPreferences(this)
-        val theme = prefManager.getString("theme_color","bookshelf")
+        val theme = prefManager.getString("theme_color", "bookshelf")
         setCustomTheme(theme.toString())
         super.onCreate(savedInstanceState)
 
@@ -59,17 +60,17 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
          * set up language configuration here to localization and internalization
          */
 
-        val lang = prefManager.getString("language","en-us")
+        val lang = prefManager.getString("language", "en-us")
         setupLan(lang)
-        val fontSize = prefManager.getInt("text_font_size",1).div(12).toFloat()
+        val fontSize = prefManager.getInt("text_font_size", 1).div(12).toFloat()
         setCustomFontSize(fontSize)
-        val isNight = prefManager.getBoolean("night_mode",false)
+        val isNight = prefManager.getBoolean("night_mode", false)
         _setCustomNightMode(isNight)
         prefListener = SharedPreferences.OnSharedPreferenceChangeListener { p0, p1 ->
             val lan = p0?.getString("language", "en-us")
-            val _theme = p0?.getString("theme_color","bookshelf")
-            val _fontSize = p0?.getInt("text_font_size",1)?.div(12)?.toFloat()
-            val isNight = p0?.getBoolean("night_mode",false)
+            val _theme = p0?.getString("theme_color", "bookshelf")
+            val _fontSize = p0?.getInt("text_font_size", 1)?.div(12)?.toFloat()
+            val isNight = p0?.getBoolean("night_mode", false)
             setupLan(lan)
             _theme?.let {
                 setCustomTheme(it)
@@ -104,26 +105,26 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
     }
 
     private fun setCustomTheme(theme: String) {
-            when(theme){
-                "bookshelf" -> {
-                    setTheme(R.style.Theme_BookShelf)
-                }
-                "bookshelf_green_dark" -> {
-                    setTheme(R.style.Theme_BookShelf_GreenDark)
-                }
-                "bookshelf_light_dark" -> {
-                    setTheme(R.style.Theme_BookShelf_LightDark)
-                }
-                "bookshelf_orange_dark" -> {
-                    setTheme(R.style.Theme_BookShelf_OrangeDark)
-                }
-                "bookshelf_white" ->{
-                    setTheme(R.style.Theme_BookShelf_White)
-                }
-                else ->{
-                    setTheme(R.style.Theme_BookShelf)
-                }
+        when (theme) {
+            "bookshelf" -> {
+                setTheme(R.style.Theme_BookShelf)
             }
+            "bookshelf_green_dark" -> {
+                setTheme(R.style.Theme_BookShelf_GreenDark)
+            }
+            "bookshelf_light_dark" -> {
+                setTheme(R.style.Theme_BookShelf_LightDark)
+            }
+            "bookshelf_orange_dark" -> {
+                setTheme(R.style.Theme_BookShelf_OrangeDark)
+            }
+            "bookshelf_white" -> {
+                setTheme(R.style.Theme_BookShelf_White)
+            }
+            else -> {
+                setTheme(R.style.Theme_BookShelf)
+            }
+        }
     }
 
 
@@ -174,12 +175,13 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
         _binding = null
     }
 
+    @SuppressLint("AppCompatMethod")
     @Deprecated("Deprecated in Java")
     override fun onAttachFragment(fragment: android.app.Fragment?) {
         super.onAttachFragment(fragment)
         println("Get attaching fragment ------------------------------------")
         println(fragment)
-        if (actionBar != null) {
+        this.actionBar?.let {
             val drawerLayout = binding.drawerLayout
             val navView = binding.navView
             val navController = findNavController(R.id.nav_host_fragment_content_main)
@@ -211,7 +213,7 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
     override fun onResume() {
         super.onResume()
         prefManager.registerOnSharedPreferenceChangeListener(prefListener)
-        if (actionBar != null) {
+        actionBar?.let {
             println("onResume-------------------------------------------------")
             val drawerLayout = binding.drawerLayout
             val navView = binding.navView
@@ -245,7 +247,7 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
 
     override fun applyOverrideConfiguration(overrideConfiguration: Configuration?) {
 
-        if (overrideConfiguration != null){
+        if (overrideConfiguration != null) {
             val uiMode = overrideConfiguration.uiMode
             overrideConfiguration.setTo(baseContext.resources.configuration)
             overrideConfiguration.uiMode = uiMode
@@ -253,7 +255,7 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
         super.applyOverrideConfiguration(overrideConfiguration)
     }
 
-    fun setupLan(lan:String?){
+    fun setupLan(lan: String?) {
         if (lan.equals("not-set")) locale = Locale.getDefault()
         else
             locale = Locale(lan.toString())
@@ -265,27 +267,27 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
 
     }
 
-    private fun setCustomFontSize(fontSize : Float){
+    private fun setCustomFontSize(fontSize: Float) {
         val _context = baseContext
         val config = _context.resources.configuration
         config.fontScale = fontSize
         val metrics = resources.displayMetrics
-        val wm : WindowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val wm: WindowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         wm.defaultDisplay.getMetrics(metrics)
-        metrics.scaledDensity  = config.fontScale * metrics.density
+        metrics.scaledDensity = config.fontScale * metrics.density
         _context.createConfigurationContext(config)
         _context.resources.displayMetrics.setTo(metrics)
     }
 
-    private fun _setCustomNightMode(isNight: Boolean){
-        val vm : WindowManager  = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    private fun _setCustomNightMode(isNight: Boolean) {
+        val vm: WindowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val metrics = resources.displayMetrics
         vm.defaultDisplay.getMetrics(metrics)
         val config = baseContext.resources.configuration
         val context = baseContext
-        if (isNight){
+        if (isNight) {
             config.uiMode = Configuration.UI_MODE_NIGHT_YES
-        }else{
+        } else {
             config.uiMode = Configuration.UI_MODE_NIGHT_NO
         }
         context.createConfigurationContext(config)

@@ -1,4 +1,3 @@
-
 <resources>
     <color name="seed">#78919c</color>
     <color name="md_theme_light_primary">#006780</color>
@@ -64,8 +63,7 @@
     <color name="CustomColor1">#A4A4A4</color>
 
 
-
-<!--    <color name="seed">#006e58</color>-->
+    <!--    <color name="seed">#006e58</color>-->
     <color name="dgreen_theme_light_primary">#006B56</color>
     <color name="dgreen_theme_light_onPrimary">#FFFFFF</color>
     <color name="dgreen_theme_light_primaryContainer">#7EF8D4</color>
@@ -128,8 +126,7 @@
     <color name="dgreen_theme_dark_scrim">#000000</color>
 
 
-
-<!--    <color name="seed">#f77600</color>-->
+    <!--    <color name="seed">#f77600</color>-->
     <color name="dark_orange_theme_light_primary">#994700</color>
     <color name="dark_orange_theme_light_onPrimary">#FFFFFF</color>
     <color name="dark_orange_theme_light_primaryContainer">#FFDBC8</color>
@@ -192,7 +189,7 @@
     <color name="dark_orange_theme_dark_scrim">#000000</color>
 
 
-<!--    <color name="seed">#22161a</color>-->
+    <!--    <color name="seed">#22161a</color>-->
     <color name="light_dark_theme_light_primary">#974065</color>
     <color name="light_dark_theme_light_onPrimary">#FFFFFF</color>
     <color name="light_dark_theme_light_primaryContainer">#FFD9E4</color>
@@ -255,7 +252,7 @@
     <color name="light_dark_theme_dark_scrim">#000000</color>
 
 
-<!--    <color name="seed">#fdf8ff</color>-->
+    <!--    <color name="seed">#fdf8ff</color>-->
     <color name="white_theme_light_primary">#5F52A7</color>
     <color name="white_theme_light_onPrimary">#FFFFFF</color>
     <color name="white_theme_light_primaryContainer">#E5DEFF</color>

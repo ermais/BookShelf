@@ -48,9 +48,4 @@ interface BookDao {
     @Query("SELECT * FROM books WHERE title = :title")
     fun getBook(title: String): Flow<BookEntity>
 
-//
-//    @Transaction
-//    @Query("SELECT * FROM books")
-//    fun getAllDownloads(): Flow<List<BookAndDownloads>>
-
 }

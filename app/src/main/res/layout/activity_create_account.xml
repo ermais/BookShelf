@@ -2,230 +2,230 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:visibility="gone">
+    android:visibility="visible">
 
-        <data>
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.bookshelf.ui.createaccount.CreateAccountViewModel" />
+    </data>
 
-                <variable
-                    name="viewModel"
-                    type="com.example.bookshelf.ui.createaccount.CreateAccountViewModel" />
-        </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/padding"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="20dp"
+        android:paddingTop="10dp"
+        android:theme="@style/Theme.BookShelf"
+        tools:context=".ui.createaccount.CreateAccountActivity">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/padding"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="50dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="643dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineVerStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="32dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineVerEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="32dp" />
+
+        <EditText
+            android:id="@+id/editTextUserName"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:autofillHints=""
+            android:drawableEnd="@drawable/ic_baseline_account_circle_24"
+            android:hint="@string/display_name_hint"
+            android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
+            android:selectAllOnFocus="true"
+
+            android:singleLine="true"
+            android:text="@={viewModel.displayName}"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineVerEnd"
+            app:layout_constraintStart_toStartOf="@+id/guidelineVerStart"
+            app:layout_constraintTop_toTopOf="@+id/guidelineTop"
+            tools:ignore="LabelFor" />
+
+        <TextView
+            android:id="@+id/tvDisplayNameError"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:labelFor="@id/editTextEmail"
+            android:text="@string/dsplay_name_error_string"
+            android:textColor="#C62828"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/guidelineVerEnd"
+            app:layout_constraintStart_toStartOf="@id/guidelineVerStart"
+            app:layout_constraintTop_toBottomOf="@+id/editTextUserName" />
+
+        <EditText
+            android:id="@+id/editTextEmail"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:autofillHints=""
+            android:drawableEnd="@drawable/ic_baseline_email_24"
+            android:ellipsize="start"
+            android:ems="10"
+            android:hint="@string/user_email_string"
+            android:inputType="textPersonName"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:text="@={viewModel.email}"
+            app:layout_constraintEnd_toEndOf="@+id/guidelineVerEnd"
+            app:layout_constraintStart_toStartOf="@+id/guidelineVerStart"
+            app:layout_constraintTop_toBottomOf="@+id/tvDisplayNameError"
+            tools:ignore="LabelFor,TextFields" />
+
+        <TextView
+            android:id="@+id/tvEmailError"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:labelFor="@id/editTextEmail"
+            android:text="@string/email_error_string"
+            android:textColor="#C62828"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/guidelineVerEnd"
+            app:layout_constraintStart_toStartOf="@id/guidelineVerStart"
+            app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
+
+        <EditText
+            android:id="@+id/editTextPassword"
+            style="@android:style/Widget.Material.Light.EditText"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:autofillHints=""
+            android:drawableEnd="@drawable/ic_baseline_lock_24"
+            android:ems="10"
+            android:hint="@string/password_hint"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:text="@={viewModel.password}"
+            app:layout_constraintEnd_toEndOf="@+id/guidelineVerEnd"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guidelineVerStart"
+            app:layout_constraintTop_toBottomOf="@+id/tvEmailError"
+            tools:ignore="LabelFor" />
+
+        <TextView
+            android:id="@+id/tvPasswordError"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:labelFor="@id/editTextEmail"
+            android:text="@string/create_password_error_string"
+            android:textColor="#C62828"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/guidelineVerEnd"
+            app:layout_constraintStart_toStartOf="@id/guidelineVerStart"
+            app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
+
+        <EditText
+            android:id="@+id/editTextConfirmPassword"
+            style="@android:style/Widget.Material.Light.EditText"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:autofillHints=""
+            android:drawableEnd="@drawable/ic_baseline_lock_24"
+            android:ems="10"
+            android:hint="@string/password_hint"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:text="@={viewModel.confirmPassword}"
+            app:layout_constraintEnd_toEndOf="@+id/guidelineVerEnd"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guidelineVerStart"
+            app:layout_constraintTop_toBottomOf="@+id/tvPasswordError"
+            tools:ignore="LabelFor" />
+
+        <TextView
+            android:id="@+id/tvConfirmPasswordError"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:labelFor="@id/editTextEmail"
+            android:text="@string/confirm_password_error_string"
+            android:textColor="#C62828"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/guidelineVerEnd"
+            app:layout_constraintStart_toStartOf="@id/guidelineVerStart"
+            app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword" />
+
+        <Button
+            android:id="@+id/btnCreateAccount"
+            style="@style/Theme.BookShelf"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
             android:elevation="20dp"
+            android:includeFontPadding="true"
+            android:letterSpacing="0.025"
             android:paddingTop="10dp"
-            android:theme="@style/Theme.BookShelf"
-            tools:context=".ui.createaccount.CreateAccountActivity">
+            android:paddingBottom="10dp"
+            android:text="@string/create_account_string"
+            android:textAllCaps="true"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineVerEnd"
+            app:layout_constraintStart_toStartOf="@+id/guidelineVerStart"
+            app:layout_constraintTop_toBottomOf="@+id/tvConfirmPasswordError" />
 
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guidelineTop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_begin="50dp" />
+        <Button
+            android:id="@+id/btnForgetPassword"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:fontFamily="sans-serif-light"
+            android:letterSpacing="0.025"
+            android:text="@string/forget_password_string"
+            android:textAllCaps="true"
+            app:layout_constraintEnd_toEndOf="@+id/btnCreateAccount"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/btnCreateAccount"
+            app:layout_constraintTop_toBottomOf="@+id/btnCreateAccount" />
 
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guidelineBottom"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_begin="643dp" />
+        <Button
+            android:id="@+id/btnHaveAccount"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:fontFamily="sans-serif-light"
+            android:letterSpacing="0.025"
+            android:text="@string/have_an_account_string"
+            android:textAllCaps="true"
+            app:layout_constraintEnd_toEndOf="@+id/btnCreateAccount"
+            app:layout_constraintStart_toStartOf="@+id/btnCreateAccount"
+            app:layout_constraintTop_toBottomOf="@+id/btnForgetPassword" />
 
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guidelineVerStart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_begin="32dp" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guidelineVerEnd"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_end="32dp" />
-
-                <EditText
-                    android:id="@+id/editTextUserName"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:autofillHints=""
-                    android:drawableEnd="@drawable/ic_baseline_account_circle_24"
-                    android:hint="@string/display_name_hint"
-                    android:importantForAutofill="no"
-                    android:inputType="textEmailAddress"
-                    android:selectAllOnFocus="true"
-                    android:singleLine="true"
-
-                    android:text="@={viewModel.displayName}"
-                    app:layout_constraintEnd_toStartOf="@+id/guidelineVerEnd"
-                    app:layout_constraintStart_toStartOf="@+id/guidelineVerStart"
-                    app:layout_constraintTop_toTopOf="@+id/guidelineTop"
-                    tools:ignore="LabelFor" />
-
-                <TextView
-                    android:id="@+id/tvDisplayNameError"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:labelFor="@id/editTextEmail"
-                    android:text="Display name should be at least 4 character or empty"
-                    android:textColor="#C62828"
-                    android:textSize="12sp"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="@id/guidelineVerEnd"
-                    app:layout_constraintStart_toStartOf="@id/guidelineVerStart"
-                    app:layout_constraintTop_toBottomOf="@+id/editTextUserName" />
-
-                <EditText
-                    android:id="@+id/editTextEmail"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:autofillHints=""
-                    android:drawableEnd="@drawable/ic_baseline_email_24"
-                    android:ellipsize="start"
-                    android:ems="10"
-                    android:hint="@string/user_email_string"
-                    android:inputType="textPersonName"
-                    android:selectAllOnFocus="true"
-                    android:singleLine="true"
-                    android:text="@={viewModel.email}"
-                    app:layout_constraintEnd_toEndOf="@+id/guidelineVerEnd"
-                    app:layout_constraintStart_toStartOf="@+id/guidelineVerStart"
-                    app:layout_constraintTop_toBottomOf="@+id/tvDisplayNameError"
-                    tools:ignore="LabelFor,TextFields" />
-
-                <TextView
-                    android:id="@+id/tvEmailError"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:labelFor="@id/editTextEmail"
-                    android:text="invlaid email or email not found"
-                    android:textColor="#C62828"
-                    android:textSize="12sp"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="@id/guidelineVerEnd"
-                    app:layout_constraintStart_toStartOf="@id/guidelineVerStart"
-                    app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
-
-                <EditText
-                    android:id="@+id/editTextPassword"
-                    style="@android:style/Widget.Material.Light.EditText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:autofillHints=""
-                    android:drawableEnd="@drawable/ic_baseline_lock_24"
-                    android:ems="10"
-                    android:hint="@string/password_hint"
-                    android:inputType="textPassword"
-                    android:singleLine="true"
-                    android:text="@={viewModel.password}"
-                    app:layout_constraintEnd_toEndOf="@+id/guidelineVerEnd"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/guidelineVerStart"
-                    app:layout_constraintTop_toBottomOf="@+id/tvEmailError"
-                    tools:ignore="LabelFor" />
-
-                <TextView
-                    android:id="@+id/tvPasswordError"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:labelFor="@id/editTextEmail"
-                    android:text="password must be at least 8 character and include A-Z, 0-9,! # @ % ^ & *"
-                    android:textColor="#C62828"
-                    android:textSize="12sp"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="@id/guidelineVerEnd"
-                    app:layout_constraintStart_toStartOf="@id/guidelineVerStart"
-                    app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
-
-                <EditText
-                    android:id="@+id/editTextConfirmPassword"
-                    style="@android:style/Widget.Material.Light.EditText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:autofillHints=""
-                    android:drawableEnd="@drawable/ic_baseline_lock_24"
-                    android:ems="10"
-                    android:hint="@string/password_hint"
-                    android:inputType="textPassword"
-                    android:singleLine="true"
-                    android:text="@={viewModel.confirmPassword}"
-                    app:layout_constraintEnd_toEndOf="@+id/guidelineVerEnd"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/guidelineVerStart"
-                    app:layout_constraintTop_toBottomOf="@+id/tvPasswordError"
-                    tools:ignore="LabelFor" />
-
-                <TextView
-                    android:id="@+id/tvConfirmPasswordError"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:labelFor="@id/editTextEmail"
-                    android:text="password doesn't match"
-                    android:textColor="#C62828"
-                    android:textSize="12sp"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="@id/guidelineVerEnd"
-                    app:layout_constraintStart_toStartOf="@id/guidelineVerStart"
-                    app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword" />
-
-                <Button
-                    android:id="@+id/btnCreateAccount"
-                    style="@style/Theme.BookShelf"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginEnd="32dp"
-                    android:elevation="20dp"
-                    android:includeFontPadding="true"
-                    android:letterSpacing="0.025"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:text="@string/create_account_string"
-                    android:textAllCaps="true"
-                    app:layout_constraintEnd_toStartOf="@+id/guidelineVerEnd"
-                    app:layout_constraintStart_toStartOf="@+id/guidelineVerStart"
-                    app:layout_constraintTop_toBottomOf="@+id/tvConfirmPasswordError" />
-
-                <Button
-                    android:id="@+id/btnForgetPassword"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
-                    android:fontFamily="sans-serif-light"
-                    android:letterSpacing="0.025"
-                    android:text="@string/forget_password_string"
-                    android:textAllCaps="true"
-                    app:layout_constraintEnd_toEndOf="@+id/btnCreateAccount"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="@+id/btnCreateAccount"
-                    app:layout_constraintTop_toBottomOf="@+id/btnCreateAccount" />
-
-                <Button
-                    android:id="@+id/btnHaveAccount"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="320dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="28dp"
-                    android:fontFamily="sans-serif-light"
-                    android:letterSpacing="0.025"
-                    android:text="@string/have_an_account_string"
-                    android:textAllCaps="true"
-                    app:layout_constraintEnd_toEndOf="@+id/btnCreateAccount"
-                    app:layout_constraintStart_toStartOf="@+id/btnCreateAccount"
-                    app:layout_constraintTop_toBottomOf="@+id/btnForgetPassword" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

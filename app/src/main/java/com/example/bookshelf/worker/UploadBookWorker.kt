@@ -22,7 +22,7 @@ class UploadBookWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker
 
         return suspendCoroutine { continuation ->
             var downloadUri: Uri? = null
-            var bookUriString = inputData.getString(KEY_BOOK_URI) ?: ""
+            val bookUriString = inputData.getString(KEY_BOOK_URI) ?: ""
             println("Logging, Uri from file-------------------------------------")
             println(bookUriString)
             val bookUri = Uri.parse(bookUriString)
@@ -30,7 +30,6 @@ class UploadBookWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker
             val storageRef = FirebaseStorage.getInstance().reference
             val imageRef = storageRef.child("BookDoc/${bookTitle}/bookUri")
             val uploadTask = imageRef.putFile(bookUri as Uri)
-
             uploadTask
                 .addOnFailureListener {
                     continuation.resumeWithException(it)

@@ -2,8 +2,8 @@
     <string name="app_name">BookShelf</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
-    <string name="nav_header_title" translatable="false">Android Studio</string>
-    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
+    <string name="nav_header_title" translatable="false">Ermias Mesfin </string>
+    <string name="nav_header_subtitle" translatable="false">ermiasmesfintech@gmail.com</string>
     <string name="nav_header_desc" translatable="false">Navigation header</string>
     <string name="action_settings">SignOut</string>
 
@@ -111,4 +111,8 @@
     <string name="my_books_app_bar_title_string">My Books</string>
     <string name="password_or_email_is_not_correct_string">password or email is not correct</string>
     <string name="password_error_string">invalid password, It must be at least 8 character</string>
+    <string name="email_error_string">invalid email or not found</string>
+    <string name="dsplay_name_error_string">Display name should be at least 4 character or empty</string>
+    <string name="create_password_error_string"><![CDATA[password must be at least 8 character and include A-Z, 0-9,! # @ % ^ & *]]></string>
+    <string name="confirm_password_error_string">password doesn\'t match</string>
 </resources>

@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.example.bookshelf.R
 import com.example.bookshelf.databinding.ActivityLoginBinding
+import com.example.bookshelf.ui.createaccount.CreateAccountActivity
 import com.example.bookshelf.ui.main.MainActivity
 import com.example.bookshelf.util.getConnMgr
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -146,6 +147,10 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+        binding.btnCreateUser.setOnClickListener {
+            val intent = Intent(this,CreateAccountActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     @Deprecated("Deprecated in Java")

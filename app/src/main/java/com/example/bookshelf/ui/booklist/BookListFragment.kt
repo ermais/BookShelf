@@ -1,6 +1,7 @@
 package com.example.bookshelf.ui.booklist
 
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -32,6 +33,8 @@ import com.example.bookshelf.ui.Utils.showSnackBar
 import com.example.bookshelf.ui.home.HomeViewModel
 import com.example.bookshelf.ui.main.MainActivity
 import com.example.bookshelf.ui.main.MainViewModel
+import com.example.bookshelf.util.NetworkStatus
+import com.example.bookshelf.util.getConnMgr
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -52,6 +55,8 @@ class BookListFragment : Fragment() {
     private lateinit var bookShelDb: BookDatabase
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private var toolbar: Toolbar? = null
+    private var isConnected  = false
+    private lateinit var  _connMgr : ConnectivityManager
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -69,12 +74,16 @@ class BookListFragment : Fragment() {
         db = Firebase.firestore
         cloudStorage = FirebaseStorage.getInstance()
         firestoreBookDataSource = FirestoreBookDataSource(db, cloudStorage)
+        activity?.let {
+            _connMgr = getConnMgr(requireContext(),it::getSystemService)
+        }
+        isConnected = NetworkStatus.isConnected(_connMgr)
         bookShelDb = BookDatabase.getDatabase(requireContext())
-        bookListRepository = BookListRepository(firestoreBookDataSource, bookShelDb)
+        bookListRepository = BookListRepository(firestoreBookDataSource, bookShelDb, _connMgr)
         val bookListViewModelFactory =
-            BookListViewModelFactory(bookListRepository, requireNotNull(activity).application)
+            BookListViewModelFactory(bookListRepository,isConnected, requireNotNull(activity).application)
         bookListModel =
-            ViewModelProvider(this, bookListViewModelFactory).get(BookListViewModel::class.java)
+            ViewModelProvider(this, bookListViewModelFactory)[BookListViewModel::class.java]
 
         val adapter = BookListAdapter(requireContext()) { view, downloadUri, bookTitle, bookId ->
             when {
@@ -118,7 +127,7 @@ class BookListFragment : Fragment() {
 
         }
         activity?.let {
-            mainViewModel = ViewModelProvider(it).get(MainViewModel::class.java)
+            mainViewModel = ViewModelProvider(it)[MainViewModel::class.java]
         }
 
 
@@ -156,7 +165,7 @@ class BookListFragment : Fragment() {
         }
 
         homeViewModel.sortBy.observe(viewLifecycleOwner) {
-            Log.d("HOMEVIEWMODEL", it)
+            Log.d("HOME_VIEW_MODEL", it)
             when (it) {
                 "date" -> bookListModel.sortByPubDate()
                 "author" -> bookListModel.sortByAuthor()
@@ -203,7 +212,7 @@ class BookListFragment : Fragment() {
         toolbar = view.findViewById(R.id.toolbarBookList)
         val drawerLayout = mainActivity.findViewById<DrawerLayout>(R.id.drawer_layout)
         val appBarConfiguration = AppBarConfiguration(findNavController().graph, drawerLayout)
-        if(toolbar != null){
+        if (toolbar != null) {
             mainActivity.setupActionBarWithNavController(findNavController(), appBarConfiguration)
 
         }
@@ -237,7 +246,7 @@ class BookListFragment : Fragment() {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         homeViewModel.sortBy.observe(viewLifecycleOwner) {
-            Log.d("HOMEVIEWMODEL", it)
+            Log.d("HOME_VIEW_MODEL", it)
             when (it) {
                 "date" -> bookListModel.sortByPubDate()
                 "author" -> bookListModel.sortByAuthor()

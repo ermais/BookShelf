@@ -1,5 +1,5 @@
-
 <resources>
+
     <style name="Theme.BookShelf" parent="Theme.Material3.Dark.NoActionBar">
         <item name="colorPrimary">@color/md_theme_dark_primary</item>
         <item name="colorOnPrimary">@color/md_theme_dark_onPrimary</item>
@@ -76,11 +76,13 @@
         <item name="colorSecondary">@color/dark_orange_theme_dark_secondary</item>
         <item name="colorOnSecondary">@color/dark_orange_theme_dark_onSecondary</item>
         <item name="colorSecondaryContainer">@color/dark_orange_theme_dark_secondaryContainer</item>
-        <item name="colorOnSecondaryContainer">@color/dark_orange_theme_dark_onSecondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/dark_orange_theme_dark_onSecondaryContainer
+        </item>
         <item name="colorTertiary">@color/dark_orange_theme_dark_tertiary</item>
         <item name="colorOnTertiary">@color/dark_orange_theme_dark_onTertiary</item>
         <item name="colorTertiaryContainer">@color/dark_orange_theme_dark_tertiaryContainer</item>
-        <item name="colorOnTertiaryContainer">@color/dark_orange_theme_dark_onTertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/dark_orange_theme_dark_onTertiaryContainer
+        </item>
         <item name="colorError">@color/dark_orange_theme_dark_error</item>
         <item name="colorErrorContainer">@color/dark_orange_theme_dark_errorContainer</item>
         <item name="colorOnError">@color/dark_orange_theme_dark_onError</item>
@@ -105,11 +107,13 @@
         <item name="colorSecondary">@color/light_dark_theme_dark_secondary</item>
         <item name="colorOnSecondary">@color/light_dark_theme_dark_onSecondary</item>
         <item name="colorSecondaryContainer">@color/light_dark_theme_dark_secondaryContainer</item>
-        <item name="colorOnSecondaryContainer">@color/light_dark_theme_dark_onSecondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/light_dark_theme_dark_onSecondaryContainer
+        </item>
         <item name="colorTertiary">@color/light_dark_theme_dark_tertiary</item>
         <item name="colorOnTertiary">@color/light_dark_theme_dark_onTertiary</item>
         <item name="colorTertiaryContainer">@color/light_dark_theme_dark_tertiaryContainer</item>
-        <item name="colorOnTertiaryContainer">@color/light_dark_theme_dark_onTertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/light_dark_theme_dark_onTertiaryContainer
+        </item>
         <item name="colorError">@color/light_dark_theme_dark_error</item>
         <item name="colorErrorContainer">@color/light_dark_theme_dark_errorContainer</item>
         <item name="colorOnError">@color/light_dark_theme_dark_onError</item>

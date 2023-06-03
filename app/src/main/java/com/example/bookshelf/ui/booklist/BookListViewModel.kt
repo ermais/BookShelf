@@ -2,7 +2,11 @@ package com.example.bookshelf.ui.booklist
 
 import android.app.Application
 import android.net.Uri
-import androidx.lifecycle.*
+import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.work.*
 import com.example.bookshelf.bussiness.db.BookEntity
 import com.example.bookshelf.bussiness.db.DownloadEntity
@@ -17,7 +21,8 @@ import kotlinx.coroutines.launch
 
 class BookListViewModel(
     private val bookListRepository: BookListRepository,
-    application: Application
+    private val isConnected : Boolean,
+    private val application: Application,
 ) : ViewModel() {
     internal var books: MutableLiveData<List<BookEntity>> =
         bookListRepository.getOfflineBooks().asLiveData() as MutableLiveData<List<BookEntity>>
@@ -29,25 +34,32 @@ class BookListViewModel(
     }
 
 
-
     fun downloadBook(downloadUri: Uri, bookTitle: String, bookId: String) = viewModelScope.launch {
+        if (isConnected){
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .setRequiresBatteryNotLow(true)
+                .setRequiresStorageNotLow(true)
+                .build()
+            val downloadWorkRequest = OneTimeWorkRequestBuilder<DownloadBookWorker>()
+                .setConstraints(constraints)
+                .setInputData(inputDownloadData(downloadUri, bookTitle, bookId))
+                .addTag(DOWNLOAD_BOOK_WORKER_TAG)
+                .build()
+            workManager.enqueue(downloadWorkRequest)
+        }else{
 
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresBatteryNotLow(true)
-            .setRequiresStorageNotLow(true)
-            .build()
-        val downloadWorkRequest = OneTimeWorkRequestBuilder<DownloadBookWorker>()
-            .setConstraints(constraints)
-            .setInputData(inputDownloadData(downloadUri, bookTitle, bookId))
-            .addTag(DOWNLOAD_BOOK_WORKER_TAG)
-            .build()
-        workManager.enqueue(downloadWorkRequest)
+        }
+
     }
 
+     private fun refreshCallback(){
+        val toast = Toast.makeText(application,"lost connection !, check your connection",Toast.LENGTH_LONG)
+        toast.show()
+    }
 
     private fun refreshBooks() = viewModelScope.launch(Dispatchers.IO) {
-        bookListRepository.refreshBooks()
+        bookListRepository.refreshBooks(::refreshCallback)
     }
 
 
@@ -93,7 +105,6 @@ class BookListViewModel(
     }
 
 
-
     private fun inputDownloadData(downloadUri: Uri, bookTitle: String, bookId: String): Data {
         val builder = Data.Builder()
         builder.putString(KEY_DOWNLOAD_BOOK_URI, downloadUri.toString())
@@ -101,4 +112,6 @@ class BookListViewModel(
         builder.putString(KEY_BOOK_ID, bookId)
         return builder.build()
     }
+
+
 }

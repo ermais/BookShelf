@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
         <variable
             name="viewModel"
@@ -17,6 +18,8 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="108dp"
             android:layout_height="110dp"
+            android:elevation="4dp"
+            android:progressBackgroundTint="@android:color/holo_orange_dark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,16 +30,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
-            android:fontFamily="@font/akaya_telivigala"
             android:hint="@string/book_title_hint"
             android:inputType="text"
             android:padding="16dp"
             android:text="@={viewModel.bookTitle}"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -45,8 +45,7 @@
             android:id="@+id/svCategory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="39dp"
-            android:fontFamily="@font/akaya_telivigala"
+            android:layout_marginTop="24dp"
             android:padding="16dp"
             android:paddingStart="2dp"
             app:layout_constraintEnd_toEndOf="@+id/teBookTitle"
@@ -59,16 +58,14 @@
             android:id="@+id/teDesc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="24dp"
             android:ems="10"
-            android:fontFamily="@font/akaya_telivigala"
             android:gravity="start|top"
             android:hint="@string/book_desc_hint"
             android:inputType="textMultiLine"
             android:lines="4"
             android:padding="16dp"
             android:text="@={viewModel.bookDesc}"
-            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@+id/svCategory"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/svCategory"
@@ -78,10 +75,9 @@
         <TextView
             android:id="@+id/bookTitleTextError"
             android:layout_width="0dp"
-            android:text="@={viewModel.bookTitleError}"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:fontFamily="@font/akaya_telivigala"
+            android:text="@={viewModel.bookTitleError}"
             app:layout_constraintEnd_toEndOf="@+id/teBookTitle"
             app:layout_constraintStart_toStartOf="@+id/teBookTitle"
             app:layout_constraintTop_toBottomOf="@+id/teBookTitle" />
@@ -102,9 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:elevation="4dp"
-            android:fontFamily="@font/akaya_telivigala"
             android:text="@string/set_book_cover_btn_text"
-            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@+id/teDesc"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/teDesc"
@@ -114,29 +108,47 @@
             android:id="@+id/btnUploadBook"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/akaya_telivigala"
+            android:layout_marginTop="32dp"
             android:text="@string/upload_book_doc_button_text"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="@+id/teDesc"
+            app:layout_constraintEnd_toEndOf="@+id/btnBookCover"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/teDesc"
+            app:layout_constraintStart_toStartOf="@+id/btnBookCover"
             app:layout_constraintTop_toBottomOf="@+id/btnBookCover" />
+
+        <TextView
+            android:id="@+id/tvUploadedBook"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="your published book!"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/btnUploadBook"
+            app:layout_constraintStart_toStartOf="@+id/btnUploadBook"
+            app:layout_constraintTop_toBottomOf="@+id/btnUploadBook" />
 
         <Button
             android:id="@+id/btnAddBook"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="32dp"
             android:drawableStart="@drawable/ic_baseline_check_24"
             android:elevation="4dp"
-            android:fontFamily="@font/akaya_telivigala"
             android:gravity="center"
             android:text="@string/save_button_text"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="@+id/teDesc"
-            app:layout_constraintStart_toStartOf="@+id/teDesc"
-            app:layout_constraintTop_toBottomOf="@+id/bookDocUriTextError" />
+            app:layout_constraintEnd_toEndOf="@+id/btnUploadBook"
+            app:layout_constraintStart_toStartOf="@+id/btnUploadBook"
+            app:layout_constraintTop_toBottomOf="@+id/btnUploadBook" />
+
+        <TextView
+            android:id="@+id/tvUploadedBookCover"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="your book cover"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/btnBookCover"
+            app:layout_constraintStart_toStartOf="@+id/btnBookCover"
+            app:layout_constraintTop_toBottomOf="@+id/btnBookCover" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

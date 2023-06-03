@@ -18,8 +18,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
-import androidx.viewpager.widget.ViewPager
-import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.example.bookshelf.HomeTabAdapter
 import com.example.bookshelf.R
 import com.example.bookshelf.databinding.FragmentHomeBinding
@@ -136,23 +134,27 @@ class HomeFragment : Fragment() {
             }
         }
         val homeTabs = binding.appBarBookList.homeTabs
-        homeTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+        homeTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 tab?.position?.let { binding.homeViewPager.currentItem = it }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
-                TODO("Not yet implemented")
+                tab?.position?.let {
+                    binding.homeViewPager.isSelected = false
+                }
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
-                TODO("Not yet implemented")
+                tab?.position?.let {
+                    binding.homeViewPager.currentItem = it
+                }
             }
         })
 
-            binding.fabCreateBook.setOnClickListener {
-                findNavController().navigate(R.id.nav_create_book)
-            }
+        binding.fabCreateBook.setOnClickListener {
+            findNavController().navigate(R.id.nav_create_book)
+        }
 
 
         val sortByAdapter = ArrayAdapter.createFromResource(
@@ -243,18 +245,21 @@ class HomeFragment : Fragment() {
         mainActivity.actionBar?.setDisplayHomeAsUpEnabled(true)
         layout.setupWithNavController(toolbar, navController, appBarConfiguration)
         navView?.setupWithNavController(navController)
-        toolbar.title = "Book Shelf"
+        toolbar.title = getString(R.string.book_list_app_bar_title)
     }
+
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        binding.appBarBookList.toolbarBookList.title = "Book Shelf"
+        binding.appBarBookList.toolbarBookList.title = getString(R.string.book_list_app_bar_title)
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
 
     override fun onDestroy() {
         super.onDestroy()

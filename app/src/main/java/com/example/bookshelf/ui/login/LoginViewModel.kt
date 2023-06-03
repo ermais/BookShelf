@@ -15,14 +15,14 @@ class LoginViewModel(private val auth: FirebaseAuth) : ViewModel() {
         value = null
     }
 
-    val email : MutableLiveData<String> by lazy {
+    val email: MutableLiveData<String> by lazy {
         MutableLiveData<String>("")
     }
-    val password : MutableLiveData<String> by lazy {
+    val password: MutableLiveData<String> by lazy {
         MutableLiveData<String>("")
     }
 
-    val invalidPassword  by lazy {
+    val invalidPassword by lazy {
         MutableLiveData<Boolean>(true)
     }
 
@@ -39,84 +39,60 @@ class LoginViewModel(private val auth: FirebaseAuth) : ViewModel() {
     }
 
 
-    fun loginWithEmailPassword(loginSuccessCallback:()->Unit,loginFailCallback:()->Unit){
-        if (canILogin()){
-            Log.d("LOGIN","CAN LOGIN")
+    fun loginWithEmailPassword(loginSuccessCallback: () -> Unit, loginFailCallback: () -> Unit) {
+        if (canILogin()) {
+            Log.d("LOGIN", "CAN LOGIN")
             showProgressBar.postValue(true)
             viewModelScope.launch {
                 delay(50000)
             }
-            auth.signInWithEmailAndPassword(email.value!!,password.value!!)
+            auth.signInWithEmailAndPassword(email.value!!, password.value!!)
                 .addOnCompleteListener {
-                    Log.d("LOGIN","Here, I am")
-                    if (it.isSuccessful){
+                    Log.d("LOGIN", "Here, I am")
+                    if (it.isSuccessful) {
                         showProgressBar.postValue(false)
                         invalidPasswordOrEmail.postValue(false)
                         loginSuccessCallback()
-                    }else{
+                    } else {
                         showProgressBar.postValue(false)
                         invalidPasswordOrEmail.postValue(true)
                         loginFailCallback()
                     }
                 }
-                .addOnFailureListener{
+                .addOnFailureListener {
                     showProgressBar.postValue(false)
                     invalidPasswordOrEmail.postValue(true)
                     loginFailCallback()
-                    Log.d("LOGIN_VIEWMODEL","Login failed!")
+                    Log.d("LOGIN_VIEWMODEL", "Login failed!")
                 }
         }
     }
 
-    private fun canILogin(): Boolean{
+    private fun canILogin(): Boolean {
         return email.value!!.isNotEmpty() && password.value!!.isNotEmpty()
     }
 
-    fun validPassword(){
-        if (password.value!!.isNotEmpty() ){
-            if (password.value!!.length >= 8){
+    fun validPassword() {
+        if (password.value!!.isNotEmpty()) {
+            if (password.value!!.length >= 8) {
                 invalidPassword.postValue(false)
-            }else{
+            } else {
                 invalidPassword.postValue(true)
             }
-        }else{
+        } else {
             invalidPassword.postValue(true)
         }
     }
 
-    fun validEmail(){
-        if (email.value!!.isNotEmpty() ){
-            if (email.value!!.length >= 8){
+    fun validEmail() {
+        if (email.value!!.isNotEmpty()) {
+            if (email.value!!.length >= 8) {
                 invalidEmail.postValue(false)
-            }else{
+            } else {
                 invalidEmail.postValue(true)
             }
-        }else{
+        } else {
             invalidEmail.postValue(true)
         }
     }
-//    val user = _user
-
-
-//    fun createUserAccount(
-//        firstName : String,
-//        lastName: String,
-//        email: String,
-//        password: String,
-//        userName: String
-//    ) {
-//        val auth = Firebase.auth
-//        var currentUser = auth.currentUser
-//        if (currentUser != null){
-//            auth.createUserWithEmailAndPassword(email,password)
-//                .addOnCompleteListener() {
-//                    if (it.isSuccessful){
-//                        currentUser = auth.currentUser
-////                        user = currentUser
-//                    }else{
-//
-//                    }
-//                }
-//        }
-//    }
 }

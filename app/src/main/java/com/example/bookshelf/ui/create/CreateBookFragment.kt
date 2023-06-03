@@ -47,6 +47,7 @@ class CreateBookFragment : Fragment() {
     private lateinit var createBookViewModel: CreateBookViewModel
     private lateinit var firebaseBooksDataSource: FirestoreMyBooksDataSource
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,7 +56,7 @@ class CreateBookFragment : Fragment() {
         db = FirebaseFirestore.getInstance()
         cloudStorage = FirebaseStorage.getInstance()
         firestoreBookDataSource = FirestoreBookDataSource(db, cloudStorage)
-        val application = requireNotNull(activity).application
+        requireNotNull(activity).application
         firebaseBooksDataSource = FirestoreMyBooksDataSource(Firebase.firestore)
         repository = CreateBookRepository(firestoreBookDataSource, FirebaseStorage.getInstance())
         auth = FirebaseAuth.getInstance()
@@ -64,7 +65,6 @@ class CreateBookFragment : Fragment() {
             this,
             createBookViewModelFactory
         )[CreateBookViewModel::class.java]
-
         binding.viewModel = createBookViewModel
         binding.layoutBookCreate.viewModel = createBookViewModel
         binding.layoutBookCreate.lifecycleOwner = this
@@ -77,62 +77,81 @@ class CreateBookFragment : Fragment() {
             pbAddBook.visibility = View.GONE
         }
 
-        createBookViewModel.bookTitle.observe(viewLifecycleOwner) { title ->
-
-            if (title.isNullOrEmpty()) {
-                binding.layoutBookCreate.btnBookCover.visibility = View.GONE
-                binding.layoutBookCreate.btnUploadBook.visibility = View.GONE
-                binding.layoutBookCreate.btnAddBook.visibility = View.GONE
-                createBookViewModel.bookTitleError.value = "Title is required!"
-            } else {
-                binding.layoutBookCreate.btnUploadBook.visibility = View.VISIBLE
-                binding.layoutBookCreate.btnBookCover.visibility = View.VISIBLE
-                binding.layoutBookCreate.btnAddBook.visibility = View.VISIBLE
-                createBookViewModel.bookTitleError.value = ""
-            }
-
-        }
-
-        createBookViewModel.bookDocUriFromFirebase.observe(viewLifecycleOwner) { uri ->
-            if (uri.isNullOrEmpty()) {
-                createBookViewModel.bookDocUriError.value = "You must upload book document!"
-            } else {
-                binding.layoutBookCreate.btnBookCover.visibility = View.VISIBLE
-                binding.layoutBookCreate.btnAddBook.visibility = View.VISIBLE
-            }
-        }
 
 
-        createBookViewModel.bookCoverUriFromFirebase.observe(viewLifecycleOwner) {
-            if (it.isNullOrEmpty()) {
-                with(binding.layoutBookCreate) {
-                    btnAddBook.visibility = View.GONE
-                }
-            } else {
-                with(binding.layoutBookCreate) {
-                    btnAddBook.visibility = View.VISIBLE
-                }
-            }
-        }
+        createBookViewModel.apply {
 
-        createBookViewModel.loading.observe(viewLifecycleOwner) {
-            if (it as Boolean) {
-                binding.layoutBookCreate.pbAddBook.visibility = View.VISIBLE
-            } else {
-                binding.layoutBookCreate.pbAddBook.visibility = View.GONE
-            }
-        }
-
-        createBookViewModel.bookCreated.observe(viewLifecycleOwner) {
-            with(binding.layoutBookCreate) {
-                if (it as Boolean) {
-                    btnBookCover.visibility = View.VISIBLE
-                    pbAddBook.visibility = View.VISIBLE
-                    btnAddBook.visibility = View.VISIBLE
+            bookTitle.observe(viewLifecycleOwner) { title ->
+                if (title.isNullOrEmpty()) {
+                    binding.layoutBookCreate.btnBookCover.visibility = View.GONE
+                    binding.layoutBookCreate.btnUploadBook.visibility = View.GONE
+                    binding.layoutBookCreate.btnAddBook.visibility = View.GONE
+                    createBookViewModel.bookTitleError.value = "Title is required!"
                 } else {
-                    btnBookCover.visibility = View.GONE
-                    pbAddBook.visibility = View.GONE
-                    pbAddBook.visibility = View.GONE
+                    binding.layoutBookCreate.btnUploadBook.visibility = View.VISIBLE
+                    binding.layoutBookCreate.btnBookCover.visibility = View.VISIBLE
+                    binding.layoutBookCreate.btnAddBook.visibility = View.VISIBLE
+                    createBookViewModel.bookTitleError.value = ""
+                }
+            }
+
+            bookDocUriFromFirebase.observe(viewLifecycleOwner) { uri ->
+                if (uri.isNullOrEmpty()) {
+                    createBookViewModel.bookDocUriError.value = "You must upload book document!"
+                } else {
+                    binding.layoutBookCreate.btnBookCover.visibility = View.VISIBLE
+                    binding.layoutBookCreate.btnAddBook.visibility = View.VISIBLE
+                }
+            }
+            bookCoverUriFromFirebase.observe(viewLifecycleOwner) {
+                if (it.isNullOrEmpty()) {
+                    with(binding.layoutBookCreate) {
+                        btnAddBook.visibility = View.GONE
+                    }
+                } else {
+                    with(binding.layoutBookCreate) {
+                        btnAddBook.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            loading.observe(viewLifecycleOwner) {
+                if (it as Boolean) {
+                    binding.layoutBookCreate.pbAddBook.visibility = View.VISIBLE
+                } else {
+                    binding.layoutBookCreate.pbAddBook.visibility = View.GONE
+                }
+            }
+
+            bookCreated.observe(viewLifecycleOwner) {
+                with(binding.layoutBookCreate) {
+                    if (it as Boolean) {
+                        btnBookCover.visibility = View.VISIBLE
+                        pbAddBook.visibility = View.VISIBLE
+                        btnAddBook.visibility = View.VISIBLE
+                    } else {
+                        btnBookCover.visibility = View.GONE
+                        pbAddBook.visibility = View.GONE
+                        pbAddBook.visibility = View.GONE
+                    }
+                }
+            }
+            bookDocUriFromFile.observe(viewLifecycleOwner) {
+                it.let {
+                    if (!it.isNullOrEmpty()) {
+                        binding.layoutBookCreate.tvUploadedBook.visibility = View.VISIBLE
+                        binding.layoutBookCreate.tvUploadedBook.text = it
+                    }
+                }
+            }
+
+            bookCoverUriFromFile.observe(viewLifecycleOwner) {
+                it.let {
+                    if (!it.isNullOrEmpty()) {
+                        binding.layoutBookCreate.tvUploadedBookCover.text = it
+                        binding.layoutBookCreate.tvUploadedBookCover.visibility = View.VISIBLE
+
+                    }
                 }
             }
         }
@@ -147,101 +166,104 @@ class CreateBookFragment : Fragment() {
          * set SET BOOK COVER button click listener
          */
 
-        binding.layoutBookCreate.btnBookCover.setOnClickListener {
-            if (createBookViewModel.canUploadBookCover()) {
-                val toast = Toast.makeText(requireContext(),"loading ...",Toast.LENGTH_SHORT)
-                toast.show()
-                if (isPermissionGranted(
-                        requireContext(),
-                        PHOTO_READ_PERMISSION
-                    )
-                ) {
-                    getImageIntent()
-                } else {
-                    requestPermission(
-                        requireActivity(),
-                        PHOTO_READ_PERMISSION,
-                        BOOK_COVER_RE_CODE
-                    )
-                }
-            } else {
-                val toast =
-                    Toast.makeText(requireContext(), "Title is required!", Toast.LENGTH_LONG)
-                toast.show()
-            }
-
-        }
-
-        /**
-         * Handling UPLOAD BOOK DOC
-         * It is the event listener that handle get uri of book to uploaded and return it uri
-         * @param savedInstanceState the returned  data and run  bookWorker manager
-         *
-         */
-        binding.layoutBookCreate.btnUploadBook.setOnClickListener {
-            if (createBookViewModel.canUploadBookDoc()) {
-                if (isPermissionGranted(
-                        requireContext(),
-                        BOOk_DOCUMENT_PERMISSION
-                    )
-                ) {
-                    getBookDoc()
-                } else {
-                    requestPermission(
-                        requireActivity(),
-                        BOOk_DOCUMENT_PERMISSION,
-                        BOOK_DOC_RE_CODE
-                    )
-                }
-            } else {
-                val toast =
-                    Toast.makeText(requireContext(), "Title is required!", Toast.LENGTH_LONG)
-                toast.show()
-            }
-
-        }
-
-        /**
-         * Handling Save button onClick
-         * It get all book attribute from view model and pass to book object creator
-         */
-
-        binding.layoutBookCreate.btnAddBook.setOnClickListener {
-            if (createBookViewModel.canSaveBook()) {
-                createBookViewModel.publishBook()
-                findNavController().navigate(R.id.action_createBookFragment_to_nav_home)
-            } else {
-                val toast = Toast.makeText(
-                    requireContext(),
-                    "Creating, But We need to fix up something",
-                    Toast.LENGTH_LONG
-                )
-                toast.show()
-            }
-        }
-
-
-        binding.layoutBookCreate.svCategory.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    val selectedItem = p0!!.getItemAtPosition(p2)
-                    if (selectedItem != null) {
-                        val toast = Toast.makeText(
-                            requireNotNull(activity).application,
-                            selectedItem.toString(),
-                            Toast.LENGTH_LONG
+        binding.layoutBookCreate.apply {
+            btnBookCover.setOnClickListener {
+                if (createBookViewModel.canUploadBookCover()) {
+                    val toast = Toast.makeText(requireContext(), "loading ...", Toast.LENGTH_SHORT)
+                    toast.show()
+                    if (isPermissionGranted(
+                            requireContext(),
+                            PHOTO_READ_PERMISSION
                         )
-                        toast.show()
-                        createBookViewModel.bookCategory.postValue(selectedItem.toString())
+                    ) {
+                        getImageIntent()
+                    } else {
+                        requestPermission(
+                            requireActivity(),
+                            PHOTO_READ_PERMISSION,
+                            BOOK_COVER_RE_CODE
+                        )
                     }
+                } else {
+                    val toast =
+                        Toast.makeText(requireContext(), "Title is required!", Toast.LENGTH_LONG)
+                    toast.show()
                 }
-
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-                    val selectedItem = p0!!.getItemAtPosition(0).toString()
-                    createBookViewModel.bookCategory.postValue(selectedItem)
-                }
-
             }
+
+            /**
+             * Handling UPLOAD BOOK DOC
+             * It is the event listener that handle get uri of book to uploaded and return it uri
+             * @param savedInstanceState the returned  data and run  bookWorker manager
+             *
+             */
+
+            btnUploadBook.setOnClickListener {
+                if (createBookViewModel.canUploadBookDoc()) {
+                    if (isPermissionGranted(
+                            requireContext(),
+                            BOOk_DOCUMENT_PERMISSION
+                        )
+                    ) {
+                        getBookDoc()
+                    } else {
+                        requestPermission(
+                            requireActivity(),
+                            BOOk_DOCUMENT_PERMISSION,
+                            BOOK_DOC_RE_CODE
+                        )
+                    }
+                } else {
+                    val toast =
+                        Toast.makeText(requireContext(), "Title is required!", Toast.LENGTH_LONG)
+                    toast.show()
+                }
+            }
+            /**
+             * Handling Save button onClick
+             * It get all book attribute from view model and pass to book object creator
+             */
+
+            btnAddBook.setOnClickListener {
+                if (createBookViewModel.canSaveBook()) {
+                    createBookViewModel.publishBook(
+                        this@CreateBookFragment::successCallback,
+                        this@CreateBookFragment::failureCallback,
+                        this@CreateBookFragment::networkFailureCallback
+                    )
+                    findNavController().navigate(R.id.action_createBookFragment_to_nav_home)
+                } else {
+                    val toast = Toast.makeText(
+                        requireContext(),
+                        "Creating, But We need to fix up something",
+                        Toast.LENGTH_LONG
+                    )
+                    toast.show()
+                }
+            }
+
+            svCategory.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                        val selectedItem = p0!!.getItemAtPosition(p2)
+                        if (selectedItem != null) {
+                            val toast = Toast.makeText(
+                                requireNotNull(activity).application,
+                                selectedItem.toString(),
+                                Toast.LENGTH_LONG
+                            )
+                            toast.show()
+                            createBookViewModel.bookCategory.postValue(selectedItem.toString())
+                        }
+                    }
+
+                    override fun onNothingSelected(p0: AdapterView<*>?) {
+                        val selectedItem = p0!!.getItemAtPosition(0).toString()
+                        createBookViewModel.bookCategory.postValue(selectedItem)
+                    }
+
+                }
+        }
 
 
         ArrayAdapter.createFromResource(
@@ -267,7 +289,11 @@ class CreateBookFragment : Fragment() {
             val toast = Toast.makeText(requireContext(), imageUri.toString(), Toast.LENGTH_LONG)
             toast.show()
             createBookViewModel.bookCoverUriFromFile.value = imageUri.toString()
-            createBookViewModel.uploadBookCover()
+            createBookViewModel.uploadBookCover(
+                this::successCallback,
+                this::failureCallback,
+                this::networkFailureCallback
+            )
         }
         if (requestCode == GET_BOOK_DOC && resultCode == Activity.RESULT_OK) {
             val bookDoc: Uri? = data?.data
@@ -280,7 +306,11 @@ class CreateBookFragment : Fragment() {
                 Toast.LENGTH_LONG
             )
             toastViewModel.show()
-            createBookViewModel.uploadBookDoc()
+            createBookViewModel.uploadBookDoc(
+                this::successCallback,
+                this::failureCallback,
+                this::networkFailureCallback
+            )
         }
     }
 
@@ -311,7 +341,7 @@ class CreateBookFragment : Fragment() {
      * Set of private function goes here forward
      */
     private fun getImageIntent() {
-        val toast = Toast.makeText(requireContext(),"getting image ...",Toast.LENGTH_LONG)
+        val toast = Toast.makeText(requireContext(), "getting image ...", Toast.LENGTH_LONG)
         toast.show()
         val imageIntent = Intent(Intent.ACTION_GET_CONTENT)
         imageIntent.type = "image/*"
@@ -341,4 +371,24 @@ class CreateBookFragment : Fragment() {
         _binding = null
     }
 
+    private fun successCallback() {
+        val toast =
+            Toast.makeText(requireContext(), "upload completed successfully!", Toast.LENGTH_LONG)
+        toast.show()
+    }
+
+    private fun failureCallback() {
+        val toast =
+            Toast.makeText(requireContext(), "upload completed successfully!", Toast.LENGTH_LONG)
+        toast.show()
+    }
+
+    private fun networkFailureCallback() {
+        val toast = Toast.makeText(
+            requireContext(),
+            "lost connection, check your connection!",
+            Toast.LENGTH_LONG
+        )
+        toast.show()
+    }
 }

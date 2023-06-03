@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<paths >
+<paths>
     <external-path
         name="Download"
-        path="."
-        />
-<external-files-path
-    name="BookShelf"
-    path="."
-    />
+        path="." />
+    <external-files-path
+        name="BookShelf"
+        path="." />
     <files-path
         name="BookShelf"
-        path="."
-        />
+        path="." />
 </paths>

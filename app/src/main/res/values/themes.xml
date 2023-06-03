@@ -1,5 +1,5 @@
-
 <resources>
+
     <style name="Theme.BookShelf" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/md_theme_light_primary</item>
         <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
@@ -38,6 +38,7 @@
         <item name="harmonize">false</item>
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
     </style>
+
     <style name="Theme.BookShelf.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -99,15 +100,19 @@
         <item name="colorPrimary">@color/dark_orange_theme_light_primary</item>
         <item name="colorOnPrimary">@color/dark_orange_theme_light_onPrimary</item>
         <item name="colorPrimaryContainer">@color/dark_orange_theme_light_primaryContainer</item>
-        <item name="colorOnPrimaryContainer">@color/dark_orange_theme_light_onPrimaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/dark_orange_theme_light_onPrimaryContainer
+        </item>
         <item name="colorSecondary">@color/dark_orange_theme_light_secondary</item>
         <item name="colorOnSecondary">@color/dark_orange_theme_light_onSecondary</item>
-        <item name="colorSecondaryContainer">@color/dark_orange_theme_light_secondaryContainer</item>
-        <item name="colorOnSecondaryContainer">@color/dark_orange_theme_light_onSecondaryContainer</item>
+        <item name="colorSecondaryContainer">@color/dark_orange_theme_light_secondaryContainer
+        </item>
+        <item name="colorOnSecondaryContainer">@color/dark_orange_theme_light_onSecondaryContainer
+        </item>
         <item name="colorTertiary">@color/dark_orange_theme_light_tertiary</item>
         <item name="colorOnTertiary">@color/dark_orange_theme_light_onTertiary</item>
         <item name="colorTertiaryContainer">@color/dark_orange_theme_light_tertiaryContainer</item>
-        <item name="colorOnTertiaryContainer">@color/dark_orange_theme_light_onTertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/dark_orange_theme_light_onTertiaryContainer
+        </item>
         <item name="colorError">@color/dark_orange_theme_light_error</item>
         <item name="colorErrorContainer">@color/dark_orange_theme_light_errorContainer</item>
         <item name="colorOnError">@color/dark_orange_theme_light_onError</item>
@@ -146,11 +151,13 @@
         <item name="colorSecondary">@color/light_dark_theme_light_secondary</item>
         <item name="colorOnSecondary">@color/light_dark_theme_light_onSecondary</item>
         <item name="colorSecondaryContainer">@color/light_dark_theme_light_secondaryContainer</item>
-        <item name="colorOnSecondaryContainer">@color/light_dark_theme_light_onSecondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/light_dark_theme_light_onSecondaryContainer
+        </item>
         <item name="colorTertiary">@color/light_dark_theme_light_tertiary</item>
         <item name="colorOnTertiary">@color/light_dark_theme_light_onTertiary</item>
         <item name="colorTertiaryContainer">@color/light_dark_theme_light_tertiaryContainer</item>
-        <item name="colorOnTertiaryContainer">@color/light_dark_theme_light_onTertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/light_dark_theme_light_onTertiaryContainer
+        </item>
         <item name="colorError">@color/light_dark_theme_light_error</item>
         <item name="colorErrorContainer">@color/light_dark_theme_light_errorContainer</item>
         <item name="colorOnError">@color/light_dark_theme_light_onError</item>
@@ -224,7 +231,6 @@
     <style name="Theme.BookShelf.White.MyCollapsableToolbar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.BookShelf.White.MyCollapsableToolbar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
 
 
 </resources>

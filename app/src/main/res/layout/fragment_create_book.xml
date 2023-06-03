@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="viewModel"
             type="com.example.bookshelf.ui.create.CreateBookViewModel" />
     </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.example.bookshelf.ui.create.CreateBookFragment"
-        >
+        tools:context="com.example.bookshelf.ui.create.CreateBookFragment">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/abMyBooks"
@@ -32,8 +33,7 @@
 
         <include
             android:id="@+id/layout_book_create"
-            layout="@layout/content_create_book"
-            />
+            layout="@layout/content_create_book" />
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
