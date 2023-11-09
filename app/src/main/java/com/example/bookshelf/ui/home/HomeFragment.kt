@@ -129,7 +129,7 @@ class HomeFragment : Fragment() {
                     binding.appBarBookList.homeTabs,
                     binding.homeViewPager
                 ) { tab, position ->
-                    tab.text = tabList[position]
+                    tab.text = tabList[position].toString()
                 }.attach()
             }
         }

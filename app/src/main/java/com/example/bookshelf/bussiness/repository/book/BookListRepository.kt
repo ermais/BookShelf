@@ -12,7 +12,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-@Suppress("DEPRECATION")
 class BookListRepository(
     private val firestoreBookDataSource: FirestoreBookDataSource,
     private val db: BookDatabase,
@@ -40,8 +39,8 @@ class BookListRepository(
     suspend fun refreshBooks(
         callbackOnRefreshFailed: () -> Unit
     ) {
-        if (isConnected) {
-            var _books = listOf<Book>()
+        if (true) {
+            var _books: List<Book>
             getBookList().collect {
                 if (it.data != null) {
                     _books = it.data as List<Book>
@@ -52,12 +51,11 @@ class BookListRepository(
         } else {
             callbackOnRefreshFailed()
         }
-
     }
 
 
 
-    private suspend fun clearDatabase() = db.bookDao().clear()
+    private fun clearDatabase() = db.bookDao().clear()
 
     suspend fun filterByCategoryOffline(
         category: String

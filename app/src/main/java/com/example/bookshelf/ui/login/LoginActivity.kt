@@ -1,6 +1,7 @@
 package com.example.bookshelf.ui.login
 
 import android.content.Intent
+import android.content.IntentSender
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.os.Bundle
@@ -16,10 +17,10 @@ import com.example.bookshelf.databinding.ActivityLoginBinding
 import com.example.bookshelf.ui.createaccount.CreateAccountActivity
 import com.example.bookshelf.ui.main.MainActivity
 import com.example.bookshelf.util.getConnMgr
-import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -43,6 +44,8 @@ class LoginActivity : AppCompatActivity() {
 
     //
     private val RC_SIGN_IN: Int = 265
+    private lateinit var oneTapClient  : SignInClient
+    private lateinit var signInRequest: BeginSignInRequest
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
@@ -66,27 +69,41 @@ class LoginActivity : AppCompatActivity() {
         connMgr = getConnMgr(applicationContext, ::getSystemService)
         prefManager = PreferenceManager.getDefaultSharedPreferences(this)
         val lang = prefManager.getString("language", "en-us")
-        setupLan(lang)
-        prefListener = object : SharedPreferences.OnSharedPreferenceChangeListener {
-            override fun onSharedPreferenceChanged(p0: SharedPreferences?, p1: String?) {
-                val lan = p0?.getString("language", "en-us")
-                setupLan(lan)
-            }
+        setUpLan(lang)
+        prefListener = SharedPreferences.OnSharedPreferenceChangeListener { p0, p1 ->
+            val lan = p0?.getString("language", "en-us")
+            setUpLan(lan)
         }
         prefManager.registerOnSharedPreferenceChangeListener(prefListener)
         // ...
         // Initialize Firebase Auth
+        oneTapClient = Identity.getSignInClient(this)
 
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
+//        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//            .requestIdToken(getString(R.string.default_web_client_id))
+//            .requestEmail()
+//            .build()
+//
+//        googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+//
+        signInRequest = BeginSignInRequest.builder()
+            .setPasswordRequestOptions(
+                BeginSignInRequest.PasswordRequestOptions.builder()
+                    .setSupported(true)
+                    .build()
+            )
+            .setGoogleIdTokenRequestOptions(
+                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                    .setSupported(true)
+                    .setServerClientId(getString(R.string.your_web_client_id))
+                    .setFilterByAuthorizedAccounts(false)
+                    .build()
+            )
+            .setAutoSelectEnabled(true)
             .build()
 
-        googleSignInClient = GoogleSignIn.getClient(this, gso)
-
-
         binding.viewModel = loginViewModel
-
 
         Log.d(LoginActivity::getLocalClassName.toString(), "On create")
         binding.btnUserLogin.setOnClickListener { view ->
@@ -105,6 +122,8 @@ class LoginActivity : AppCompatActivity() {
 
         binding.signInBtn.setOnClickListener {
             if (isConnected()) {
+                val toast = Toast.makeText(this, "One Tap login ", Toast.LENGTH_SHORT)
+                toast.show()
                 signIn()
             } else {
                 val toast = Toast.makeText(this, "Network Unavailable ", Toast.LENGTH_SHORT)
@@ -157,24 +176,34 @@ class LoginActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-
-                // Google Sign In was successful, authenticate with Firebase
-                val account = task.getResult(ApiException::class.java)!!
-                Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
-                firebaseAuthWithGoogle(account.idToken!!)
-            } catch (e: ApiException) {
-                // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e)
+//        if (requestCode == RC_SIGN_IN) {
+//            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+//            try {
+//
+//                // Google Sign In was successful, authenticate with Firebase
+//                val account = task.getResult(ApiException::class.java)!!
+//                Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
+//                firebaseAuthWithGoogle(account.idToken!!)
+//            } catch (e: ApiException) {
+//                // Google Sign In failed, update UI appropriately
+//                Log.w(TAG, "Google sign in failed", e)
+//            }
+//        }
+        when(requestCode){
+            RC_SIGN_IN->{
+                try {
+                    val credential = oneTapClient.getSignInCredentialFromIntent(data)
+                    credential.googleIdToken?.let { firebaseAuthWithGoogle(it) }
+                }catch (e:Exception){
+                    Log.d(TAG, "Google sign in failed", e)
+                }
             }
         }
     }
 
     override fun onStart() {
         super.onStart()
-//             Check if user is signed in (non-null) and update UI accordingly.
+//      Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
         updateUI(currentUser)
     }
@@ -190,8 +219,25 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun signIn() {
-        val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
+//        val signInIntent = googleSignInClient.signInIntent
+//        startActivityForResult(signInIntent, RC_SIGN_IN)
+        Log.d("ONE_TAP","getting one tap")
+        oneTapClient.beginSignIn(signInRequest)
+            .addOnSuccessListener(this){ result->
+                Log.d("ONE_TAP","get result")
+                try {
+                    Log.d("ONE_TAP","onSuccess")
+                    startIntentSenderForResult(
+                        result.pendingIntent.intentSender,RC_SIGN_IN,
+                        null,0,0,0,null
+                    )
+                }catch (e:IntentSender.SendIntentException){
+                    Log.d("ONE_TAP","couldn't start one tap")
+                }
+            }
+            .addOnFailureListener(this){
+                it.localizedMessage?.let { it1 -> Log.d("ONE_TAP", it1) }
+            }
     }
 
 
@@ -218,10 +264,10 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    fun setupLan(lan: String?) {
-        if (lan.equals("not-set")) locale = Locale.getDefault()
+    private fun setUpLan(lan: String?) {
+        locale = if (lan.equals("not-set")) Locale.getDefault()
         else
-            locale = Locale(lan.toString())
+            Locale(lan.toString())
         Locale.setDefault(locale)
         val config = baseContext.resources.configuration
         config.locale = locale
@@ -243,7 +289,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginSuccess(): Unit {
-        val intent = Intent(this, LoginActivity::class.java)
+        val toast = Toast.makeText(this,"Login succeed!  ",Toast.LENGTH_LONG)
+        toast.show()
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
     }
@@ -252,6 +300,5 @@ class LoginActivity : AppCompatActivity() {
         val toast = Toast.makeText(this, "username or password not found", Toast.LENGTH_LONG)
         toast.show()
     }
-
 }
 

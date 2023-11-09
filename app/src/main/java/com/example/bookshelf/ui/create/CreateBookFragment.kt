@@ -4,13 +4,16 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.children
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -22,8 +25,8 @@ import com.example.bookshelf.bussiness.networkdata.FirestoreBookDataSource
 import com.example.bookshelf.bussiness.networkdata.FirestoreMyBooksDataSource
 import com.example.bookshelf.bussiness.repository.book.CreateBookRepository
 import com.example.bookshelf.databinding.FragmentCreateBookBinding
-import com.example.bookshelf.isPermissionGranted
-import com.example.bookshelf.requestPermission
+import com.example.bookshelf.util.isPermissionGranted
+import com.example.bookshelf.util.requestPermission
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -69,7 +72,6 @@ class CreateBookFragment : Fragment() {
         binding.layoutBookCreate.viewModel = createBookViewModel
         binding.layoutBookCreate.lifecycleOwner = this
         binding.lifecycleOwner = this
-
         with(binding.layoutBookCreate) {
             btnUploadBook.visibility = View.VISIBLE
             btnBookCover.visibility = View.GONE
@@ -118,8 +120,19 @@ class CreateBookFragment : Fragment() {
             loading.observe(viewLifecycleOwner) {
                 if (it as Boolean) {
                     binding.layoutBookCreate.pbAddBook.visibility = View.VISIBLE
+                    for (view in binding.layoutBookCreate.bookCreateContainer.children){
+                        if (view !is ProgressBar){
+                            view.alpha = 0.23f
+                            view.isActivated = false
+                            Log.d("ProgressBar",view.id.toString())
+                        }
+                    }
                 } else {
                     binding.layoutBookCreate.pbAddBook.visibility = View.GONE
+                    for (view in binding.layoutBookCreate.bookCreateContainer.children){
+                            view.alpha = 1.0f
+                            Log.d("ProgressBar",view.id.toString())
+                    }
                 }
             }
 
@@ -141,6 +154,8 @@ class CreateBookFragment : Fragment() {
                     if (!it.isNullOrEmpty()) {
                         binding.layoutBookCreate.tvUploadedBook.visibility = View.VISIBLE
                         binding.layoutBookCreate.tvUploadedBook.text = it
+                    }else{
+                        binding.layoutBookCreate.tvUploadedBook.visibility = View.GONE
                     }
                 }
             }
@@ -151,6 +166,8 @@ class CreateBookFragment : Fragment() {
                         binding.layoutBookCreate.tvUploadedBookCover.text = it
                         binding.layoutBookCreate.tvUploadedBookCover.visibility = View.VISIBLE
 
+                    }else{
+                        binding.layoutBookCreate.tvUploadedBookCover.visibility =  View.GONE
                     }
                 }
             }
@@ -167,6 +184,8 @@ class CreateBookFragment : Fragment() {
          */
 
         binding.layoutBookCreate.apply {
+
+
             btnBookCover.setOnClickListener {
                 if (createBookViewModel.canUploadBookCover()) {
                     val toast = Toast.makeText(requireContext(), "loading ...", Toast.LENGTH_SHORT)
@@ -200,16 +219,18 @@ class CreateBookFragment : Fragment() {
 
             btnUploadBook.setOnClickListener {
                 if (createBookViewModel.canUploadBookDoc()) {
+                    val toast = Toast.makeText(requireContext(),"Upload book ...",Toast.LENGTH_SHORT)
+                    toast.show()
                     if (isPermissionGranted(
                             requireContext(),
-                            BOOk_DOCUMENT_PERMISSION
+                            BOOK_DOCUMENT_PERMISSION
                         )
                     ) {
                         getBookDoc()
                     } else {
                         requestPermission(
                             requireActivity(),
-                            BOOk_DOCUMENT_PERMISSION,
+                            BOOK_DOCUMENT_PERMISSION,
                             BOOK_DOC_RE_CODE
                         )
                     }
@@ -337,9 +358,12 @@ class CreateBookFragment : Fragment() {
         toolbar.title = getString(R.string.create_app_bar_title_string)
     }
 
+
     /**
      * Set of private function goes here forward
      */
+
+
     private fun getImageIntent() {
         val toast = Toast.makeText(requireContext(), "getting image ...", Toast.LENGTH_LONG)
         toast.show()
@@ -351,6 +375,8 @@ class CreateBookFragment : Fragment() {
     }
 
     private fun getBookDoc() {
+        val toast = Toast.makeText(requireContext(),"Get book ...",Toast.LENGTH_LONG)
+        toast.show()
         val bookDocIntent = Intent(Intent.ACTION_GET_CONTENT)
         bookDocIntent.type = "application/pdf*"
         bookDocIntent.addCategory(Intent.CATEGORY_OPENABLE)
@@ -361,7 +387,7 @@ class CreateBookFragment : Fragment() {
         const val GET_BCI: Int = 233
         const val GET_BOOK_DOC = 443
         const val PHOTO_READ_PERMISSION = android.Manifest.permission.READ_EXTERNAL_STORAGE
-        const val BOOk_DOCUMENT_PERMISSION = android.Manifest.permission.READ_EXTERNAL_STORAGE
+        const val BOOK_DOCUMENT_PERMISSION = android.Manifest.permission.READ_EXTERNAL_STORAGE
         const val BOOK_COVER_RE_CODE = 453
         const val BOOK_DOC_RE_CODE = 786
     }

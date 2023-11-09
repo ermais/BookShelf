@@ -9,6 +9,7 @@
             type="com.example.bookshelf.ui.create.CreateBookViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bookCreateContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -77,6 +78,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:textSize="8sp"
             android:text="@={viewModel.bookTitleError}"
             app:layout_constraintEnd_toEndOf="@+id/teBookTitle"
             app:layout_constraintStart_toStartOf="@+id/teBookTitle"
@@ -85,6 +87,7 @@
         <TextView
             android:id="@+id/bookDocUriTextError"
             android:layout_width="0dp"
+            android:textSize="8sp"
             android:layout_height="wrap_content"
             android:layout_marginTop="13dp"
             android:text="@={viewModel.bookDocUriError}"
@@ -122,6 +125,8 @@
             android:layout_marginTop="8dp"
             android:text="your published book!"
             android:textAlignment="center"
+            android:textSize="8sp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/btnUploadBook"
             app:layout_constraintStart_toStartOf="@+id/btnUploadBook"
             app:layout_constraintTop_toBottomOf="@+id/btnUploadBook" />
@@ -146,6 +151,8 @@
             android:layout_marginTop="8dp"
             android:text="your book cover"
             android:textAlignment="center"
+            android:textSize="8sp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/btnBookCover"
             app:layout_constraintStart_toStartOf="@+id/btnBookCover"
             app:layout_constraintTop_toBottomOf="@+id/btnBookCover" />

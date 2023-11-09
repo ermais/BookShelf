@@ -50,6 +50,7 @@ class LoginViewModel(private val auth: FirebaseAuth) : ViewModel() {
                 .addOnCompleteListener {
                     Log.d("LOGIN", "Here, I am")
                     if (it.isSuccessful) {
+                        Log.d("LOGIN","navigate to main screen")
                         showProgressBar.postValue(false)
                         invalidPasswordOrEmail.postValue(false)
                         loginSuccessCallback()

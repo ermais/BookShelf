@@ -1,4 +1,4 @@
-package com.example.bookshelf
+package com.example.bookshelf.util
 
 import android.app.Activity
 import android.content.Context

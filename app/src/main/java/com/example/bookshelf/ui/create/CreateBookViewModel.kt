@@ -28,7 +28,7 @@ class CreateBookViewModel(
     val bookCoverUriFromFirebase: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
-    private var isConnected = MutableLiveData(false)
+    private var isConnected = MutableLiveData(true)
     var bookCreated = MutableLiveData(false)
 
     val bookTitleError: MutableLiveData<String> by lazy {
@@ -46,9 +46,10 @@ class CreateBookViewModel(
 
 
 
-    fun publishBook(successCallback:()->Unit,failureCallback : ()->Unit,networkFailureCallback:()->Unit) = viewModelScope.launch {
-
-
+    fun publishBook(
+        successCallback:()->Unit,failureCallback : ()->Unit,
+        networkFailureCallback:()->Unit
+    ) = viewModelScope.launch(Dispatchers.IO) {
         if (isConnected.value == true){
             try {
                 val book = Book(
@@ -66,10 +67,13 @@ class CreateBookViewModel(
                 )
                 createBookRepository.publishBook(book).collect {
                     bookCreated.postValue(true)
+                    loading.postValue(false)
                     successCallback()
                 }
             }catch (e:Exception){
+                loading.postValue(false)
                 failureCallback()
+
             }
         }else networkFailureCallback()
     }
@@ -114,6 +118,7 @@ class CreateBookViewModel(
                     }
             }catch (e:Exception){
                 failureCallback()
+                loading.postValue(true)
             }
 
         }else networkFailureCallback()
@@ -135,6 +140,7 @@ class CreateBookViewModel(
                     }
             }catch (e: Exception){
                 failureCallback()
+                loading.postValue(false)
             }
         }else networkFailureCallback()
     }

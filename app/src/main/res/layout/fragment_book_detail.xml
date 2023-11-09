@@ -99,9 +99,10 @@
                     android:layout_marginEnd="32dp"
                     android:layout_marginBottom="24dp"
                     android:clickable="true"
-                    android:text="Buy Book"
+                    android:text="@string/buy_book_string"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:focusable="true" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

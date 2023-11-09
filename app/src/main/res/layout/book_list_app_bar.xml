@@ -17,7 +17,6 @@
             android:layout_gravity="bottom|end"
             android:fitsSystemWindows="true"
             app:expandedTitleGravity="top|start"
-            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|enterAlwaysCollapsed"
             app:title="@string/book_list_app_bar_title"
             app:titleCollapseMode="fade"
@@ -69,6 +68,16 @@
                         tools:listheader="Sort By" />
                 </LinearLayout>
 
+<!--                <com.google.android.material.tabs.TabLayout-->
+<!--                    android:id="@+id/homeTabs"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="?attr/actionBarSize"-->
+<!--                    app:layout_constraintStart_toStartOf="@id/categoryLayout"-->
+<!--                    app:layout_constraintEnd_toEndOf="@+id/categoryLayout"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    tools:ignore="MissingConstraints">-->
+
+<!--                </com.google.android.material.tabs.TabLayout>-->
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/homeTabs"
                     android:layout_width="match_parent"
@@ -76,7 +85,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    tools:ignore="SpeakableTextPresentCheck">
+                    tools:ignore="SpeakableTextPresentCheck"
+                    >
 
                     <com.google.android.material.tabs.TabItem
                         android:layout_width="wrap_content"

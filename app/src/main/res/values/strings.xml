@@ -7,7 +7,6 @@
     <string name="nav_header_desc" translatable="false">Navigation header</string>
     <string name="action_settings">SignOut</string>
 
-
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
@@ -109,10 +108,11 @@
     <string name="your_web_client_id" translatable="false">731245511798-1qcug65ejmhl1t56h11fkc2kn47cpjru.apps.googleusercontent.com</string>
     <string name="create_app_bar_title_string">Create Book</string>
     <string name="my_books_app_bar_title_string">My Books</string>
-    <string name="password_or_email_is_not_correct_string">password or email is not correct</string>
-    <string name="password_error_string">invalid password, It must be at least 8 character</string>
-    <string name="email_error_string">invalid email or not found</string>
-    <string name="dsplay_name_error_string">Display name should be at least 4 character or empty</string>
-    <string name="create_password_error_string"><![CDATA[password must be at least 8 character and include A-Z, 0-9,! # @ % ^ & *]]></string>
-    <string name="confirm_password_error_string">password doesn\'t match</string>
+    <string name="password_or_email_is_not_correct_string" translatable="false">password or email is not correct</string>
+    <string name="password_error_string" translatable="false">invalid password, It must be at least 8 character</string>
+    <string name="email_error_string" translatable="false">invalid email or not found</string>
+    <string name="dsplay_name_error_string" translatable="false">Display name should be at least 4 character or empty</string>
+    <string name="create_password_error_string" translatable="false"><![CDATA[password must be at least 8 character and include A-Z, 0-9,! # @ % ^ & *]]></string>
+    <string name="confirm_password_error_string" translatable="false">password doesn\'t match</string>
+    <string name="buy_book_string">Buy Book</string>
 </resources>
