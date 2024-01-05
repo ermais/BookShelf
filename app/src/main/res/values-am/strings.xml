@@ -55,4 +55,5 @@
     <string name="create_account_string">አካውንት ክፈት</string>
     <string name="create_app_bar_title_string">መጽሐፍ አትም</string>
     <string name="my_books_app_bar_title_string">My Books</string>
+    <string name="buy_book_string">መጽሓፉን ግዛ</string>
 </resources>

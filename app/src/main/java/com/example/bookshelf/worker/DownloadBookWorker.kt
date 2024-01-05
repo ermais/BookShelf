@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import androidx.work.*
 import com.example.bookshelf.bussiness.db.BookDatabase
 import com.example.bookshelf.bussiness.db.DownloadEntity
@@ -11,6 +12,7 @@ import com.example.bookshelf.bussiness.repository.book.DownloadRepository
 import com.example.bookshelf.data.KEY_BOOK_ID
 import com.example.bookshelf.data.KEY_BOOK_TITLE
 import com.example.bookshelf.data.KEY_DOWNLOAD_BOOK_URI
+import com.example.bookshelf.util.NotificationService
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.common.util.concurrent.ListenableFuture
@@ -33,7 +35,9 @@ class DownloadBookWorker(ctx: Context, params: WorkerParameters) : CoroutineWork
             val downloadBookUri = inputData.getString(KEY_DOWNLOAD_BOOK_URI)
             val bookTitle = inputData.getString(KEY_BOOK_TITLE)
             val bookId = inputData.getString(KEY_BOOK_ID)
+
             println("doWork book id ----------------------------------${bookId}")
+            Log.d("Download",bookId.toString())
             var localDownloadUri =
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
             localDownloadUri = File(localDownloadUri.path + "/books")
@@ -51,7 +55,13 @@ class DownloadBookWorker(ctx: Context, params: WorkerParameters) : CoroutineWork
                     if (!it.isSuccessful) {
                         it.exception?.let { it1 -> continuation.resumeWithException(it1) }
                     }
-
+                    val notifyBuilder = NotificationService.builder(
+                        applicationContext,
+                        100,
+                        50,
+                        bookTitle.toString()
+                    )
+                    NotificationService.notify(applicationContext,notifyBuilder)
                     return@Continuation downloadRef.downloadUrl
                 })
                     .addOnCompleteListener {

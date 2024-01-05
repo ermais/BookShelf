@@ -3,6 +3,7 @@ package com.example.bookshelf.ui.create
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -187,7 +188,7 @@ class CreateBookFragment : Fragment() {
 
 
             btnBookCover.setOnClickListener {
-                if (createBookViewModel.canUploadBookCover()) {
+                if (true) {
                     val toast = Toast.makeText(requireContext(), "loading ...", Toast.LENGTH_SHORT)
                     toast.show()
                     if (isPermissionGranted(
@@ -221,18 +222,22 @@ class CreateBookFragment : Fragment() {
                 if (createBookViewModel.canUploadBookDoc()) {
                     val toast = Toast.makeText(requireContext(),"Upload book ...",Toast.LENGTH_SHORT)
                     toast.show()
-                    if (isPermissionGranted(
-                            requireContext(),
-                            BOOK_DOCUMENT_PERMISSION
-                        )
-                    ) {
+                    if (Build.VERSION.SDK_INT >= 32){
                         getBookDoc()
-                    } else {
-                        requestPermission(
-                            requireActivity(),
-                            BOOK_DOCUMENT_PERMISSION,
-                            BOOK_DOC_RE_CODE
-                        )
+                    }else{
+                        if (isPermissionGranted(
+                                requireContext(),
+                                BOOK_DOCUMENT_PERMISSION
+                            )
+                        ) {
+                            getBookDoc()
+                        } else {
+                            requestPermission(
+                                requireActivity(),
+                                BOOK_DOCUMENT_PERMISSION,
+                                BOOK_DOC_RE_CODE
+                            )
+                        }
                     }
                 } else {
                     val toast =
@@ -386,8 +391,8 @@ class CreateBookFragment : Fragment() {
     companion object {
         const val GET_BCI: Int = 233
         const val GET_BOOK_DOC = 443
-        const val PHOTO_READ_PERMISSION = android.Manifest.permission.READ_EXTERNAL_STORAGE
-        const val BOOK_DOCUMENT_PERMISSION = android.Manifest.permission.READ_EXTERNAL_STORAGE
+        const val PHOTO_READ_PERMISSION = android.Manifest.permission.READ_MEDIA_IMAGES
+        const val BOOK_DOCUMENT_PERMISSION = android.Manifest.permission.MANAGE_EXTERNAL_STORAGE
         const val BOOK_COVER_RE_CODE = 453
         const val BOOK_DOC_RE_CODE = 786
     }

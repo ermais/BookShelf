@@ -101,7 +101,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         else
             locale = Locale(lan.toString())
         Locale.setDefault(locale)
-        val context = requireNotNull(activity).baseContext
+        val context = requireActivity().baseContext
         val config = context.resources.configuration
         config?.locale = locale
         context.resources.updateConfiguration(

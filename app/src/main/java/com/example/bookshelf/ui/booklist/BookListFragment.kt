@@ -3,6 +3,7 @@ package com.example.bookshelf.ui.booklist
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -34,7 +35,9 @@ import com.example.bookshelf.ui.home.HomeViewModel
 import com.example.bookshelf.ui.main.MainActivity
 import com.example.bookshelf.ui.main.MainViewModel
 import com.example.bookshelf.util.NetworkStatus
+import com.example.bookshelf.util.NotificationService
 import com.example.bookshelf.util.getConnMgr
+import com.example.bookshelf.util.requestPermission
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -65,6 +68,7 @@ class BookListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentBookListBinding.inflate(inflater, container, false)
+        NotificationService.createNotificationChannel(requireContext().applicationContext)
 
         val prefManager = PreferenceManager.getDefaultSharedPreferences(requireContext())
         val lan = prefManager.getString("language", "english")
@@ -85,45 +89,63 @@ class BookListFragment : Fragment() {
         bookListModel =
             ViewModelProvider(this, bookListViewModelFactory)[BookListViewModel::class.java]
 
-        val adapter = BookListAdapter(requireContext()) { view, downloadUri, bookTitle, bookId ->
-            when {
-                ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) ==
-                        PackageManager.PERMISSION_GRANTED -> {
-                    val toast =
-                        Toast.makeText(requireContext(), "Downloading ...", Toast.LENGTH_LONG)
+        requestPermissionLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.RequestPermission()
+            ) { isGranted: Boolean ->
+                if (isGranted) {
+                    val toast = Toast.makeText(activity, "Permission Granted", Toast.LENGTH_LONG)
                     toast.show()
-                    println("Granted --------------")
-                    layout.showSnackBar(
-                        view,
-                        getString(R.string.write_external_storage_permission),
-                        Snackbar.LENGTH_SHORT,
-                        null
-                    ) {
-                        Log.d("BOOK-LIST", "I am from inside the snack-bar")
-                        onDownloadBook(downloadUri, bookTitle, bookId)
-                    }
-                    onDownloadBook(downloadUri, bookTitle, bookId)
-                }
-                ActivityCompat.shouldShowRequestPermissionRationale(
-                    requireActivity(),
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) -> {
-                    layout.showSnackBar(
-                        view,
-                        getString(R.string.write_external_storage_permission),
-                        Snackbar.LENGTH_INDEFINITE,
-                        getString(R.string.ok),
-                    ) {
-                        requestPermissionLauncher.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    }
-                }
-                else -> {
-                    requestPermissionLauncher.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                } else {
+                    val toast = Toast.makeText(activity, "Permission Denied", Toast.LENGTH_LONG)
+                    toast.show()
                 }
             }
+        val adapter = BookListAdapter(requireContext()) { view, downloadUri, bookTitle, bookId ->
+//            when {
+//                ContextCompat.checkSelfPermission(
+//                    requireContext(),
+//                    android.Manifest.permission.MANAGE_EXTERNAL_STORAGE
+//                ) ==
+//                        PackageManager.PERMISSION_GRANTED -> {
+//                    val toast =
+//                        Toast.makeText(requireContext(), "Downloading ...", Toast.LENGTH_LONG)
+//                    toast.show()
+//                    println("Granted --------------")
+//                    layout.showSnackBar(
+//                        view,
+//                        getString(R.string.write_external_storage_permission),
+//                        Snackbar.LENGTH_SHORT,
+//                        null
+//                    ) {
+//                        Log.d("BOOK-LIST", "I am from inside the snack-bar")
+//                        onDownloadBook(downloadUri, bookTitle, bookId)
+//                    }
+//                    onDownloadBook(downloadUri, bookTitle, bookId)
+//                }
+//                ActivityCompat.shouldShowRequestPermissionRationale(
+//                    requireActivity(),
+//                    android.Manifest.permission.MANAGE_EXTERNAL_STORAGE
+//                ) -> {
+//                    layout.showSnackBar(
+//                        view,
+//                        getString(R.string.write_external_storage_permission),
+//                        Snackbar.LENGTH_INDEFINITE,
+//                        getString(R.string.ok),
+//                    ) {
+//                        requestPermissionLauncher.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                    }
+//                }
+//                else -> {
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//                        requestPermission(activity,android.Manifest.permission.MANAGE_EXTERNAL_STORAGE,300)
+//                    }
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//                        requestPermissionLauncher.launch(android.Manifest.permission.MANAGE_EXTERNAL_STORAGE)
+//                    }
+//                }
+//            }
+            onDownloadBook(downloadUri, bookTitle, bookId)
 
         }
         activity?.let {
@@ -147,18 +169,7 @@ class BookListFragment : Fragment() {
             }
         }
 
-        requestPermissionLauncher =
-            registerForActivityResult(
-                ActivityResultContracts.RequestPermission()
-            ) { isGranted: Boolean ->
-                if (isGranted) {
-                    val toast = Toast.makeText(activity, "Permission Granted", Toast.LENGTH_LONG)
-                    toast.show()
-                } else {
-                    val toast = Toast.makeText(activity, "Permission Denied", Toast.LENGTH_LONG)
-                    toast.show()
-                }
-            }
+
 
         mainViewModel.query.observe(viewLifecycleOwner) {
             bookListModel.filterBooks(it)
@@ -173,9 +184,6 @@ class BookListFragment : Fragment() {
                 else -> bookListModel.sortByPubDate()
             }
         }
-
-
-
 
         binding.rvBookList.adapter = adapter
         with(binding.rvBookList) {

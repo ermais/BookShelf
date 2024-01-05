@@ -2,6 +2,7 @@ package com.example.bookshelf.ui.create
 
 import android.net.Uri
 import android.text.TextUtils
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -68,14 +69,24 @@ class CreateBookViewModel(
                 createBookRepository.publishBook(book).collect {
                     bookCreated.postValue(true)
                     loading.postValue(false)
-                    successCallback()
+                    viewModelScope.launch(Dispatchers.Main) {
+                        successCallback()
+                    }
+
                 }
             }catch (e:Exception){
                 loading.postValue(false)
-                failureCallback()
+                viewModelScope.launch {
+                    failureCallback()
+                }
+
 
             }
-        }else networkFailureCallback()
+        }else {
+            viewModelScope.launch {
+                networkFailureCallback()
+            }
+        }
     }
 
     private fun titleNotNullOREmpty(): Boolean {
@@ -114,10 +125,16 @@ class CreateBookViewModel(
                     .collect { result ->
                         bookDocUriFromFirebase.postValue(result.data.toString())
                         loading.postValue(false)
-                        successCallback()
+                        viewModelScope.launch(Dispatchers.Main) {
+                            successCallback()
+                        }
+
                     }
             }catch (e:Exception){
-                failureCallback()
+                viewModelScope.launch(Dispatchers.Main) {
+                    failureCallback()
+                }
+
                 loading.postValue(true)
             }
 
@@ -135,11 +152,19 @@ class CreateBookViewModel(
                 )
                     .collect { result ->
                         bookCoverUriFromFirebase.postValue(result.data.toString())
-                        loading.postValue(false)
-                        successCallback()
+                        loading.value = false
+
+                        Log.d("Upload",loading.value.toString())
+                        viewModelScope.launch(Dispatchers.Main) {
+                            successCallback()
+                        }
+
                     }
             }catch (e: Exception){
-                failureCallback()
+                viewModelScope.launch(Dispatchers.Main) {
+                    failureCallback()
+                }
+
                 loading.postValue(false)
             }
         }else networkFailureCallback()

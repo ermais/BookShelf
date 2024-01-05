@@ -115,4 +115,6 @@
     <string name="create_password_error_string" translatable="false"><![CDATA[password must be at least 8 character and include A-Z, 0-9,! # @ % ^ & *]]></string>
     <string name="confirm_password_error_string" translatable="false">password doesn\'t match</string>
     <string name="buy_book_string">Buy Book</string>
+    <string name="download_book_channel_name">download book channel</string>
+    <string name="download_book_channel_description">"Download Book "</string>
 </resources>

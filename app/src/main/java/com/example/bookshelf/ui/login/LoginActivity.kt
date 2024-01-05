@@ -42,6 +42,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var prefListener: SharedPreferences.OnSharedPreferenceChangeListener
     private lateinit var prefManager: SharedPreferences
 
+
     //
     private val RC_SIGN_IN: Int = 265
     private lateinit var oneTapClient  : SignInClient
@@ -107,6 +108,9 @@ class LoginActivity : AppCompatActivity() {
 
         Log.d(LoginActivity::getLocalClassName.toString(), "On create")
         binding.btnUserLogin.setOnClickListener { view ->
+//            val intent = Intent(this, MainActivity::class.java)
+//            startActivity(intent)
+//            finish()
             if (isConnected()) {
                 Log.d("LOGIN", "log-in")
                 loginViewModel.loginWithEmailPassword(::loginSuccess, ::loginFail)
