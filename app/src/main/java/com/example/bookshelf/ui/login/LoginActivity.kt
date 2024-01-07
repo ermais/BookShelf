@@ -301,9 +301,10 @@ class LoginActivity : AppCompatActivity() {
                 user.displayName ?: "",
                 "",
                 "",
-                user.photoUrl ?: Uri.EMPTY,
+                user.photoUrl.toString(),
                 user.email ?: ""
             )
+            loginViewModel.createProfile(profile)
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()

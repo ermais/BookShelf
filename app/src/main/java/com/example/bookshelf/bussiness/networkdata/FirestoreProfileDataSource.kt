@@ -1,6 +1,8 @@
 package com.example.bookshelf.bussiness.networkdata
 
 import android.net.Uri
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.example.bookshelf.bussiness.Result.Result
 import com.example.bookshelf.bussiness.model.UserProfile
 import com.google.firebase.firestore.FirebaseFirestore
@@ -91,11 +93,12 @@ class FirestoreProfileDataSource(db : FirebaseFirestore,cloudStorage : FirebaseS
         return flow
     }
 
-    override suspend fun getProfile(uuid: String) = callbackFlow {
+    override suspend  fun getProfile(uuid: String) = callbackFlow {
         val snapshot = profileRef.document(uuid)
             .addSnapshotListener{_snapshot,e->
                 val response = if (_snapshot != null){
                     val _profile = _snapshot.toObject(UserProfile::class.java)
+                    Log.d("ProfileRepo","${_profile!!.displayName} ---Display Name")
                     Result.Success(_profile)
                 }else{
                     Result.Failure(e?.message ?: e.toString())

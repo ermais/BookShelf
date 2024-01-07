@@ -45,11 +45,10 @@
 
                     <ImageView
                         android:id="@+id/ivProfilePicture"
-                        android:layout_width="160dp"
-                        android:layout_height="160dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_marginBottom="16dp"
-                        android:background="@drawable/circle"
-                        android:scaleType="center"
+                        android:scaleType="centerCrop"
                         app:circularflow_radiusInDP="100dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -62,7 +61,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="32dp"
                         android:layout_marginEnd="32dp"
-                        android:text="@={viewModel.email}"
+                        android:text="@{viewModel.email}"
                         android:textAlignment="center"
                         android:textSize="20sp"
                         app:layout_constraintBottom_toBottomOf="@+id/ivProfilePicture"
@@ -74,11 +73,11 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.appcompat.widget.Toolbar
+                android:fitsSystemWindows="true"
                 android:id="@+id/profile_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                android:overScrollMode="always"
                 android:text="My Profile"
                 android:theme="?attr/actionBarTheme"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
@@ -128,7 +127,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:text="@={viewModel.firstName}"
+                        android:text="@{viewModel.firstName}"
 
                         app:layout_constraintStart_toStartOf="@+id/tvNameLabel"
                         app:layout_constraintTop_toBottomOf="@+id/tvNameLabel" />
@@ -138,7 +137,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:text="@={viewModel.lastName}"
+                        android:text="@{viewModel.lastName}"
 
                         app:layout_constraintStart_toEndOf="@+id/tevFirstName"
                         app:layout_constraintTop_toBottomOf="@+id/tvNameLabel" />
@@ -203,7 +202,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:text="@={viewModel.displayName}"
+                        android:text="@{viewModel.displayName}"
 
                         app:layout_constraintStart_toStartOf="@+id/tvDisplayNameLabel"
                         app:layout_constraintTop_toBottomOf="@+id/tvDisplayNameLabel" />

@@ -3,10 +3,12 @@ package com.example.bookshelf.ui.profile
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.core.net.toUri
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -15,6 +17,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.bookshelf.R
 import com.example.bookshelf.bussiness.networkdata.FirestoreProfileDataSource
 import com.example.bookshelf.bussiness.repository.profile.UserProfileRepository
@@ -55,7 +59,6 @@ class ProfileFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentProfileBinding.inflate(inflater,container,false)
-
         db = FirebaseFirestore.getInstance()
         cloudStorage = FirebaseStorage.getInstance()
         auth = FirebaseAuth.getInstance()
@@ -67,14 +70,42 @@ class ProfileFragment : Fragment() {
             this,
             profileViewModelFactory
         )[ProfileViewModel::class.java]
+
+
         binding.viewModel = profileViewModel
+
         toolbar = binding.profileToolbar
         layout = binding.layoutProfileCollapsable
         navController = findNavController()
         val _drawer = view?.findViewById<DrawerLayout>(R.id.drawer_layout)
         appBarConfiguration = AppBarConfiguration(setOf(),_drawer)
         NavigationUI.setupWithNavController(layout,toolbar,navController,appBarConfiguration)
+        Log.d("ProfileF","${profileViewModel.profile.value} ---------Model")
 
+        profileViewModel.displayName.observe(viewLifecycleOwner){
+            Log.d("ProfileD","${it} ----DisplayName")
+            binding.tevDisplayName.setText(it)
+        }
+        profileViewModel.firstName.observe(viewLifecycleOwner){
+            binding.tevFirstName.setText(it)
+        }
+        profileViewModel.lastName.observe(viewLifecycleOwner){
+            binding.tevLastName.setText(it)
+        }
+        profileViewModel.email.observe(viewLifecycleOwner){
+            Log.d("ProfileE","${it} ----Email")
+            binding.tvUserName.setText(it)
+
+        }
+
+        profileViewModel.userPhotoUrl.observe(viewLifecycleOwner){
+            val requestOptions: RequestOptions =
+                RequestOptions().placeholder(R.drawable.ic_launcher_background)
+            Glide.with(requireActivity())
+                .load(it.toUri())
+                .apply(requestOptions)
+                .into(binding.ivProfilePicture)
+        }
 
         return binding.root
     }
@@ -82,16 +113,12 @@ class ProfileFragment : Fragment() {
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.title = "profile page"
-        val drawerLayout = view.findViewById<DrawerLayout>(R.id.drawer_layout)
-        val appBarConfiguration = AppBarConfiguration(setOf(), drawerLayout)
-        layout.isTitleEnabled = false
-        layout.title = "profile name"
-//        layout.setupWithNavController(toolbar,navController,appBarConfiguration)
-        NavigationUI.setupWithNavController(
-            toolbar as Toolbar,
-            navController = findNavController(),
-            appBarConfiguration
-        )
+        Log.d("ProfileF","${profileViewModel.profile.value} ---------Model")
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("ProfileF","${profileViewModel.profile.value} ---------Model")
     }
 }

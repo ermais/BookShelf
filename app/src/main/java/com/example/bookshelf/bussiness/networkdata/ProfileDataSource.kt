@@ -1,6 +1,7 @@
 package com.example.bookshelf.bussiness.networkdata
 
 import android.net.Uri
+import androidx.lifecycle.MutableLiveData
 import com.example.bookshelf.bussiness.Result.Result
 import com.example.bookshelf.bussiness.model.UserProfile
 import com.google.firebase.firestore.FirebaseFirestore
@@ -14,6 +15,6 @@ interface ProfileDataSource {
     suspend fun updateUserName(firstName:String,lastName:String,uuid: String) : Flow<Result<Void>>
     suspend fun updateUserPhoto(photoUri:Uri,uuid: String) : Flow<Result<Void>>
     suspend fun updateDisplayName(displayName : String,uuid: String) : Flow<Result<Void>>
-    suspend fun getProfile(uuid: String) : Flow<Result<UserProfile?>>
+     suspend fun getProfile(uuid: String) : Flow<Result<UserProfile>>
 
 }

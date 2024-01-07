@@ -121,5 +121,4 @@ class BookListViewModel(
         return builder.build()
     }
 
-
 }
