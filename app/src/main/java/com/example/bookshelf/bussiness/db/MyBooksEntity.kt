@@ -2,7 +2,7 @@ package com.example.bookshelf.bussiness.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.*
+import java.util.Date
 
 @Entity(tableName = "mybooks")
 data class MyBooksEntity(

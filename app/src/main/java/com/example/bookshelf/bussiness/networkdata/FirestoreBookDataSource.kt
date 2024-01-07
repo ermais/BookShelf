@@ -23,10 +23,9 @@ class FirestoreBookDataSource(db: FirebaseFirestore, cloudStorage: FirebaseStora
             try {
                 emit(Loading)
                 val bookId = bookRef.document().id
-                val bookAdded = bookRef.
-                document(bookId).
-                set(book.
-                toMap(bookId))
+                val bookAdded = bookRef.document(bookId).set(
+                    book.toMap(bookId)
+                )
                     .await()
                 emit(Success(bookAdded))
             } catch (e: Exception) {

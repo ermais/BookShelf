@@ -37,7 +37,7 @@ class DownloadBookWorker(ctx: Context, params: WorkerParameters) : CoroutineWork
             val bookId = inputData.getString(KEY_BOOK_ID)
 
             println("doWork book id ----------------------------------${bookId}")
-            Log.d("Download",bookId.toString())
+            Log.d("Download", bookId.toString())
             var localDownloadUri =
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
             localDownloadUri = File(localDownloadUri.path + "/books")
@@ -61,7 +61,7 @@ class DownloadBookWorker(ctx: Context, params: WorkerParameters) : CoroutineWork
                         50,
                         bookTitle.toString()
                     )
-                    NotificationService.notify(applicationContext,notifyBuilder)
+                    NotificationService.notify(applicationContext, notifyBuilder)
                     return@Continuation downloadRef.downloadUrl
                 })
                     .addOnCompleteListener {

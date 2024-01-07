@@ -2,11 +2,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="viewModel"
             type="com.example.bookshelf.ui.login.LoginViewModel" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/LoginLayout"
         android:layout_width="match_parent"
@@ -17,6 +20,7 @@
         android:visibility="visible"
         app:circularflow_radiusInDP="100"
         tools:context=".ui.login.LoginActivity">
+
         <TextView
             android:id="@+id/loginError"
             android:layout_width="0dp"
@@ -108,7 +112,7 @@
             android:layout_marginTop="32dp"
             android:autofillHints=""
             android:drawableStart="@drawable/ic_baseline_lock_24"
-            android:fontFamily="sans-serif-smallcaps"
+            android:fontFamily="sans-serif"
             android:hint="@string/password_hint"
             android:inputType="textPassword"
             android:padding="6dp"
@@ -160,7 +164,6 @@
             android:textAllCaps="false"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:typeface="monospace"
             app:circularflow_radiusInDP="20dp"
             app:layout_constraintEnd_toEndOf="@+id/btnUserLogin"
             app:layout_constraintHorizontal_bias="0.0"
@@ -173,7 +176,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:fontFamily="@font/dawning_of_a_new_day"
             android:letterSpacing="0.05"
             android:paddingHorizontal="40dp"
             android:text="@string/i_don_t_have_an_account_button_text"

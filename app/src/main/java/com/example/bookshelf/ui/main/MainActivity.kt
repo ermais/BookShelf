@@ -13,9 +13,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
+import androidx.core.view.children
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -28,6 +30,7 @@ import com.example.bookshelf.databinding.ActivityMainBinding
 import com.example.bookshelf.ui.login.LoginActivity
 import com.example.bookshelf.util.LocaleHelper
 import com.example.bookshelf.util.getConnMgr
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import java.util.*
@@ -45,6 +48,7 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
     private lateinit var locale: Locale
     private lateinit var prefListener: SharedPreferences.OnSharedPreferenceChangeListener
     private lateinit var prefManager: SharedPreferences
+    private lateinit var auth : FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         prefManager = PreferenceManager.getDefaultSharedPreferences(this)
@@ -85,9 +89,12 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
         }
         prefManager.registerOnSharedPreferenceChangeListener(prefListener)
         layout = binding.root
+        auth = FirebaseAuth.getInstance()
+        val navHeader = binding.navView.getHeaderView(0)
+        val tvUserMail = navHeader.findViewById<TextView>(R.id.tvUserEmail)
+        tvUserMail.text = auth.currentUser?.email ?: ""
         viewModelFactory = MainViewModelFactory(application)
         viewModel = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
-
         if (actionBar != null) {
 
             val drawerLayout = binding.drawerLayout
@@ -109,18 +116,23 @@ class MainActivity : AppCompatActivity(), OnQueryTextListener {
             "bookshelf" -> {
                 setTheme(R.style.Theme_BookShelf)
             }
+
             "bookshelf_green_dark" -> {
                 setTheme(R.style.Theme_BookShelf_GreenDark)
             }
+
             "bookshelf_light_dark" -> {
                 setTheme(R.style.Theme_BookShelf_LightDark)
             }
+
             "bookshelf_orange_dark" -> {
                 setTheme(R.style.Theme_BookShelf_OrangeDark)
             }
+
             "bookshelf_white" -> {
                 setTheme(R.style.Theme_BookShelf_White)
             }
+
             else -> {
                 setTheme(R.style.Theme_BookShelf)
             }

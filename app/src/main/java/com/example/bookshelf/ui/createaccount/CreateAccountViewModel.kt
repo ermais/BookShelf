@@ -93,22 +93,28 @@ class CreateAccountViewModel(private val auth: FirebaseAuth) : ViewModel() {
         return isPasswordMatch() && isValidDisplayName() && isValidEmail() && isValidPassword()
     }
 
-    fun createUserEmailAndPassword(callbackOnSuccess: () -> Unit, callbackOnFailure: () -> Unit) {
-        if (canICreate()) {
-            auth.createUserWithEmailAndPassword(email.value!!, password.value!!)
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        showCreateAccountError.postValue(false)
-                        callbackOnSuccess()
-                    } else {
+    fun createUserEmailAndPassword(callbackOnSuccess: () -> Unit, callbackOnFailure: () -> Unit,isConnected:Boolean) {
+
+        if (canICreate() and isConnected) {
+            auth.signInWithEmailAndPassword(email.value!!,password.value!!).addOnCompleteListener{
+                callbackOnSuccess()
+            }.addOnFailureListener{
+                auth.createUserWithEmailAndPassword(email.value!!, password.value!!)
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            showCreateAccountError.postValue(false)
+                            callbackOnSuccess()
+                        } else {
+                            showCreateAccountError.postValue(true)
+                            callbackOnFailure()
+                        }
+                    }
+                    .addOnFailureListener {
                         showCreateAccountError.postValue(true)
                         callbackOnFailure()
                     }
-                }
-                .addOnFailureListener {
-                    showCreateAccountError.postValue(true)
-                    callbackOnFailure()
-                }
-        }
+            }
+            }
+
     }
 }

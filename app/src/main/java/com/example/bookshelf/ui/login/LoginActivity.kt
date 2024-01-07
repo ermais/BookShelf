@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.IntentSender
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
@@ -13,6 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.example.bookshelf.R
+import com.example.bookshelf.bussiness.model.UserProfile
+import com.example.bookshelf.bussiness.networkdata.FirestoreProfileDataSource
+import com.example.bookshelf.bussiness.repository.profile.UserProfileRepository
 import com.example.bookshelf.databinding.ActivityLoginBinding
 import com.example.bookshelf.ui.createaccount.CreateAccountActivity
 import com.example.bookshelf.ui.main.MainActivity
@@ -25,7 +29,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import java.util.*
 
 
@@ -45,13 +51,17 @@ class LoginActivity : AppCompatActivity() {
 
     //
     private val RC_SIGN_IN: Int = 265
-    private lateinit var oneTapClient  : SignInClient
+    private lateinit var oneTapClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var loginViewModelFactory: LoginViewModelFactory
+    private lateinit var userProfileRepository: UserProfileRepository
+    private lateinit var firestoreProfileDataSource: FirestoreProfileDataSource
+    private lateinit var db : FirebaseFirestore
+    private lateinit var cloudStorage : FirebaseStorage
 
     override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onPostCreate(savedInstanceState, persistentState)
@@ -64,7 +74,11 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         auth = Firebase.auth
-        loginViewModelFactory = LoginViewModelFactory(auth)
+        db = FirebaseFirestore.getInstance()
+        cloudStorage = FirebaseStorage.getInstance()
+        firestoreProfileDataSource = FirestoreProfileDataSource(db, cloudStorage)
+        userProfileRepository = UserProfileRepository(firestoreProfileDataSource)
+        loginViewModelFactory = LoginViewModelFactory(auth,userProfileRepository)
         loginViewModel =
             ViewModelProvider(this, loginViewModelFactory).get(LoginViewModel::class.java)
         connMgr = getConnMgr(applicationContext, ::getSystemService)
@@ -171,7 +185,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.btnCreateUser.setOnClickListener {
-            val intent = Intent(this,CreateAccountActivity::class.java)
+            val intent = Intent(this, CreateAccountActivity::class.java)
             startActivity(intent)
         }
     }
@@ -193,12 +207,12 @@ class LoginActivity : AppCompatActivity() {
 //                Log.w(TAG, "Google sign in failed", e)
 //            }
 //        }
-        when(requestCode){
-            RC_SIGN_IN->{
+        when (requestCode) {
+            RC_SIGN_IN -> {
                 try {
                     val credential = oneTapClient.getSignInCredentialFromIntent(data)
                     credential.googleIdToken?.let { firebaseAuthWithGoogle(it) }
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     Log.d(TAG, "Google sign in failed", e)
                 }
             }
@@ -225,21 +239,21 @@ class LoginActivity : AppCompatActivity() {
     private fun signIn() {
 //        val signInIntent = googleSignInClient.signInIntent
 //        startActivityForResult(signInIntent, RC_SIGN_IN)
-        Log.d("ONE_TAP","getting one tap")
+        Log.d("ONE_TAP", "getting one tap")
         oneTapClient.beginSignIn(signInRequest)
-            .addOnSuccessListener(this){ result->
-                Log.d("ONE_TAP","get result")
+            .addOnSuccessListener(this) { result ->
+                Log.d("ONE_TAP", "get result")
                 try {
-                    Log.d("ONE_TAP","onSuccess")
+                    Log.d("ONE_TAP", "onSuccess")
                     startIntentSenderForResult(
-                        result.pendingIntent.intentSender,RC_SIGN_IN,
-                        null,0,0,0,null
+                        result.pendingIntent.intentSender, RC_SIGN_IN,
+                        null, 0, 0, 0, null
                     )
-                }catch (e:IntentSender.SendIntentException){
-                    Log.d("ONE_TAP","couldn't start one tap")
+                } catch (e: IntentSender.SendIntentException) {
+                    Log.d("ONE_TAP", "couldn't start one tap")
                 }
             }
-            .addOnFailureListener(this){
+            .addOnFailureListener(this) {
                 it.localizedMessage?.let { it1 -> Log.d("ONE_TAP", it1) }
             }
     }
@@ -281,6 +295,15 @@ class LoginActivity : AppCompatActivity() {
 
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
+            UserProfile()
+            val profile = UserProfile(
+                user.uid,
+                user.displayName ?: "",
+                "",
+                "",
+                user.photoUrl ?: Uri.EMPTY,
+                user.email ?: ""
+            )
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
@@ -293,7 +316,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginSuccess(): Unit {
-        val toast = Toast.makeText(this,"Login succeed!  ",Toast.LENGTH_LONG)
+        val toast = Toast.makeText(this, "Login succeed!  ", Toast.LENGTH_LONG)
         toast.show()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)

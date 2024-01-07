@@ -15,6 +15,7 @@
     <string name="set_book_cover_btn_text">የመጽሐፉን ገጽ መሸፈኛ ያስገቡ</string>
     <string name="save_button_text">በቋሚነት ያስቀምጡ</string>
     <string name="upload_book_doc_button_text">መጽሐፉን ይጫኑ</string>
+    <string name="user_name_hint">መጠቀሚያ ስም</string>
     <string name="login_button_text">ይግቡ</string>
     <string name="forget_password_button_text">የይለፍ መለያዪን እረስቼዋለሁ</string>
     <string name="i_don_t_have_an_account_button_text">መጠቀሚያ አካውንት የለኝም</string>
@@ -55,5 +56,6 @@
     <string name="create_account_string">አካውንት ክፈት</string>
     <string name="create_app_bar_title_string">መጽሐፍ አትም</string>
     <string name="my_books_app_bar_title_string">My Books</string>
+    <string name="confirm_password_error_string">የይለፍ ቃሉ አይመሳሰልም</string>
     <string name="buy_book_string">መጽሓፉን ግዛ</string>
 </resources>

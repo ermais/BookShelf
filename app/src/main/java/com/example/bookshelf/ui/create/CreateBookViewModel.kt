@@ -45,13 +45,11 @@ class CreateBookViewModel(
     }
 
 
-
-
     fun publishBook(
-        successCallback:()->Unit,failureCallback : ()->Unit,
-        networkFailureCallback:()->Unit
+        successCallback: () -> Unit, failureCallback: () -> Unit,
+        networkFailureCallback: () -> Unit
     ) = viewModelScope.launch(Dispatchers.IO) {
-        if (isConnected.value == true){
+        if (isConnected.value == true) {
             try {
                 val book = Book(
                     "",
@@ -74,7 +72,7 @@ class CreateBookViewModel(
                     }
 
                 }
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 loading.postValue(false)
                 viewModelScope.launch {
                     failureCallback()
@@ -82,7 +80,7 @@ class CreateBookViewModel(
 
 
             }
-        }else {
+        } else {
             viewModelScope.launch {
                 networkFailureCallback()
             }
@@ -112,10 +110,10 @@ class CreateBookViewModel(
 
 
     fun uploadBookDoc(
-        successCallback: () -> Unit,failureCallback: () -> Unit,
+        successCallback: () -> Unit, failureCallback: () -> Unit,
         networkFailureCallback: () -> Unit
     ) = viewModelScope.launch(Dispatchers.IO) {
-        if (isConnected.value == true){
+        if (isConnected.value == true) {
             try {
                 loading.postValue(true)
                 createBookRepository.uploadBookDoc(
@@ -130,7 +128,7 @@ class CreateBookViewModel(
                         }
 
                     }
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 viewModelScope.launch(Dispatchers.Main) {
                     failureCallback()
                 }
@@ -138,12 +136,16 @@ class CreateBookViewModel(
                 loading.postValue(true)
             }
 
-        }else networkFailureCallback()
+        } else networkFailureCallback()
 
     }
 
-    fun uploadBookCover(successCallback: () -> Unit,failureCallback: () -> Unit,networkFailureCallback: () -> Unit) = viewModelScope.launch(Dispatchers.IO) {
-        if (isConnected.value == true){
+    fun uploadBookCover(
+        successCallback: () -> Unit,
+        failureCallback: () -> Unit,
+        networkFailureCallback: () -> Unit
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        if (isConnected.value == true) {
             try {
                 loading.postValue(true)
                 createBookRepository.uploadBookCover(
@@ -154,20 +156,20 @@ class CreateBookViewModel(
                         bookCoverUriFromFirebase.postValue(result.data.toString())
                         loading.value = false
 
-                        Log.d("Upload",loading.value.toString())
+                        Log.d("Upload", loading.value.toString())
                         viewModelScope.launch(Dispatchers.Main) {
                             successCallback()
                         }
 
                     }
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 viewModelScope.launch(Dispatchers.Main) {
                     failureCallback()
                 }
 
                 loading.postValue(false)
             }
-        }else networkFailureCallback()
+        } else networkFailureCallback()
     }
 }
 

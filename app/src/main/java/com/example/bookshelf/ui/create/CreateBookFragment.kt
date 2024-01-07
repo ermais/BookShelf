@@ -25,6 +25,7 @@ import com.example.bookshelf.R
 import com.example.bookshelf.bussiness.networkdata.FirestoreBookDataSource
 import com.example.bookshelf.bussiness.networkdata.FirestoreMyBooksDataSource
 import com.example.bookshelf.bussiness.repository.book.CreateBookRepository
+import com.example.bookshelf.bussiness.repository.profile.UserProfileRepository
 import com.example.bookshelf.databinding.FragmentCreateBookBinding
 import com.example.bookshelf.util.isPermissionGranted
 import com.example.bookshelf.util.requestPermission
@@ -50,6 +51,7 @@ class CreateBookFragment : Fragment() {
     private lateinit var createBookViewModelFactory: CreateBookViewModelFactory
     private lateinit var createBookViewModel: CreateBookViewModel
     private lateinit var firebaseBooksDataSource: FirestoreMyBooksDataSource
+    private lateinit var userProfileRepository: UserProfileRepository
 
 
     override fun onCreateView(
@@ -121,18 +123,18 @@ class CreateBookFragment : Fragment() {
             loading.observe(viewLifecycleOwner) {
                 if (it as Boolean) {
                     binding.layoutBookCreate.pbAddBook.visibility = View.VISIBLE
-                    for (view in binding.layoutBookCreate.bookCreateContainer.children){
-                        if (view !is ProgressBar){
+                    for (view in binding.layoutBookCreate.bookCreateContainer.children) {
+                        if (view !is ProgressBar) {
                             view.alpha = 0.23f
                             view.isActivated = false
-                            Log.d("ProgressBar",view.id.toString())
+                            Log.d("ProgressBar", view.id.toString())
                         }
                     }
                 } else {
                     binding.layoutBookCreate.pbAddBook.visibility = View.GONE
-                    for (view in binding.layoutBookCreate.bookCreateContainer.children){
-                            view.alpha = 1.0f
-                            Log.d("ProgressBar",view.id.toString())
+                    for (view in binding.layoutBookCreate.bookCreateContainer.children) {
+                        view.alpha = 1.0f
+                        Log.d("ProgressBar", view.id.toString())
                     }
                 }
             }
@@ -155,7 +157,7 @@ class CreateBookFragment : Fragment() {
                     if (!it.isNullOrEmpty()) {
                         binding.layoutBookCreate.tvUploadedBook.visibility = View.VISIBLE
                         binding.layoutBookCreate.tvUploadedBook.text = it
-                    }else{
+                    } else {
                         binding.layoutBookCreate.tvUploadedBook.visibility = View.GONE
                     }
                 }
@@ -167,8 +169,8 @@ class CreateBookFragment : Fragment() {
                         binding.layoutBookCreate.tvUploadedBookCover.text = it
                         binding.layoutBookCreate.tvUploadedBookCover.visibility = View.VISIBLE
 
-                    }else{
-                        binding.layoutBookCreate.tvUploadedBookCover.visibility =  View.GONE
+                    } else {
+                        binding.layoutBookCreate.tvUploadedBookCover.visibility = View.GONE
                     }
                 }
             }
@@ -220,11 +222,12 @@ class CreateBookFragment : Fragment() {
 
             btnUploadBook.setOnClickListener {
                 if (createBookViewModel.canUploadBookDoc()) {
-                    val toast = Toast.makeText(requireContext(),"Upload book ...",Toast.LENGTH_SHORT)
+                    val toast =
+                        Toast.makeText(requireContext(), "Upload book ...", Toast.LENGTH_SHORT)
                     toast.show()
-                    if (Build.VERSION.SDK_INT >= 32){
+                    if (Build.VERSION.SDK_INT >= 32) {
                         getBookDoc()
-                    }else{
+                    } else {
                         if (isPermissionGranted(
                                 requireContext(),
                                 BOOK_DOCUMENT_PERMISSION
@@ -380,7 +383,7 @@ class CreateBookFragment : Fragment() {
     }
 
     private fun getBookDoc() {
-        val toast = Toast.makeText(requireContext(),"Get book ...",Toast.LENGTH_LONG)
+        val toast = Toast.makeText(requireContext(), "Get book ...", Toast.LENGTH_LONG)
         toast.show()
         val bookDocIntent = Intent(Intent.ACTION_GET_CONTENT)
         bookDocIntent.type = "application/pdf*"

@@ -1,9 +1,7 @@
 package com.example.bookshelf.ui.booklist
 
-import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,8 +11,6 @@ import android.widget.Toast
 import android.widget.Toolbar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -30,15 +26,12 @@ import com.example.bookshelf.bussiness.db.asDomainModel
 import com.example.bookshelf.bussiness.networkdata.FirestoreBookDataSource
 import com.example.bookshelf.bussiness.repository.book.BookListRepository
 import com.example.bookshelf.databinding.FragmentBookListBinding
-import com.example.bookshelf.ui.Utils.showSnackBar
 import com.example.bookshelf.ui.home.HomeViewModel
 import com.example.bookshelf.ui.main.MainActivity
 import com.example.bookshelf.ui.main.MainViewModel
 import com.example.bookshelf.util.NetworkStatus
 import com.example.bookshelf.util.NotificationService
 import com.example.bookshelf.util.getConnMgr
-import com.example.bookshelf.util.requestPermission
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -58,8 +51,8 @@ class BookListFragment : Fragment() {
     private lateinit var bookShelDb: BookDatabase
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private var toolbar: Toolbar? = null
-    private var isConnected  = false
-    private lateinit var  _connMgr : ConnectivityManager
+    private var isConnected = false
+    private lateinit var _connMgr: ConnectivityManager
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -79,13 +72,17 @@ class BookListFragment : Fragment() {
         cloudStorage = FirebaseStorage.getInstance()
         firestoreBookDataSource = FirestoreBookDataSource(db, cloudStorage)
         activity?.let {
-            _connMgr = getConnMgr(requireContext(),it::getSystemService)
+            _connMgr = getConnMgr(requireContext(), it::getSystemService)
         }
         isConnected = NetworkStatus.isConnected(_connMgr)
         bookShelDb = BookDatabase.getDatabase(requireContext())
         bookListRepository = BookListRepository(firestoreBookDataSource, bookShelDb, _connMgr)
         val bookListViewModelFactory =
-            BookListViewModelFactory(bookListRepository,isConnected, requireNotNull(activity).application)
+            BookListViewModelFactory(
+                bookListRepository,
+                isConnected,
+                requireNotNull(activity).application
+            )
         bookListModel =
             ViewModelProvider(this, bookListViewModelFactory)[BookListViewModel::class.java]
 

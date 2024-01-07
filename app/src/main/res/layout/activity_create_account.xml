@@ -5,6 +5,7 @@
     android:visibility="visible">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.bookshelf.ui.createaccount.CreateAccountViewModel" />

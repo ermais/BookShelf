@@ -32,7 +32,7 @@
     <string name="set_book_cover_btn_text">Set Book Cover</string>
     <string name="save_button_text">SAVE</string>
     <string name="upload_book_doc_button_text">Upload Book Doc</string>
-    <string name="user_name_hint" translatable="false">User Name</string>
+    <string name="user_name_hint">User Name</string>
     <string name="display_name_hint" translatable="false">ermias mesfin</string>
     <string name="password_hint" translatable="false">*********</string>
     <string name="login_button_text">Login</string>
@@ -113,7 +113,7 @@
     <string name="email_error_string" translatable="false">invalid email or not found</string>
     <string name="dsplay_name_error_string" translatable="false">Display name should be at least 4 character or empty</string>
     <string name="create_password_error_string" translatable="false"><![CDATA[password must be at least 8 character and include A-Z, 0-9,! # @ % ^ & *]]></string>
-    <string name="confirm_password_error_string" translatable="false">password doesn\'t match</string>
+    <string name="confirm_password_error_string">password doesn\'t match</string>
     <string name="buy_book_string">Buy Book</string>
     <string name="download_book_channel_name">download book channel</string>
     <string name="download_book_channel_description">"Download Book "</string>

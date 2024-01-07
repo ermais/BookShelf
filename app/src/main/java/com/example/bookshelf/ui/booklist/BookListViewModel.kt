@@ -7,7 +7,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.work.*
+import androidx.work.Constraints
+import androidx.work.Data
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.bookshelf.bussiness.db.BookEntity
 import com.example.bookshelf.bussiness.db.DownloadEntity
 import com.example.bookshelf.bussiness.repository.book.BookListRepository
@@ -21,7 +25,7 @@ import kotlinx.coroutines.launch
 
 class BookListViewModel(
     private val bookListRepository: BookListRepository,
-    private val isConnected : Boolean,
+    private val isConnected: Boolean,
     private val application: Application,
 ) : ViewModel() {
     internal var books: MutableLiveData<List<BookEntity>> =
@@ -35,7 +39,7 @@ class BookListViewModel(
 
 
     fun downloadBook(downloadUri: Uri, bookTitle: String, bookId: String) = viewModelScope.launch {
-        if (isConnected){
+        if (isConnected) {
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .setRequiresBatteryNotLow(true)
@@ -47,14 +51,18 @@ class BookListViewModel(
                 .addTag(DOWNLOAD_BOOK_WORKER_TAG)
                 .build()
             workManager.enqueue(downloadWorkRequest)
-        }else{
+        } else {
 
         }
 
     }
 
-     private fun refreshCallback(){
-        val toast = Toast.makeText(application,"lost connection !, check your connection",Toast.LENGTH_LONG)
+    private fun refreshCallback() {
+        val toast = Toast.makeText(
+            application,
+            "lost connection !, check your connection",
+            Toast.LENGTH_LONG
+        )
         toast.show()
     }
 

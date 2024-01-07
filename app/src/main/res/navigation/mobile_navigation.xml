@@ -66,4 +66,8 @@
             android:id="@+id/action_createBookFragment_to_nav_home"
             app:destination="@id/nav_home" />
     </fragment>
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.example.bookshelf.ui.profile.ProfileFragment"
+        android:label="ProfileFragment" />
 </navigation>

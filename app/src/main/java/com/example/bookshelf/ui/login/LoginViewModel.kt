@@ -4,12 +4,16 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.bookshelf.bussiness.model.UserProfile
+import com.example.bookshelf.bussiness.repository.profile.UserProfileRepository
 import com.example.bookshelf.data.User
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val auth: FirebaseAuth) : ViewModel() {
+class LoginViewModel(private val auth: FirebaseAuth,private val userProfileRepository: UserProfileRepository) : ViewModel() {
 
     private val _user = MutableLiveData<User>().apply {
         value = null
@@ -38,6 +42,10 @@ class LoginViewModel(private val auth: FirebaseAuth) : ViewModel() {
         MutableLiveData<Boolean>(false)
     }
 
+    fun createProfile(profile:UserProfile) = viewModelScope.launch(Dispatchers.IO) {
+        userProfileRepository.createProfile(profile)
+            .collect()
+    }
 
     fun loginWithEmailPassword(loginSuccessCallback: () -> Unit, loginFailCallback: () -> Unit) {
         if (canILogin()) {
@@ -50,7 +58,7 @@ class LoginViewModel(private val auth: FirebaseAuth) : ViewModel() {
                 .addOnCompleteListener {
                     Log.d("LOGIN", "Here, I am")
                     if (it.isSuccessful) {
-                        Log.d("LOGIN","navigate to main screen")
+                        Log.d("LOGIN", "navigate to main screen")
                         showProgressBar.postValue(false)
                         invalidPasswordOrEmail.postValue(false)
                         loginSuccessCallback()

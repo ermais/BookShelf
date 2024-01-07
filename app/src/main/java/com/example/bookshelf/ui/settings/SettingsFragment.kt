@@ -116,18 +116,23 @@ class SettingsFragment : PreferenceFragmentCompat() {
             "bookshelf" -> {
                 requireActivity().baseContext.setTheme(R.style.Theme_BookShelf)
             }
+
             "bookshelf_green_dark" -> {
                 requireActivity().baseContext.setTheme(R.style.Theme_BookShelf_GreenDark)
             }
+
             "bookshelf_light_dark" -> {
                 requireActivity().baseContext.setTheme(R.style.Theme_BookShelf_LightDark)
             }
+
             "bookshelf_orange_dark" -> {
                 requireActivity().baseContext.setTheme(R.style.Theme_BookShelf_OrangeDark)
             }
+
             "bookshelf_white" -> {
                 requireActivity().baseContext.setTheme(R.style.Theme_BookShelf_White)
             }
+
             else -> {
                 requireActivity().baseContext.setTheme(R.style.Theme_BookShelf)
             }

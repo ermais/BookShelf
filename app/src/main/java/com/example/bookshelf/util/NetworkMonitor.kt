@@ -66,7 +66,7 @@ fun showSnackBar(message: String, context: Context) {
 
 object NetworkStatus {
 
-    fun isConnected(connMgr:ConnectivityManager) : Boolean{
+    fun isConnected(connMgr: ConnectivityManager): Boolean {
         return connMgr.activeNetworkInfo!!.isConnected
     }
 }

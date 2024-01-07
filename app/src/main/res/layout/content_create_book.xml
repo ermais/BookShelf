@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.bookshelf.ui.create.CreateBookViewModel" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bookCreateContainer"
         android:layout_width="match_parent"
@@ -78,8 +80,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textSize="8sp"
             android:text="@={viewModel.bookTitleError}"
+            android:textSize="8sp"
             app:layout_constraintEnd_toEndOf="@+id/teBookTitle"
             app:layout_constraintStart_toStartOf="@+id/teBookTitle"
             app:layout_constraintTop_toBottomOf="@+id/teBookTitle" />
@@ -87,10 +89,10 @@
         <TextView
             android:id="@+id/bookDocUriTextError"
             android:layout_width="0dp"
-            android:textSize="8sp"
             android:layout_height="wrap_content"
             android:layout_marginTop="13dp"
             android:text="@={viewModel.bookDocUriError}"
+            android:textSize="8sp"
             app:layout_constraintEnd_toEndOf="@+id/btnUploadBook"
             app:layout_constraintStart_toStartOf="@+id/btnUploadBook"
             app:layout_constraintTop_toBottomOf="@+id/btnUploadBook" />

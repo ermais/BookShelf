@@ -93,6 +93,10 @@ class BookDetailFragment : Fragment() {
         )
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null

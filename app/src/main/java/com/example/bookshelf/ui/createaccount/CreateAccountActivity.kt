@@ -22,7 +22,10 @@ class CreateAccountActivity : AppCompatActivity() {
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
         createAccountViewModelFactory = CreateAccountViewModelFactory(auth)
-        createAccountViewModel = ViewModelProvider(this,createAccountViewModelFactory)[CreateAccountViewModel::class.java]
+        createAccountViewModel = ViewModelProvider(
+            this,
+            createAccountViewModelFactory
+        )[CreateAccountViewModel::class.java]
         binding.viewModel = createAccountViewModel
 
 
@@ -53,18 +56,18 @@ class CreateAccountActivity : AppCompatActivity() {
                     binding.tvEmailError.visibility = View.GONE
                 }
             }
-            showPasswordError.observe(this@CreateAccountActivity){
-                if(it){
-                    binding.tvPasswordError.visibility =  View.VISIBLE
-                }else{
+            showPasswordError.observe(this@CreateAccountActivity) {
+                if (it) {
+                    binding.tvPasswordError.visibility = View.VISIBLE
+                } else {
                     binding.tvPasswordError.visibility = View.GONE
                 }
             }
 
-            showConfirmPasswordError.observe(this@CreateAccountActivity){
-                if (it){
+            showConfirmPasswordError.observe(this@CreateAccountActivity) {
+                if (it) {
                     binding.tvConfirmPasswordError.visibility = View.VISIBLE
-                }else{
+                } else {
                     binding.tvConfirmPasswordError.visibility = View.GONE
                 }
             }
@@ -73,25 +76,25 @@ class CreateAccountActivity : AppCompatActivity() {
 
         binding.apply {
             btnHaveAccount.setOnClickListener {
-                val loginIntent = Intent(this@CreateAccountActivity,LoginActivity::class.java)
+                val loginIntent = Intent(this@CreateAccountActivity, LoginActivity::class.java)
                 startActivity(loginIntent)
             }
 
             btnCreateAccount.setOnClickListener {
-                createAccountViewModel.createUserEmailAndPassword(::onCreateSuccess,::onCreateFail)
+                createAccountViewModel.createUserEmailAndPassword(::onCreateSuccess, ::onCreateFail,true)
             }
-        } 
+        }
     }
 
-    private fun onCreateSuccess(){
-        val intent = Intent(this,MainActivity::class.java)
+    private fun onCreateSuccess() {
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
     }
 
-    private fun onCreateFail(){
+    private fun onCreateFail() {
         createAccountViewModel.showCreateAccountError.postValue(true)
-        val toast = Toast.makeText(this,"login failed!,check your connection",Toast.LENGTH_LONG)
+        val toast = Toast.makeText(this, "login failed!,check your connection", Toast.LENGTH_LONG)
         toast.show()
     }
 }

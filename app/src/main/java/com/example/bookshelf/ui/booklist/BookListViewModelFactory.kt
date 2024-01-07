@@ -9,7 +9,7 @@ import com.example.bookshelf.bussiness.repository.book.BookListRepository
 @Suppress("UNCHECKED_CAST")
 class BookListViewModelFactory(
     private val bookListRepository: BookListRepository,
-    private val isConnected : Boolean,
+    private val isConnected: Boolean,
     private val application: Application,
 ) : ViewModelProvider.Factory {
 

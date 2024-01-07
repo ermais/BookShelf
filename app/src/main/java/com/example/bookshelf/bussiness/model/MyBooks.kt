@@ -1,7 +1,7 @@
 package com.example.bookshelf.bussiness.model
 
 import com.example.bookshelf.bussiness.db.MyBooksEntity
-import java.util.*
+import java.util.Date
 
 
 data class MyBooks(

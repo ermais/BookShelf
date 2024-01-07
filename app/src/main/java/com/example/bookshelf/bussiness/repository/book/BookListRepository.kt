@@ -32,8 +32,8 @@ class BookListRepository(
 
     suspend fun filterByAuthor(author: String) =
         if (isConnected)
-        firestoreBookDataSource
-            .filterByCategory(author)
+            firestoreBookDataSource
+                .filterByCategory(author)
         else getOfflineBooks()
 
     suspend fun refreshBooks(
@@ -54,7 +54,6 @@ class BookListRepository(
     }
 
 
-
     private fun clearDatabase() = db.bookDao().clear()
 
     suspend fun filterByCategoryOffline(
@@ -64,8 +63,7 @@ class BookListRepository(
 
     suspend fun filterBooks(query: String) = db.bookDao().queryBooks(query)
 
-    suspend fun sortByAuthor()
-    = db.bookDao().sortByAuthor()
+    suspend fun sortByAuthor() = db.bookDao().sortByAuthor()
 
     suspend fun sortByTitle() = db.bookDao().sortByTitle()
 
