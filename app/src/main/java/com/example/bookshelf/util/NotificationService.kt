@@ -75,7 +75,7 @@ class NotificationService {
                     ) !=
                     PackageManager.PERMISSION_GRANTED
                 ) {
-                    requestPermission(context as MainActivity, POST_NOTIFICATION, 899)
+                    requestPermission(context.applicationContext as MainActivity, POST_NOTIFICATION, 899)
                     return@with
                 }
                 notify(NOTIFICATION_ID, builder.build())

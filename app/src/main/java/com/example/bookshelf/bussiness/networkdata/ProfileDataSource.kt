@@ -13,8 +13,10 @@ interface ProfileDataSource {
 
     suspend fun createProfile(profile: UserProfile) : Flow<Result<Void>>
     suspend fun updateUserName(firstName:String,lastName:String,uuid: String) : Flow<Result<Void>>
-    suspend fun updateUserPhoto(photoUri:Uri,uuid: String) : Flow<Result<Void>>
+    suspend fun updateUserPhoto(photoUri:String,uuid: String) : Flow<Result<Void>>
     suspend fun updateDisplayName(displayName : String,uuid: String) : Flow<Result<Void>>
      suspend fun getProfile(uuid: String) : Flow<Result<UserProfile>>
+
+     suspend fun uploadProfilePicture(uuid:String,uriFromFile : Uri) : Flow<Result<Uri>>
 
 }

@@ -117,4 +117,5 @@
     <string name="buy_book_string">Buy Book</string>
     <string name="download_book_channel_name">download book channel</string>
     <string name="download_book_channel_description">"Download Book "</string>
+    <string name="edit_profile_picture">edit profile picture</string>
 </resources>

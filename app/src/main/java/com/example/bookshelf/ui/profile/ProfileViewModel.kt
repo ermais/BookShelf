@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import java.util.UUID
 
 class ProfileViewModel(
@@ -39,13 +40,23 @@ class ProfileViewModel(
 //    internal val profile = data.asLiveData() as MutableLiveData<UserProfile>
     private val _profile = MutableLiveData<UserProfile>()
     val profile : LiveData<UserProfile> get() = _profile
-    private val _firstName = MutableLiveData<String>()
-    val firstName : LiveData<String> get() = _firstName
-    private val _lastName = MutableLiveData<String>()
-    val lastName : LiveData<String> = _lastName
-     private val _displayName = MutableLiveData<String>()
+    val firstName : MutableLiveData<String> by lazy {
+        MutableLiveData<String>("")
+}
+    val lastName : MutableLiveData<String> by lazy {
+        MutableLiveData<String>("")
+    }
+//    private val _firstName = MutableLiveData<String>()
+//    val firstName : LiveData<String> get() = _firstName
+//    private val _lastName = MutableLiveData<String>()
+//    val lastName : LiveData<String> = _lastName
+//     private val _displayName = MutableLiveData<String>()
+//
+//    val displayName : LiveData<String> = _displayName
 
-    val displayName : LiveData<String> = _displayName
+    val displayName : MutableLiveData<String> by lazy {
+        MutableLiveData<String>("")
+    }
 
     private val _userPhotoUrl = MutableLiveData<String>()
      val userPhotoUrl : LiveData<String> = _userPhotoUrl
@@ -53,6 +64,27 @@ class ProfileViewModel(
 
     private val _email = MutableLiveData<String>()
      val email : MutableLiveData<String> = _email
+
+    val changeName : MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>(false)
+    }
+
+    val changeDisplayName : MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>(false)
+    }
+
+    val loading : MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>(false)
+    }
+
+    val profileImageUri : MutableLiveData<String> by lazy {
+        MutableLiveData<String>("")
+    }
+
+    val profileSuccessfullyLoaded : MutableLiveData<Boolean> by  lazy {
+        MutableLiveData<Boolean>(false)
+    }
+
 
 
     init {
@@ -67,22 +99,37 @@ class ProfileViewModel(
 
     }
 
-    fun updateName() = viewModelScope.launch {
-        repository.updateName(firstName.value.toString(),lastName.value.toString(),
-            user.currentUser!!.uid ).collect{
+    fun setChangeName(value : Boolean){
+        changeName.postValue(value)
+    }
 
+    fun setChangeDisplayName(value : Boolean){
+        changeDisplayName.postValue(value)
+    }
+
+    fun updateName() = viewModelScope.launch(Dispatchers.IO) {
+        firstName.value?.let {_firstName->
+            lastName.value?.let { _lastName->
+                repository.updateName(
+                    _firstName, _lastName,
+                    user.currentUser!!.uid ).collect{
+
+                }
+            }
         }
     }
 
-    fun updateDisplayName() = viewModelScope.launch {
-        repository.updateDisplayName(displayName.value.toString(),user.currentUser!!.uid)
-            .collect{
 
-            }
+    fun updateDisplayName() = viewModelScope.launch {
+        displayName.value?.let {
+            repository.updateDisplayName(it,user.currentUser!!.uid)
+                .collect{
+                }
+        }
     }
     fun updateUserPhotoUrl() = viewModelScope.launch {
         userPhotoUrl.value?.let {
-            repository.updatePhotoUrl(it as Uri,user.currentUser!!.uid)
+            repository.updatePhotoUrl(it,user.currentUser!!.uid)
                 .collect{
 
                 }
@@ -98,8 +145,9 @@ class ProfileViewModel(
                 viewModelScope.launch(Dispatchers.Main) {
                     userProfile?.let {
                         _profile.value = it
-                        _displayName.value = it.displayName
-                        _lastName.value = it.lastName
+                        displayName.value = it.displayName
+                        firstName.value = it.firstName
+                        lastName.value = it.lastName
                         _email.value= it.email
                         _userPhotoUrl.value= it.userPhotoUrl
                     }
@@ -107,5 +155,33 @@ class ProfileViewModel(
                 }
 
             }
+    }
+
+     fun uploadProfilePicture(successCallback:()->Unit,failureCallback:()->Unit) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            loading.postValue(true)
+            repository.uploadProfilePicture(
+                user.currentUser!!.uid,
+                Uri.parse(profileImageUri.value)
+            )
+                .collect{
+                    loading.postValue(false)
+                    it.data?.let {uri->
+                        profileSuccessfullyLoaded.postValue(true)
+                        _userPhotoUrl.postValue(uri.toString())
+                        updateUserPhotoUrl()
+                        viewModelScope.launch(Dispatchers.Main) {
+                            successCallback()
+                        }
+
+                    }
+                    profileSuccessfullyLoaded.postValue(false)
+
+                }
+        }catch (e : Exception){
+            viewModelScope.launch(Dispatchers.Main) {
+                failureCallback()
+            }
+        }
     }
 }

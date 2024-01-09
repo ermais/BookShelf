@@ -14,6 +14,9 @@ class UserProfileRepository(val dataSource: FirestoreProfileDataSource) {
     suspend fun updateDisplayName(displayName : String,uuid: String) =
         dataSource.updateDisplayName(displayName,uuid)
 
-    suspend fun updatePhotoUrl(photoUrl : Uri,uuid: String) =
+    suspend fun updatePhotoUrl(photoUrl : String,uuid: String) =
         dataSource.updateUserPhoto(photoUrl,String())
+
+    suspend fun uploadProfilePicture(uuid: String,uri:Uri) =
+        dataSource.uploadProfilePicture(uuid,uri)
 }

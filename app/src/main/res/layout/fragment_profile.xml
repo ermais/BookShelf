@@ -15,27 +15,33 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/profile_appbar"
         android:fitsSystemWindows="true"
-        android:layout_height="192dp"
+        android:elevation="10dp"
+        app:elevation="0dp"
+        android:layout_height="@dimen/profile_app_bar_sie_large"
         android:layout_width="match_parent">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="bottom|end"
             android:id="@+id/layout_profile_collapsable"
             app:toolbarId="@+id/toolbar"
             app:titleCollapseMode="fade"
             app:expandedTitleGravity="top|start"
-            android:layout_gravity="bottom|end|center"
             android:fitsSystemWindows="true"
-            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
-
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|enterAlwaysCollapsed|snap"
             >
 
+
+
             <androidx.cardview.widget.CardView
+                app:layout_collapseParallaxMultiplier="-1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/top_corner_radius"
                 app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="-1"
+                android:layout_weight="1"
+                android:layout_gravity="bottom|end"
                 android:id="@+id/profile_bar_card"
                 >
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -47,9 +53,9 @@
                         android:id="@+id/ivProfilePicture"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/circle"
+                        android:elevation="0dp"
                         android:scaleType="centerCrop"
-                        app:circularflow_radiusInDP="100dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -61,29 +67,30 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="32dp"
                         android:layout_marginEnd="32dp"
+                        android:layout_marginBottom="8dp"
                         android:text="@{viewModel.email}"
                         android:textAlignment="center"
                         android:textSize="20sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/ivProfilePicture"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="@+id/ivProfilePicture"
-                        app:layout_constraintStart_toStartOf="@+id/ivProfilePicture"
-                        app:layout_constraintTop_toBottomOf="@+id/ivProfilePicture" />
+                        app:layout_constraintStart_toStartOf="@+id/ivProfilePicture" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>
-
             <androidx.appcompat.widget.Toolbar
-                android:fitsSystemWindows="true"
                 android:id="@+id/profile_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
+                android:overScrollMode="always"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 android:text="My Profile"
                 android:theme="?attr/actionBarTheme"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                >
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/white_back_24"
+                />
 
-            </androidx.appcompat.widget.Toolbar>
+
+
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -126,8 +133,9 @@
                         android:id="@+id/tevFirstName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:hint="fname"
                         android:layout_marginStart="16dp"
-                        android:text="@{viewModel.firstName}"
+                        android:text="@={viewModel.firstName}"
 
                         app:layout_constraintStart_toStartOf="@+id/tvNameLabel"
                         app:layout_constraintTop_toBottomOf="@+id/tvNameLabel" />
@@ -136,8 +144,9 @@
                         android:id="@+id/tevLastName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:hint="lname"
                         android:layout_marginStart="16dp"
-                        android:text="@{viewModel.lastName}"
+                        android:text="@={viewModel.lastName}"
 
                         app:layout_constraintStart_toEndOf="@+id/tevFirstName"
                         app:layout_constraintTop_toBottomOf="@+id/tvNameLabel" />
@@ -202,7 +211,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:text="@{viewModel.displayName}"
+                        android:text="@={viewModel.displayName}"
 
                         app:layout_constraintStart_toStartOf="@+id/tvDisplayNameLabel"
                         app:layout_constraintTop_toBottomOf="@+id/tvDisplayNameLabel" />
@@ -262,7 +271,25 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 
-
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            app:layout_anchor="@id/ivProfilePicture"-->
+<!--            app:layout_anchorGravity="bottom|end|center"-->
+<!--            android:src="@drawable/ic_edit"-->
+<!--            android:contentDescription="@string/edit_profile_picture" />-->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabEditProfilePicture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_anchor="@id/profile_bar_card"
+            android:layout_gravity="end|center"
+            app:layout_anchorGravity="end|bottom"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/navigate_to_create_book_fab_text"
+            app:srcCompat="@android:drawable/ic_menu_edit" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </layout>
 

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.bookshelf.bussiness.Result.data
 import com.example.bookshelf.bussiness.model.UserProfile
 import com.example.bookshelf.bussiness.repository.profile.UserProfileRepository
 import com.example.bookshelf.data.User
@@ -42,9 +43,20 @@ class LoginViewModel(private val auth: FirebaseAuth,private val userProfileRepos
         MutableLiveData<Boolean>(false)
     }
 
+    val hasProfile : MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>(false)
+    }
+
+
     fun createProfile(profile:UserProfile) = viewModelScope.launch(Dispatchers.IO) {
-        userProfileRepository.createProfile(profile)
-            .collect()
+        userProfileRepository.getProfile(auth.currentUser!!.uid)
+            .collect{
+                if (it.data == null){
+                    userProfileRepository.createProfile(profile)
+                        .collect()
+                }
+            }
+
     }
 
     fun loginWithEmailPassword(loginSuccessCallback: () -> Unit, loginFailCallback: () -> Unit) {
