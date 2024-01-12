@@ -13,7 +13,7 @@ interface BookDao {
     @Insert
     suspend fun createBook(vararg book: BookEntity)
 
-    @Query("SELECT * FROM books")
+    @Query("SELECT * FROM books ORDER BY pub_date DESC")
     fun getBooks(): Flow<List<BookEntity>>
 
     @Query("SELECT * FROM books WHERE category = :query")
@@ -26,7 +26,7 @@ interface BookDao {
     @Query(
         "SELECT * FROM books WHERE authorName LIKE '%'||:query ||'%'" +
                 " OR title  LIKE '%' || :query || '%'" +
-                " OR category LIKE '%' || :query || '%'"
+                " OR category LIKE '%' || :query || '%' ORDER BY pub_date DESC"
     )
     fun queryBooks(query: String): Flow<List<BookEntity>>
 
@@ -47,5 +47,8 @@ interface BookDao {
 
     @Query("SELECT * FROM books WHERE title = :title")
     fun getBook(title: String): Flow<BookEntity>
+
+    @Query("SELECT * FROM books ORDER BY pub_date DESC LIMIT 5")
+    fun getRecent(): Flow<List<BookEntity>>
 
 }

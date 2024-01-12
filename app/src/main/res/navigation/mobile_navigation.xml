@@ -70,4 +70,8 @@
         android:id="@+id/nav_profile"
         android:name="com.example.bookshelf.ui.profile.ProfileFragment"
         android:label="ProfileFragment" />
+    <fragment
+        android:id="@+id/nav_contactus"
+        android:name="com.example.bookshelf.ui.contactus.ContactUsFragment"
+        android:label="ContactUsFragment" />
 </navigation>

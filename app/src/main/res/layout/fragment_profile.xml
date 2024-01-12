@@ -15,19 +15,20 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/profile_appbar"
         android:fitsSystemWindows="true"
-        android:elevation="10dp"
+        android:elevation="0dp"
         app:elevation="0dp"
         android:layout_height="@dimen/profile_app_bar_sie_large"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:background="@android:color/transparent"
+        >
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom|end"
             android:id="@+id/layout_profile_collapsable"
             app:toolbarId="@+id/toolbar"
+            android:background="@android:color/transparent"
             app:titleCollapseMode="fade"
-            app:expandedTitleGravity="top|start"
             android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|enterAlwaysCollapsed|snap"
             >
@@ -59,7 +60,8 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:srcCompat="@drawable/ic_launcher_background" />
+                        app:srcCompat="@drawable/ic_launcher_background"
+                        />
 
                     <TextView
                         android:id="@+id/tvUserName"
@@ -79,14 +81,12 @@
             </androidx.cardview.widget.CardView>
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/profile_toolbar"
-                android:layout_width="match_parent"
+                android:layout_width="50dp"
                 android:layout_height="?attr/actionBarSize"
-                android:overScrollMode="always"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                android:text="My Profile"
-                android:theme="?attr/actionBarTheme"
                 app:layout_collapseMode="pin"
+                android:background="@android:color/transparent"
                 app:navigationIcon="@drawable/white_back_24"
+                android:theme="?attr/actionBarTheme"
                 />
 
 

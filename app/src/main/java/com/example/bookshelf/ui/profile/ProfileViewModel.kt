@@ -85,6 +85,10 @@ class ProfileViewModel(
         MutableLiveData<Boolean>(false)
     }
 
+    val showEditProfilePicFab : MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>(true)
+    }
+
 
 
     init {
@@ -127,11 +131,12 @@ class ProfileViewModel(
                 }
         }
     }
-    fun updateUserPhotoUrl() = viewModelScope.launch {
-        userPhotoUrl.value?.let {
+    fun updateUserPhotoUrl() = viewModelScope.launch(Dispatchers.IO) {
+        Log.d("ProfileP","${profileImageUri.value} ---PImage")
+        profileImageUri.value?.let {
             repository.updatePhotoUrl(it,user.currentUser!!.uid)
                 .collect{
-
+                    Log.d("ProfilePC","------------success")
                 }
         }
     }

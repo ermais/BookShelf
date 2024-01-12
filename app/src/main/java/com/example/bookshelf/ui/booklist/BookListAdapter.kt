@@ -20,7 +20,7 @@ import com.example.bookshelf.R
 import com.example.bookshelf.bussiness.model.Book
 import com.example.bookshelf.ui.home.HomeFragmentDirections
 
-class BookListAdapter(
+open class BookListAdapter(
     context: Context,
     onBtnDownload: (view: View, downloadUri: Uri, bookTitle: String, bookId: String) -> Unit
 ) : RecyclerView.Adapter<BookListAdapter.ViewHolder>() {

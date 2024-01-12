@@ -22,6 +22,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.bookshelf.R
@@ -85,8 +86,6 @@ class ProfileFragment : Fragment() {
         binding.viewModel = profileViewModel
 
         toolbar = binding.profileToolbar
-        toolbar.title = "Profile"
-
         layout = binding.layoutProfileCollapsable
         layout.isTitleEnabled = false
         navController = findNavController()
@@ -176,6 +175,13 @@ class ProfileFragment : Fragment() {
             btnSaveDisplayName.setOnClickListener{
                     onSaveDisplayName()
                 }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                profileAppbar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+                    profileViewModel.showEditProfilePicFab.value = verticalOffset == 0
+                }
+            }
+
         }
 
         profileViewModel.userPhotoUrl.observe(viewLifecycleOwner){
@@ -187,6 +193,13 @@ class ProfileFragment : Fragment() {
                 .into(binding.ivProfilePicture)
         }
 
+        profileViewModel.showEditProfilePicFab.observe(viewLifecycleOwner){
+            if (it){
+                binding.fabEditProfilePicture.show()
+            }else{
+                binding.fabEditProfilePicture.hide()
+            }
+        }
         return binding.root
     }
 

@@ -153,11 +153,6 @@ class BookListFragment : Fragment() {
         mainViewModel.query.observe(viewLifecycleOwner) { query ->
             bookListModel.filterBooks(query)
         }
-        bookListModel.filteredBooks.observe(viewLifecycleOwner) {
-            adapter.data = it.asDomainModel()
-            println("Filtered Book provided to List--------------------")
-            println(it.asDomainModel())
-        }
         homeViewModel.filterByCategory.observe(viewLifecycleOwner) {
             if (it != "All") {
                 bookListModel.filterByCategory(it)
@@ -166,11 +161,6 @@ class BookListFragment : Fragment() {
             }
         }
 
-
-
-        mainViewModel.query.observe(viewLifecycleOwner) {
-            bookListModel.filterBooks(it)
-        }
 
         homeViewModel.sortBy.observe(viewLifecycleOwner) {
             Log.d("HOME_VIEW_MODEL", it)
@@ -182,7 +172,19 @@ class BookListFragment : Fragment() {
             }
         }
 
+        mainViewModel.query.observe(viewLifecycleOwner) {
+            bookListModel.filterBooks(it)
+        }
+
+
+        bookListModel.filteredBooks.observe(viewLifecycleOwner) {
+            adapter.data = it.asDomainModel()
+            println("Filtered Book provided to List--------------------")
+            println(it.asDomainModel())
+        }
         binding.rvBookList.adapter = adapter
+
+
         with(binding.rvBookList) {
             this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {

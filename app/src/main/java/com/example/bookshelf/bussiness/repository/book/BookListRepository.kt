@@ -27,6 +27,8 @@ class BookListRepository(
     fun getOfflineBooks() =
         db.bookDao().getBooks()
 
+    fun getRecentBooks() = db.bookDao().getRecent()
+
     suspend fun filterByCategory(category: String) =
         firestoreBookDataSource.filterByCategory(category)
 
