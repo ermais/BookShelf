@@ -9,7 +9,7 @@ import com.example.bookshelf.data.DATABASE_NAME
 
 @Database(
     entities = [BookEntity::class, DownloadEntity::class, MyBooksEntity::class],
-    version = 23,
+    version = 26,
     exportSchema = false
 )
 @TypeConverters()

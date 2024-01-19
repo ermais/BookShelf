@@ -334,7 +334,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="24dp"
                     app:cardCornerRadius="8dp"
-                    app:cardElevation="8dp"
+                    app:cardElevation="2dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/telegramCard">
@@ -403,7 +403,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="24dp"
                     app:cardCornerRadius="8dp"
-                    app:cardElevation="8dp"
+                    app:cardElevation="2dp"
                     app:layout_constraintBottom_toTopOf="@+id/whatsappCard"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -485,8 +485,8 @@
                             android:layout_height="wrap_content"
                             android:text="Audio Call"
 
-                            app:layout_constraintTop_toBottomOf="@+id/iconAudioCall"
-                            app:layout_constraintEnd_toEndOf="parent" />
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/iconAudioCall" />
 
                         <TextView
                             android:id="@+id/phoneContact"

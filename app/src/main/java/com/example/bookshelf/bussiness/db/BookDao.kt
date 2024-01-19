@@ -42,13 +42,19 @@ interface BookDao {
     @Query("SELECT * FROM books ORDER BY title ASC")
     fun sortByTitle(): Flow<List<BookEntity>>
 
-    @Query("SELECT * FROM books ORDER BY pub_date ASC")
+    @Query("SELECT * FROM books ORDER BY pub_date DESC")
     fun sortByPubDate(): Flow<List<BookEntity>>
 
     @Query("SELECT * FROM books WHERE title = :title")
     fun getBook(title: String): Flow<BookEntity>
 
+    @Query("SELECT * FROM books WHERE bookId = :bookId")
+    fun getBookById(bookId : String) : Flow<BookEntity>
+
     @Query("SELECT * FROM books ORDER BY pub_date DESC LIMIT 5")
     fun getRecent(): Flow<List<BookEntity>>
+
+    @Query("SELECT * FROM books WHERE rating > :topRate LIMIT 5")
+    fun getTopRated(topRate : Double) : Flow<List<BookEntity>>
 
 }

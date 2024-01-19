@@ -16,7 +16,7 @@ data class Book(
     val pubDate: Long = 0L,
     val bookCover: String? = "",
     val bookUri: String = "",
-    val rating: String = "4.5",
+    val rating: Double = 4.5,
     val downloadCount: Int = 0
 ) {
 
@@ -28,7 +28,7 @@ data class Book(
         desc = "",
         pubDate = 0L,
         bookCover = "",
-        bookUri = "", rating = "4.5",
+        bookUri = "", rating = 4.5,
         downloadCount = 0
     ) {
 

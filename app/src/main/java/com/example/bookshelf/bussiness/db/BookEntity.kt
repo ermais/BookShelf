@@ -31,8 +31,9 @@ data class BookEntity(
     val bookDocUri: String,
     @ColumnInfo(name = "pub_date")
     val pubDate: Long = 0,
+    @NotNull
     @ColumnInfo(name = "rating")
-    val rating: String,
+    val rating: Double,
     @ColumnInfo(name = "download_count", defaultValue = "0")
     val downloadCount: Int
 ) {

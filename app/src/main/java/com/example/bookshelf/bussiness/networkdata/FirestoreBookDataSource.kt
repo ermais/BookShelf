@@ -36,6 +36,8 @@ class FirestoreBookDataSource(db: FirebaseFirestore, cloudStorage: FirebaseStora
         return flow
     }
 
+
+
     override suspend fun getBooksFromFirestore() = callbackFlow {
         val snapShot = bookRef.orderBy("title").addSnapshotListener { snapshot, e ->
             val response = if (snapshot != null) {
@@ -223,5 +225,33 @@ class FirestoreBookDataSource(db: FirebaseFirestore, cloudStorage: FirebaseStora
                 loading.result
             }
         }
+    }
+
+    override suspend fun editBook(
+        bookId: String,
+        vararg obj: Map<String, String?>
+    ): Flow<Result<Void>> {
+        var objectToUpdate = mutableMapOf<String,String>()
+        for (item in obj){
+            for ((k,v) in item){
+                objectToUpdate[k] = v.toString()
+                Log.d("OBJ_TOUpdateV","$k --- $v")
+
+            }
+        }
+        Log.d("OBJ_TOUpdateF","${objectToUpdate["title"]}")
+     val flow = flow{
+         try {
+             emit(Loading)
+             val book = bookRef.document(bookId)
+                 .update(
+                     objectToUpdate.toMap()
+                 ).await()
+             emit(Success(book))
+         }catch (e : Exception){
+             emit(Result.Failure(e.message ?: e.toString()))
+         }
+         }
+        return flow
     }
 }

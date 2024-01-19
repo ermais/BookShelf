@@ -61,7 +61,7 @@ class CreateBookViewModel(
                     Calendar.getInstance().timeInMillis,
                     bookCoverUriFromFirebase.value.toString(),
                     bookDocUriFromFirebase.value.toString(),
-                    "0.0",
+                    0.0,
                     downloadCount = 0
                 )
                 createBookRepository.publishBook(book).collect {

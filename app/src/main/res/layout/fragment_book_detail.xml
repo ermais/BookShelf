@@ -11,9 +11,10 @@
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         tools:context=".ui.detail.BookDetailFragment">
         <!--        <com.google.android.material.appbar.AppBarLayout-->
         <!--            android:layout_width="match_parent"-->
@@ -23,8 +24,11 @@
             android:id="@+id/toolbarBookDetail"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:elevation="15dp"
             android:theme="?attr/actionBarTheme"
             app:title="@string/book_list_app_bar_title" />
+
+
         <!--        </com.google.android.material.appbar.AppBarLayout>-->
 
         <ImageView
@@ -37,6 +41,7 @@
             android:src="@drawable/ic_launcher_background" />
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/bookDetailCard"
             android:layout_width="match_parent"
             android:layout_height="320dp"
             android:layout_gravity="bottom"
@@ -45,10 +50,10 @@
             android:layout_marginBottom="10dp"
             android:clipToPadding="true"
             android:elevation="2dp"
+            android:visibility="visible"
             app:cardCornerRadius="12dp"
-            app:cardElevation="12dp"
-            app:cardPreventCornerOverlap="false"
-            app:layout_anchorGravity="bottom">
+            app:cardElevation="6dp"
+            app:cardPreventCornerOverlap="false">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -96,14 +101,63 @@
                     android:id="@+id/btnBuyBook"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="32dp"
                     android:layout_marginBottom="24dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:text="@string/buy_book_string"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
+
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabBookDetailMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/fab_content_desc"
+            app:backgroundTint="?colorPrimary"
+            app:srcCompat="@drawable/widgets_menu_24" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabEditBook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="84dp"
+            android:background="?colorPrimary"
+            android:contentDescription="@string/fab_content_desc"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/edit_24" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabDeleteBook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="156dp"
+            android:background="?colorPrimary"
+            android:contentDescription="@string/fab_content_desc"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/delete_24" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabShareBook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="222dp"
+            android:contentDescription="@string/fab_content_desc"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/share_24"
+            app:tint="?colorAccent" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

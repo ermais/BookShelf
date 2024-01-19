@@ -1,5 +1,6 @@
 package com.example.bookshelf.bussiness.networkdata
 
+import android.icu.text.CaseMap.Title
 import android.net.Uri
 import com.example.bookshelf.bussiness.Result.Result
 import com.example.bookshelf.bussiness.model.Book
@@ -31,5 +32,7 @@ interface BookDataSource {
     suspend fun sortByBookTitle(): Flow<Result<List<Book>>>
     suspend fun uploadBookDoc(uriFromFile: Uri, bookTitle: String): Flow<Result<Uri>>
     suspend fun uploadBookCover(uriFromFile: Uri, bookTitle: String): Flow<Result<Uri>>
+
+    suspend fun editBook(title:String,vararg obj : Map<String,String?>) : Flow<Result<Void>>
 
 }

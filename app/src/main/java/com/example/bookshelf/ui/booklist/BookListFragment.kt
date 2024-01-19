@@ -31,6 +31,7 @@ import com.example.bookshelf.ui.main.MainActivity
 import com.example.bookshelf.ui.main.MainViewModel
 import com.example.bookshelf.util.NetworkStatus
 import com.example.bookshelf.util.NotificationService
+import com.example.bookshelf.util.callActionWithPermission
 import com.example.bookshelf.util.getConnMgr
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -142,8 +143,17 @@ class BookListFragment : Fragment() {
 //                    }
 //                }
 //            }
-            onDownloadBook(downloadUri, bookTitle, bookId)
 
+            val downloadBook : ()->Unit = {
+                onDownloadBook(downloadUri, bookTitle, bookId)
+            }
+            callActionWithPermission(
+                requireContext(),
+                requireActivity(),
+                POST_NOTIFICATION,
+                POST_NOTIFICATION_PC,
+                downloadBook
+            )
         }
         activity?.let {
             mainViewModel = ViewModelProvider(it)[MainViewModel::class.java]
@@ -265,6 +275,11 @@ class BookListFragment : Fragment() {
 
     private fun onDownloadBook(uri: Uri, title: String, bookId: String) {
         bookListModel.downloadBook(uri, title, bookId)
+    }
+
+    companion object {
+        const val POST_NOTIFICATION = android.Manifest.permission.POST_NOTIFICATIONS
+        const val POST_NOTIFICATION_PC = 1239
     }
 
 }

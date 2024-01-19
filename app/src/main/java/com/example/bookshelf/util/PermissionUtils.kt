@@ -30,7 +30,13 @@ fun callActionWithPermission(context: Context,activity: Activity?,permission: St
           permission,
             permissionCode
         )
-       callback()
+        if (isPermissionGranted(
+            context,
+            permission
+        )){
+            callback()
+        }
+
     }
 }
 

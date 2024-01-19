@@ -31,6 +31,7 @@ import com.example.bookshelf.bussiness.repository.profile.UserProfileRepository
 import com.example.bookshelf.databinding.FragmentProfileBinding
 import com.example.bookshelf.ui.create.CreateBookFragment
 import com.example.bookshelf.ui.main.MainActivity
+import com.example.bookshelf.util.callActionWithPermission
 import com.example.bookshelf.util.isPermissionGranted
 import com.example.bookshelf.util.requestPermission
 import com.google.android.material.appbar.AppBarLayout
@@ -213,42 +214,21 @@ class ProfileFragment : Fragment() {
         binding.fabEditProfilePicture.setOnClickListener{
             try {
                 if (Build.VERSION.SDK_INT >= 32) {
-                    if (isPermissionGranted(
-                            requireContext(),
-                            REQUEST_PHOTO_PERMISSION
-                    )){
-                        getProfileImageIntent()
-                    }else{
-                        requestPermission(
-                            requireActivity(),
-                            REQUEST_PHOTO_PERMISSION,
-                            GET_PROFILE_PICTURE_PR
-                        )
-                        if (isPermissionGranted(requireContext(), REQUEST_PHOTO_PERMISSION)){
-                            getProfileImageIntent()
-                        }
-                    }
+                    callActionWithPermission(
+                        requireContext(),
+                        requireActivity(),
+                        REQUEST_PHOTO_PERMISSION,
+                        GET_PROFILE_PICTURE_PR,
+                        this::getProfileImageIntent
+                    )
                 } else {
-                    if (isPermissionGranted(
-                            requireContext(),
-                            REQUEST_MANAGE_STORAGE
-                        )
-                    ) {
-                        getProfileImageIntent()
-                    } else {
-                        requestPermission(
-                            requireActivity(),
-                           REQUEST_MANAGE_STORAGE,
-                            GET_PROFILE_PICTURE_PR
-                        )
-                        if (isPermissionGranted(
-                                requireContext(),
-                                REQUEST_MANAGE_STORAGE
-                            )
-                        ) {
-                            getProfileImageIntent()
-                        }
-                    }
+                    callActionWithPermission(
+                        requireContext(),
+                        requireActivity(),
+                        REQUEST_MANAGE_STORAGE,
+                        GET_PROFILE_PICTURE_PR,
+                        this::getProfileImageIntent
+                    )
                 }
             }catch (e : Exception){
                 val toast = Toast.makeText(activity,"something wrong happened!",Toast.LENGTH_SHORT)
@@ -270,7 +250,7 @@ class ProfileFragment : Fragment() {
 
     }
 
-    fun onSaveDisplayName(){
+    private fun onSaveDisplayName(){
         profileViewModel.updateDisplayName()
         profileViewModel.setChangeDisplayName(false)
     }

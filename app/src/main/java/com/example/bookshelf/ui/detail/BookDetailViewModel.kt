@@ -9,6 +9,7 @@ import com.example.bookshelf.bussiness.model.Book
 import com.example.bookshelf.bussiness.repository.book.BookDetailRepository
 import com.example.bookshelf.bussiness.repository.book.MyBooksRepository
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class BookDetailViewModel(
@@ -21,14 +22,18 @@ class BookDetailViewModel(
         MutableLiveData<Book>(Book())
     }
 
+    val openBookMenu : MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>(false)
+    }
+
     init {
     }
 
-    fun getBook(title: String) = viewModelScope.launch {
+    fun getBook(title: String) = viewModelScope.launch(Dispatchers.IO) {
         bookDetailRepository.getBook(title).collect {
             println("Get Book -----------------------")
-            println(it.asDomainModel())
-            book.value = it.asDomainModel()
+            println(it?.asDomainModel())
+            book?.postValue(it?.asDomainModel())
         }
     }
 
