@@ -18,5 +18,4 @@ Flow of work with this video
 ![photo_2024-02-14_08-48-02](https://github.com/ermais/BookShelf/assets/33171889/802b8bdc-2ef9-42ff-8f69-c3ba47eb00ef)
 ![photo_2024-02-14_08-48-29](https://github.com/ermais/BookShelf/assets/33171889/2d16bef7-3b36-4494-959e-3b171350b21d)
 
-https://user-images.githubusercontent.com/33171889/213848042-aaa84188-9194-465b-81c3-6720e1864785.mp4
 
